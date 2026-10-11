@@ -9,7 +9,6 @@ import {
   Printer,
   Store,
   ShoppingCart,
-  UserRound,
   ChevronLeft,
   X,
   Armchair,
@@ -123,10 +122,10 @@ function PostSaleModal({
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="font-mono font-bold text-sm text-zinc-900" dir="ltr">
+              <span className="font-mono font-bold text-sm text-[#142644]" dir="ltr">
                 #{receipt.orderNumber}
               </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-900 text-white">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#142644] text-white">
                 {receipt.type === OrderType.DINE_IN ? 'صالة' : 'سفري'}
               </span>
               {receipt.orderNumber.startsWith('OFFLINE-') && (
@@ -135,7 +134,7 @@ function PostSaleModal({
                 </span>
               )}
             </div>
-            <p className="text-xs text-zinc-600 font-bold mt-0.5">
+            <p className="text-xs text-[#526B90] font-bold mt-0.5">
               الإجمالي:{' '}
               {Money.fromMinor(receipt.totalMinor, currency).format(receipt.locale)}
             </p>
@@ -147,25 +146,25 @@ function PostSaleModal({
           <button
             type="button"
             onClick={() => onPrintReceipt(receipt)}
-            className="flex items-center justify-center gap-2 p-3 rounded-xl border border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-800 text-xs font-bold transition shadow-2xs"
+            className="flex items-center justify-center gap-2 min-h-12 p-3 rounded-[14px] border border-[#DCE3EF] bg-white hover:bg-[#F1F5FD] text-[#142644] text-xs font-bold transition shadow-[0_3px_10px_rgba(20,38,68,0.04)]"
           >
-            <Printer className="w-4 h-4 text-zinc-600" />
+            <Printer className="w-4 h-4 text-[#526B90]" />
             <span>طباعة فاتورة العميل</span>
           </button>
 
           <button
             type="button"
             onClick={() => onPrintKot(receipt)}
-            className="flex items-center justify-center gap-2 p-3 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100/80 text-amber-900 text-xs font-bold transition shadow-2xs"
+            className="flex items-center justify-center gap-2 min-h-12 p-3 rounded-[14px] border border-[#C6D5F1] bg-[#EDF3FF] hover:bg-[#DDE7FA] text-[#2D61C9] text-xs font-bold transition shadow-[0_3px_10px_rgba(45,97,201,0.08)]"
           >
-            <ChefHat className="w-4 h-4 text-amber-700" />
+            <ChefHat className="w-4 h-4 text-[#2D61C9]" />
             <span>طباعة بون المطبخ (KOT)</span>
           </button>
 
           <button
             type="button"
             onClick={() => onPrintBoth(receipt)}
-            className="sm:col-span-2 flex items-center justify-center gap-2 p-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white text-xs font-bold transition shadow-xs"
+            className="sm:col-span-2 flex items-center justify-center gap-2 min-h-14 p-3 rounded-[14px] bg-[#2D61C9] hover:bg-[#2756B8] text-white text-xs font-bold transition shadow-[0_7px_16px_rgba(45,97,201,0.18)]"
           >
             <Printer className="w-4 h-4" />
             <span>طباعة الفاتورة وبون المطبخ معاً</span>
@@ -173,8 +172,8 @@ function PostSaleModal({
         </div>
 
         {/* Auto-print KOT toggle */}
-        <div className="flex items-center justify-between p-3 rounded-xl bg-zinc-50 border border-zinc-200 text-xs">
-          <label htmlFor="auto-print-kot-toggle" className="cursor-pointer font-medium text-zinc-700 select-none">
+        <div className="flex items-center justify-between p-3 rounded-[14px] bg-[#F7F9FD] border border-[#DCE3EF] text-xs">
+          <label htmlFor="auto-print-kot-toggle" className="cursor-pointer font-medium text-[#526B90] select-none">
             طباعة بون المطبخ تلقائياً مع الفاتورة عند كل بيع
           </label>
           <input
@@ -182,7 +181,7 @@ function PostSaleModal({
             type="checkbox"
             checked={autoPrintKot}
             onChange={(e) => onToggleAutoPrintKot(e.target.checked)}
-            className="size-4 rounded border-zinc-300 text-zinc-900 focus:ring-zinc-500 cursor-pointer"
+            className="size-4 rounded border-[#C6D2E5] text-[#2D61C9] focus:ring-[#2D61C9] cursor-pointer"
           />
         </div>
 
@@ -190,7 +189,7 @@ function PostSaleModal({
         <button
           type="button"
           onClick={onClose}
-          className="w-full py-2.5 rounded-xl border border-zinc-200 text-zinc-600 hover:bg-zinc-100 text-xs font-semibold transition"
+          className="w-full min-h-12 py-2.5 rounded-[14px] border border-[#DCE3EF] text-[#526B90] hover:bg-[#E9EEFC] text-xs font-semibold transition"
         >
           طلب جديد (متابعة)
         </button>
@@ -232,48 +231,39 @@ function PosHeader({
   ).length;
 
   return (
-    <header className="min-h-[88px] shrink-0 flex items-center justify-between gap-3 border-b border-[#DCE3EF] bg-[#F7F8FC]/95 px-4 py-3 sm:px-6 lg:min-h-[112px] lg:px-8 shadow-[0_3px_14px_rgba(20,38,68,0.035)]">
+    <header className="min-h-[64px] shrink-0 flex items-center justify-between gap-3 border-b border-[#DCE3EF] bg-[#F7F8FC]/95 px-4 py-2.5 sm:px-6 shadow-[0_3px_14px_rgba(20,38,68,0.035)]">
       <div className="flex items-center gap-2.5 min-w-0">
-        <span className="grid size-12 shrink-0 place-items-center rounded-[16px] bg-[#142644] text-white shadow-[0_7px_15px_rgba(20,38,68,0.14)] sm:size-16">
+        <span className="grid size-11 shrink-0 place-items-center rounded-[14px] bg-[#142644] text-white shadow-[0_7px_15px_rgba(20,38,68,0.14)]">
           <Store size={18} strokeWidth={1.75} />
         </span>
         <div className="truncate">
           <h1 className="truncate text-sm font-bold text-[#142644] sm:text-base">
             {state.settings.nameAr} — نقطة البيع
           </h1>
-          <p className="truncate text-[11px] text-[#7180a4] sm:text-xs">
+          <p className="truncate text-[11px] text-[#7180a4]">
             {state.branch.nameAr} · {state.shift ? 'وردية مفتوحة' : 'الوردية مغلقة'}
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-        <div className="hidden min-h-16 items-center gap-2 rounded-[16px] border border-[#DCE3EF] bg-white px-4 py-2 text-[#405675] shadow-[0_3px_12px_rgba(20,38,68,0.04)] xl:flex">
-          <CalendarDays size={18} className="text-[#2D61C9]" />
+      <div className="flex items-center gap-2 shrink-0">
+        <div className="hidden h-11 items-center gap-2 rounded-[14px] border border-[#DCE3EF] bg-white px-3 text-[#405675] shadow-[0_3px_12px_rgba(20,38,68,0.04)] xl:flex">
+          <CalendarDays size={16} className="text-[#2D61C9]" />
           <span className="whitespace-nowrap text-[11px] font-semibold" dir="rtl">
             {headerDateTime || '—'}
           </span>
         </div>
-        <button type="button" aria-label="الفواتير الأخيرة" title="الفواتير الأخيرة" onClick={() => state.setShowHistory(true)} className="grid size-16 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#405675] shadow-[0_3px_12px_rgba(20,38,68,0.04)] transition hover:bg-[#F1F5FD]">
-          <History size={18} strokeWidth={1.8} />
-        </button>
-        <button type="button" aria-label="طباعة" title="طباعة" onClick={() => window.print()} className="hidden size-16 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#405675] shadow-[0_3px_12px_rgba(20,38,68,0.04)] transition hover:bg-[#F1F5FD] sm:grid">
-          <Printer size={18} strokeWidth={1.8} />
-        </button>
-        <Link href="/admin" aria-label="فتح لوحة الإدارة" title="فتح لوحة الإدارة" className="hidden min-h-16 items-center gap-3 rounded-[16px] border border-[#DCE3EF] bg-white px-4 py-2 text-[#142644] shadow-[0_3px_12px_rgba(20,38,68,0.04)] transition hover:bg-[#F1F5FD] xl:flex">
-          <UserRound size={20} className="text-[#6D7C99]" />
-          <span className="text-right text-[10px] leading-4"><span className="block text-[#8490ad]">المستخدم</span><span className="block font-bold">الكاشير</span></span>
-        </Link>
+
         {/* Offline / Online Sync Indicator */}
         {!state.offlineSync.isOnline ? (
           <div
             title="نظام الكاشير يعمل محلياً في وضع عدم الاتصال (أوفلاين). يتم حفظ الفواتير وطباعتها وتجهيزها للمزامنة التلقائية فور عودة الإنترنت."
-            className="flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-2.5 py-1 text-[11px] font-bold text-rose-700 shadow-[0_4px_12px_rgba(200,70,100,0.06)]"
+            className="flex h-11 items-center gap-1.5 rounded-[14px] border border-rose-200 bg-rose-50 px-3 text-[11px] font-bold text-rose-700 shadow-[0_4px_12px_rgba(200,70,100,0.06)]"
           >
-            <WifiOff size={13} className="text-rose-600 animate-pulse" />
+            <WifiOff size={14} className="text-rose-600 animate-pulse" />
             <span className="hidden md:inline">أوفلاين</span>
             {state.offlineSync.pendingCount > 0 && (
-              <span className="rounded-md bg-rose-200 px-1 py-0.2 text-[10px] text-rose-900">
+              <span className="rounded-md bg-rose-200 px-1 text-[10px] text-rose-900">
                 {state.offlineSync.pendingCount}
               </span>
             )}
@@ -284,10 +274,10 @@ function PosHeader({
             onClick={() => state.offlineSync.syncNow()}
             disabled={state.offlineSync.isSyncing}
             title="توجد فواتير محلية بانتظار المزامنة مع الخادم. انقر للمزامنة الفورية."
-            className="flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-800 hover:bg-amber-100 shadow-[0_4px_12px_rgba(180,130,40,0.08)] transition disabled:opacity-50"
+            className="flex h-11 items-center gap-1.5 rounded-[14px] border border-amber-200 bg-amber-50 px-3 text-[11px] font-bold text-amber-800 hover:bg-amber-100 shadow-[0_4px_12px_rgba(180,130,40,0.08)] transition disabled:opacity-50"
           >
             <RefreshCw
-              size={13}
+              size={14}
               className={`text-amber-700 ${state.offlineSync.isSyncing ? 'animate-spin' : ''}`}
             />
             <span>
@@ -299,7 +289,7 @@ function PosHeader({
         ) : (
           <div
             title="الاتصال بالخادم وقاعدة البيانات مستقر ومباشر."
-            className="hidden xl:flex items-center gap-1 text-[11px] font-medium text-emerald-600 bg-emerald-50/70 border border-emerald-100 rounded-xl px-2 py-0.5"
+            className="hidden h-11 items-center gap-1.5 rounded-[14px] border border-emerald-100 bg-emerald-50/70 px-3 text-[11px] font-medium text-emerald-600 xl:flex"
           >
             <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
             <span>متصل</span>
@@ -313,7 +303,7 @@ function PosHeader({
             onClick={() =>
               state.setViewMode(state.viewMode === 'FLOOR_PLAN' ? 'SALE' : 'FLOOR_PLAN')
             }
-            className={`${posButton} px-2 sm:px-3 text-xs flex items-center gap-1.5 ${
+            className={`${posButton} px-3 text-xs ${
               state.viewMode === 'FLOOR_PLAN'
                 ? 'bg-[#2D61C9] text-white hover:bg-[#2756B8]'
                 : 'text-[#405675] hover:bg-[#E9EEFC]'
@@ -325,7 +315,7 @@ function PosHeader({
             </span>
             {occupiedTablesCount > 0 && (
               <span
-                className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold ${
+                className={`rounded-full px-1.5 text-[10px] font-bold ${
                   state.viewMode === 'FLOOR_PLAN'
                     ? 'bg-white text-[#2D61C9]'
                     : 'bg-[#2D61C9] text-white'
@@ -336,6 +326,21 @@ function PosHeader({
             )}
           </button>
         )}
+
+        <button type="button" onClick={() => state.setShowHistory(true)} className={posButton + ' px-3 text-xs'}>
+          <History size={15} />
+          <span className="hidden sm:inline">الفواتير</span>
+        </button>
+
+        <button
+          type="button"
+          aria-label="طباعة"
+          title="طباعة"
+          onClick={() => window.print()}
+          className={posButton + ' hidden w-11 px-0 sm:inline-flex'}
+        >
+          <Printer size={16} strokeWidth={1.8} />
+        </button>
 
         {/* Mobile Cart Button */}
         {state.shift && (
@@ -354,20 +359,15 @@ function PosHeader({
           </button>
         )}
 
-        <button onClick={() => state.setShowHistory(true)} className={posButton + ' px-2 sm:px-3 text-xs'}>
-          <History size={15} />
-          <span className="hidden sm:inline">الفواتير</span>
-        </button>
-
         <button
           disabled={state.sale.locked || state.items.length > 0}
           onClick={() => state.setShowShift(true)}
-          className={posButton + ' px-2 sm:px-3 text-xs'}
+          className={posButton + ' px-3 text-xs'}
         >
           {state.shift ? 'إغلاق الوردية' : 'فتح وردية'}
         </button>
 
-        <Link href="/admin" className={posButton + ' px-2 sm:px-3 text-xs'}>
+        <Link href="/admin" className={posButton + ' px-3 text-xs'}>
           <ArrowRight size={15} />
           <span className="hidden sm:inline">الإدارة</span>
         </Link>
@@ -440,7 +440,7 @@ function PosSalePanel({
       </div>
 
       {/* 3. Bottom: Pinned Summary, Compact Options, Payment Trigger */}
-      <div className="shrink-0 space-y-2.5 border-t border-[#E7ECF4] bg-white p-4 sm:p-5">
+      <div className="shrink-0 space-y-3 border-t border-[#E7ECF4] bg-white p-4 sm:p-5">
         <CartTotals totals={totals} settings={state.settings} />
         <CartOptions
           canDiscount={state.canDiscount}

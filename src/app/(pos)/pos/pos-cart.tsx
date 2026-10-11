@@ -101,31 +101,31 @@ export function CartTypeSelector({
 
               <div className="flex items-center gap-1.5">
                 {/* Guest Count Stepper */}
-                <div className="flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-1.5 py-0.5">
+                <div className="flex items-center gap-1 rounded-lg border border-[#DCE3EF] bg-[#F7F9FD] px-1.5 py-0.5">
         <button
                     type="button"
                     onClick={() => onGuestCountChange?.(Math.max(1, guestCount - 1))}
-                    className="size-4 text-zinc-500 hover:text-zinc-900 font-bold text-[11px]"
+                    className="size-4 text-[#526B90] hover:text-[#2D61C9] font-bold text-[11px]"
                   >
                     -
                   </button>
-                  <span className="text-[11px] font-bold text-zinc-800 min-w-4 text-center">
+                  <span className="text-[11px] font-bold text-[#142644] min-w-4 text-center">
                     {guestCount}
                   </span>
                   <button
                     type="button"
                     onClick={() => onGuestCountChange?.(Math.min(20, guestCount + 1))}
-                    className="size-4 text-zinc-500 hover:text-zinc-900 font-bold text-[11px]"
+                    className="size-4 text-[#526B90] hover:text-[#2D61C9] font-bold text-[11px]"
                   >
                     +
                   </button>
-                  <Users className="size-3 text-zinc-400" />
+                  <Users className="size-3 text-[#8D9AB2]" />
                 </div>
 
                 <button
                   type="button"
                   onClick={onOpenTablePicker}
-                  className="rounded-md px-1.5 py-0.5 text-[11px] font-semibold text-zinc-600 hover:bg-zinc-200/60"
+                  className="rounded-md px-1.5 py-0.5 text-[11px] font-semibold text-[#526B90] hover:bg-[#E9EEFC]"
                 >
                   تغيير
                 </button>
@@ -133,7 +133,7 @@ export function CartTypeSelector({
                 <button
                   type="button"
                   onClick={onClearTable}
-                  className="grid size-5 place-items-center rounded-md text-zinc-400 hover:text-rose-600"
+                  className="grid size-5 place-items-center rounded-md text-[#8D9AB2] hover:text-rose-600"
                   title="إلغاء تحديد الطاولة"
                 >
                   <X className="size-3" />
@@ -148,10 +148,10 @@ export function CartTypeSelector({
               className="flex w-full items-center justify-between rounded-[14px] border border-dashed border-[#C6D2E5] bg-[#F7F9FD] px-2.5 py-2 text-xs font-semibold text-[#405675] hover:border-[#8EAAD8] hover:bg-white active:scale-[0.99] transition"
             >
               <div className="flex items-center gap-2">
-                <Armchair className="size-4 text-zinc-500" strokeWidth={1.8} />
+                <Armchair className="size-4 text-[#526B90]" strokeWidth={1.8} />
                 <span>اختر الطاولة من الصالة...</span>
               </div>
-              <span className="text-[10px] text-zinc-400 font-mono">تحديد ▾</span>
+              <span className="text-[10px] text-[#8D9AB2] font-mono">تحديد ▾</span>
             </button>
           )}
         </div>
@@ -198,7 +198,7 @@ export function CartLines({
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-1">
               <p className="truncate text-xs font-bold text-[#142644]">{product.nameAr}</p>
-                <p className="font-mono text-xs font-bold text-zinc-950 shrink-0">
+                <p className="font-mono text-xs font-bold text-[#142644] shrink-0">
                   {price.multiply(item.quantity).format(settings.locale)}
                 </p>
               </div>
@@ -210,7 +210,7 @@ export function CartLines({
               )}
             </div>
 
-            <div className="flex items-center gap-1 shrink-0 border-s border-zinc-100 ps-1.5">
+            <div className="flex items-center gap-1 shrink-0 border-s border-[#E7ECF4] ps-1.5">
               <button
                 type="button"
                 disabled={locked}
@@ -220,7 +220,7 @@ export function CartLines({
               >
                 <Minus size={12} />
               </button>
-              <span className="w-4 text-center font-mono text-xs font-bold text-zinc-900">
+              <span className="w-4 text-center font-mono text-xs font-bold text-[#142644]">
                 {item.quantity}
               </span>
               <button
@@ -263,7 +263,7 @@ export function CartOptions({
             type="button"
             disabled={locked}
             onClick={() => setShowNotes(true)}
-            className="text-[11px] font-semibold text-zinc-500 hover:text-zinc-800 transition py-0.5 px-1.5 rounded hover:bg-zinc-100"
+            className="text-[11px] font-semibold text-[#526B90] hover:text-[#142644] transition py-0.5 px-1.5 rounded hover:bg-[#E9EEFC]"
           >
             + ملاحظة
           </button>
@@ -275,13 +275,13 @@ export function CartOptions({
               onChange={(e) => setNotes(e.target.value)}
               maxLength={500}
               placeholder="ملاحظات الطلب..."
-              className="w-full h-7 rounded-lg border border-zinc-200 bg-white px-2 text-[11px] focus:outline-none focus:ring-1 focus:ring-zinc-900"
+              className="w-full h-7 rounded-lg border border-[#DCE3EF] bg-[#F7F9FD] px-2 text-[11px] focus:outline-none focus:ring-1 focus:ring-[#2D61C9]"
             />
             {notes === '' && (
               <button
                 type="button"
                 onClick={() => setShowNotes(false)}
-                className="absolute left-1.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 text-[10px]"
+                className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[#8D9AB2] hover:text-[#526B90] text-[10px]"
               >
                 ✕
               </button>
@@ -295,7 +295,7 @@ export function CartOptions({
               type="button"
               disabled={locked}
               onClick={() => setShowDiscount(true)}
-              className="text-[11px] font-semibold text-zinc-500 hover:text-zinc-800 transition py-0.5 px-1.5 rounded hover:bg-zinc-100 mr-auto"
+              className="text-[11px] font-semibold text-[#526B90] hover:text-[#142644] transition py-0.5 px-1.5 rounded hover:bg-[#E9EEFC] mr-auto"
             >
               % خصم
             </button>
@@ -307,13 +307,13 @@ export function CartOptions({
                 onChange={(e) => setDiscount(e.target.value)}
                 inputMode="decimal"
                 placeholder={`خصم (${settings.currency})`}
-                className="w-full h-7 rounded-lg border border-zinc-200 bg-white px-2 text-[11px] font-mono focus:outline-none focus:ring-1 focus:ring-zinc-900"
+                className="w-full h-7 rounded-lg border border-[#DCE3EF] bg-[#F7F9FD] px-2 text-[11px] font-mono focus:outline-none focus:ring-1 focus:ring-[#2D61C9]"
               />
               {(discount === '' || discount === '0') && (
                 <button
                   type="button"
                   onClick={() => setShowDiscount(false)}
-                  className="absolute left-1.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 text-[10px]"
+                  className="absolute left-1.5 top-1/2 -translate-y-1/2 text-[#8D9AB2] hover:text-[#526B90] text-[10px]"
                 >
                   ✕
                 </button>
@@ -359,7 +359,7 @@ export function PosCart(props: PosCartProps) {
   return (
     <div className="flex h-full flex-col justify-between">
       <div className="space-y-2 shrink-0">
-        <h2 className="flex items-center gap-2 font-bold text-sm text-zinc-900">
+        <h2 className="flex items-center gap-2 font-bold text-sm text-[#142644]">
           <ShoppingCart size={17} strokeWidth={1.75} />
           الطلب الحالي
         </h2>
@@ -378,7 +378,7 @@ export function PosCart(props: PosCartProps) {
       <div className="flex-1 min-h-0 overflow-y-auto my-2">
         <CartLines {...props} />
       </div>
-      <div className="space-y-2 shrink-0 border-t border-zinc-200 pt-2">
+      <div className="space-y-2 shrink-0 border-t border-[#DCE3EF] pt-2">
         <CartOptions {...props} />
         <CartTotals totals={props.totals} settings={props.settings} />
       </div>
