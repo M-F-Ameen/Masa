@@ -54,18 +54,18 @@ export function TablePickerModal({
   const getShapeIcon = (shape: string) => {
     switch (shape) {
       case TableShape.ROUND:
-        return <Circle className="size-3 text-zinc-400" strokeWidth={1.8} />;
+        return <Circle className="size-3 text-[#8D9AB2]" strokeWidth={1.8} />;
       case TableShape.RECTANGLE:
-        return <RectangleHorizontal className="size-3 text-zinc-400" strokeWidth={1.8} />;
+        return <RectangleHorizontal className="size-3 text-[#8D9AB2]" strokeWidth={1.8} />;
       case TableShape.SQUARE:
       default:
-        return <Square className="size-3 text-zinc-400" strokeWidth={1.8} />;
+        return <Square className="size-3 text-[#8D9AB2]" strokeWidth={1.8} />;
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#10204a]/35 p-3 backdrop-blur-[2px] sm:p-4 animate-in fade-in" dir="rtl">
-      <div className="flex max-h-[88vh] w-full max-w-xl flex-col overflow-hidden rounded-[24px] border border-[#e1e7f3] bg-white p-4 text-[#243663] shadow-[0_24px_80px_rgba(31,50,105,0.18)] sm:p-5 animate-in zoom-in-95">
+      <div className="flex max-h-[88vh] w-full max-w-xl flex-col overflow-hidden rounded-[16px] border border-[#DCE3EF] bg-white p-4 text-[#142644] shadow-[0_20px_60px_rgba(20,38,68,0.16)] sm:p-5 animate-in zoom-in-95">
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-[#edf0f7] pb-3">
           <div className="flex items-center gap-2">
@@ -73,21 +73,21 @@ export function TablePickerModal({
               <Armchair className="size-4" strokeWidth={1.8} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[#142957] sm:text-base">تحديد طاولة للطلب</h3>
-              <p className="text-[11px] text-[#7b89a9]">اختر طاولة متاحة لفتح الشيك أو فتح طلبها المفتوح</p>
+              <h3 className="text-sm font-bold text-[#142644] sm:text-base">تحديد طاولة للطلب</h3>
+              <p className="text-[11px] text-[#72819A]">اختر طاولة متاحة لفتح الشيك أو فتح طلبها المفتوح</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-[#8a96b0] hover:bg-[#eef0ff] hover:text-[#40527c]"
+            className="rounded-[10px] p-1 text-[#72819A] hover:bg-[#E9EEFC] hover:text-[#142644]"
           >
             <X className="size-4" />
           </button>
         </div>
 
         {/* Section Pills & Search */}
-        <div className="py-3 space-y-2 border-b border-zinc-100 shrink-0">
+        <div className="shrink-0 space-y-2 border-b border-[#E7ECF4] py-3">
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
             <button
               type="button"
@@ -95,7 +95,7 @@ export function TablePickerModal({
               className={`shrink-0 rounded-xl px-3 py-1 font-semibold transition ${
                 selectedSectionId === 'ALL'
                 ? 'bg-[#2D61C9] text-white'
-                  : 'bg-[#f1f3fb] text-[#526286] hover:bg-[#e7eaf7]'
+                  : 'bg-[#E9EEFC] text-[#526B90] hover:bg-[#F7F9FD]'
               }`}
             >
               كافة الأقسام ({tables.length})
@@ -108,7 +108,7 @@ export function TablePickerModal({
                 className={`shrink-0 rounded-xl px-3 py-1 font-semibold transition ${
                   selectedSectionId === sec.id
                 ? 'bg-[#2D61C9] text-white'
-                    : 'bg-[#f1f3fb] text-[#526286] hover:bg-[#e7eaf7]'
+                    : 'bg-[#E9EEFC] text-[#526B90] hover:bg-[#F7F9FD]'
                 }`}
               >
                 {sec.nameAr}
@@ -117,7 +117,7 @@ export function TablePickerModal({
           </div>
 
           <div className="relative">
-            <Search className="pointer-events-none absolute right-3 top-1/2 size-3.5 -translate-y-1/2 text-zinc-400" />
+            <Search className="pointer-events-none absolute right-3 top-1/2 size-3.5 -translate-y-1/2 text-[#8D9AB2]" />
             <input
               type="text"
               placeholder="بحث برقم الطاولة..."
@@ -131,7 +131,7 @@ export function TablePickerModal({
         {/* Tables Grid */}
         <div className="flex-1 overflow-y-auto py-3">
           {filteredTables.length === 0 ? (
-            <p className="py-8 text-center text-xs text-zinc-400">لا توجد طاولات مطابقة للبحث أو التصفية</p>
+            <p className="py-8 text-center text-xs text-[#8D9AB2]">لا توجد طاولات مطابقة للبحث أو التصفية</p>
           ) : (
             <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">
               {filteredTables.map((table) => {
@@ -157,7 +157,7 @@ export function TablePickerModal({
                         ? 'border-[#2D61C9] bg-[#2D61C9] text-white shadow-[0_6px_14px_rgba(45,97,201,0.2)]'
                         : isAvailable
                         ? 'border-emerald-200/80 bg-emerald-50/40 hover:border-emerald-300 hover:bg-emerald-50'
-                        : 'border-[#e0e6f3] bg-[#f8faff] hover:bg-[#f0f2fb]'
+                        : 'border-[#DCE3EF] bg-[#F7F9FD] hover:bg-[#E9EEFC]'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-1 w-full">
@@ -169,7 +169,7 @@ export function TablePickerModal({
                       </div>
 
                       {isSelected ? (
-                        <span className="grid size-4 place-items-center rounded-full bg-white text-zinc-900">
+                        <span className="grid size-4 place-items-center rounded-full bg-white text-[#142644]">
                           <Check className="size-2.5" strokeWidth={3} />
                         </span>
                       ) : (
@@ -178,8 +178,8 @@ export function TablePickerModal({
                             isAvailable
                               ? 'bg-emerald-100 text-emerald-800'
                               : isOccupied
-                              ? 'bg-zinc-200 text-zinc-800'
-                              : 'bg-zinc-100 text-zinc-500'
+                              ? 'bg-[#E9EEFC] text-[#142644]'
+                              : 'bg-[#F7F9FD] text-[#72819A]'
                           }`}
                         >
                           {isAvailable ? 'متاحة' : isOccupied ? 'مشغولة' : table.status}
@@ -198,7 +198,7 @@ export function TablePickerModal({
                     </div>
 
                     {isOccupied && table.activeOrder && (
-                      <div className="mt-2 w-full pt-1.5 border-t border-zinc-200/60 text-[10px] font-bold text-zinc-700 flex justify-between">
+                      <div className="mt-2 flex w-full justify-between border-t border-[#DCE3EF] pt-1.5 text-[10px] font-bold text-[#526B90]">
                         <span>طلب جاري:</span>
                         <span>{(table.activeOrder.totalMinor / 100).toFixed(2)} ج.م</span>
                       </div>
@@ -211,14 +211,14 @@ export function TablePickerModal({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between border-t border-zinc-100 pt-3 text-xs shrink-0">
-          <p className="text-[11px] text-zinc-500">
+        <div className="flex shrink-0 items-center justify-between border-t border-[#E7ECF4] pt-3 text-xs">
+          <p className="text-[11px] text-[#72819A]">
             اضغط على طاولة متاحة لربطها فوراً بالطلب الحالي.
           </p>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-[#e0e6f3] px-4 py-1.5 font-semibold text-[#526286] hover:bg-[#f7f8ff]"
+            className="rounded-[12px] border border-[#DCE3EF] px-4 py-1.5 font-semibold text-[#526B90] hover:bg-[#E9EEFC]"
           >
             إغلاق
           </button>

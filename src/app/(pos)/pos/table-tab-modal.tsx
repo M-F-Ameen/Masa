@@ -138,7 +138,7 @@ export function TableTabModal({
       className="fixed inset-0 z-50 flex items-center justify-center bg-[#10204a]/35 p-3 backdrop-blur-[2px] sm:p-4 animate-in fade-in"
       dir="rtl"
     >
-      <div className="flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-[24px] border border-[#e1e7f3] bg-white p-4 text-[#243663] shadow-[0_24px_80px_rgba(31,50,105,0.18)] sm:p-5 animate-in zoom-in-95">
+      <div className="flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-[16px] border border-[#DCE3EF] bg-white p-4 text-[#142644] shadow-[0_20px_60px_rgba(20,38,68,0.16)] sm:p-5 animate-in zoom-in-95">
         {/* Modal Top Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-[#edf0f7] pb-3">
           <div className="flex items-center gap-2.5">
@@ -147,7 +147,7 @@ export function TableTabModal({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-[#142957]">
+                <h3 className="text-base font-bold text-[#142644]">
                   جلسة طاولة {table.tableNumber}
                 </h3>
                 <span
@@ -160,7 +160,7 @@ export function TableTabModal({
                   {table.status === TableStatus.BILL_PRINTED ? 'مطبوع الشيك' : 'مشغولة'}
                 </span>
               </div>
-              <p className="text-[11px] text-zinc-500">
+              <p className="text-[11px] text-[#72819A]">
                 {table.sectionNameAr || 'صالة عامة'} · {order?.guestCount || 2} ضيوف · منذ{' '}
                 {order?.minutesSeated || 0} دقيقة
               </p>
@@ -170,7 +170,7 @@ export function TableTabModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-[#8a96b0] hover:bg-[#eef0ff] hover:text-[#40527c]"
+            className="rounded-[10px] p-1 text-[#72819A] hover:bg-[#E9EEFC] hover:text-[#142644]"
           >
             <X className="size-4" />
           </button>
@@ -188,12 +188,12 @@ export function TableTabModal({
         {currentView === 'DETAILS' && (
           <div className="flex-1 min-h-0 flex flex-col py-3 space-y-3 overflow-hidden">
             {/* Order info ribbon */}
-            <div className="flex items-center justify-between rounded-xl border border-zinc-200 bg-zinc-50/70 p-2.5 text-xs shrink-0">
-              <span className="font-mono text-zinc-700 font-bold">
+            <div className="flex shrink-0 items-center justify-between rounded-[12px] border border-[#DCE3EF] bg-[#F7F9FD] p-2.5 text-xs">
+              <span className="font-mono font-bold text-[#526B90]">
                 #{order?.orderNumber || 'DINE-TAB'}
               </span>
-              <span className="flex items-center gap-1 text-zinc-500 text-[11px]">
-                <Clock className="size-3 text-zinc-400" />
+              <span className="flex items-center gap-1 text-[11px] text-[#72819A]">
+                <Clock className="size-3 text-[#8D9AB2]" />
                 <span>جلسة منذ {order?.minutesSeated || 0} دقيقة</span>
               </span>
             </div>
@@ -201,34 +201,34 @@ export function TableTabModal({
             {/* Items List */}
             <div className="flex-1 min-h-0 overflow-y-auto space-y-2 pr-0.5">
               {!order || !order.items || order.items.length === 0 ? (
-                <div className="py-8 text-center text-xs text-zinc-400">
-                  <ShoppingBag className="mx-auto size-6 mb-1 text-zinc-300" />
+                <div className="py-8 text-center text-xs text-[#8D9AB2]">
+                  <ShoppingBag className="mx-auto mb-1 size-6 text-[#C6D2E5]" />
                   <p>لا توجد أصناف في الطلب المفتوح بعد</p>
                 </div>
               ) : (
                 order.items.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-start justify-between rounded-xl border border-zinc-100 bg-white p-2.5 text-xs shadow-2xs"
+                    className="flex items-start justify-between rounded-[12px] border border-[#E7ECF4] bg-white p-2.5 text-xs shadow-2xs"
                   >
                     <div className="space-y-0.5 min-w-0 flex-1">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-zinc-900">{item.productNameAr}</span>
+                        <span className="font-bold text-[#142644]">{item.productNameAr}</span>
                         {item.sizeNameAr && (
-                          <span className="text-[10px] text-zinc-500">({item.sizeNameAr})</span>
+                          <span className="text-[10px] text-[#72819A]">({item.sizeNameAr})</span>
                         )}
                       </div>
 
                       {item.modifiers && item.modifiers.length > 0 && (
-                        <p className="text-[10px] text-zinc-500 truncate">
+                        <p className="truncate text-[10px] text-[#72819A]">
                           + {item.modifiers.map((m) => m.nameAr).join('، ')}
                         </p>
                       )}
                     </div>
 
                     <div className="flex items-center gap-3 shrink-0 text-left" dir="ltr">
-                      <span className="font-mono text-zinc-500 text-xs">x{item.quantity}</span>
-                      <span className="font-bold text-zinc-900 text-xs font-mono">
+                      <span className="text-xs font-mono text-[#72819A]">x{item.quantity}</span>
+                      <span className="text-xs font-mono font-bold text-[#142644]">
                         {(item.totalPriceMinor / 100).toFixed(2)} {currencySymbol}
                       </span>
                     </div>
@@ -238,20 +238,20 @@ export function TableTabModal({
             </div>
 
             {/* Totals Summary */}
-            <div className="rounded-xl border border-zinc-200 bg-zinc-50/80 p-3 space-y-1.5 text-xs shrink-0">
-              <div className="flex justify-between text-zinc-600">
+            <div className="flex shrink-0 flex-col space-y-1.5 rounded-[12px] border border-[#DCE3EF] bg-[#F7F9FD] p-3 text-xs">
+              <div className="flex justify-between text-[#526B90]">
                 <span>المجموع الفرعي:</span>
                 <span className="font-mono">
                   {((order?.subtotalMinor ?? 0) / 100).toFixed(2)} {currencySymbol}
                 </span>
               </div>
-              <div className="flex justify-between text-zinc-600">
+              <div className="flex justify-between text-[#526B90]">
                 <span>الضريبة (14%):</span>
                 <span className="font-mono">
                   {((order?.taxMinor ?? 0) / 100).toFixed(2)} {currencySymbol}
                 </span>
               </div>
-              <div className="flex justify-between pt-1.5 border-t border-zinc-200 font-bold text-sm text-zinc-900">
+              <div className="flex justify-between border-t border-[#DCE3EF] pt-1.5 text-sm font-bold text-[#142644]">
                 <span>الإجمالي المستحق:</span>
                 <span className="font-mono text-base">
                   {(totalMinor / 100).toFixed(2)} {currencySymbol}
@@ -267,18 +267,18 @@ export function TableTabModal({
                   onStartAddItems(table);
                   onClose();
                 }}
-                className="flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white py-2 font-semibold text-zinc-800 hover:bg-zinc-50 active:scale-95 transition"
+                className="flex items-center justify-center gap-1.5 rounded-[12px] border border-[#DCE3EF] bg-white py-2 font-semibold text-[#526B90] transition hover:bg-[#F7F9FD] active:scale-95"
               >
-                <Plus className="size-3.5 text-zinc-600" />
+                <Plus className="size-3.5 text-[#2D61C9]" />
                 <span>إضافة أصناف</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setCurrentView('TRANSFER')}
-                className="flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white py-2 font-semibold text-zinc-800 hover:bg-zinc-50 active:scale-95 transition"
+                className="flex items-center justify-center gap-1.5 rounded-[12px] border border-[#DCE3EF] bg-white py-2 font-semibold text-[#526B90] transition hover:bg-[#F7F9FD] active:scale-95"
               >
-                <ArrowRightLeft className="size-3.5 text-zinc-600" />
+                <ArrowRightLeft className="size-3.5 text-[#2D61C9]" />
                 <span>نقل الطاولة</span>
               </button>
 
@@ -286,9 +286,9 @@ export function TableTabModal({
                 type="button"
                 onClick={handlePrintBill}
                 disabled={isPending}
-                className="flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white py-2 font-semibold text-zinc-800 hover:bg-zinc-50 active:scale-95 transition"
+                className="flex items-center justify-center gap-1.5 rounded-[12px] border border-[#DCE3EF] bg-white py-2 font-semibold text-[#526B90] transition hover:bg-[#F7F9FD] active:scale-95"
               >
-                <Printer className="size-3.5 text-zinc-600" />
+                <Printer className="size-3.5 text-[#2D61C9]" />
                 <span>طباعة الشيك</span>
               </button>
 
@@ -297,10 +297,10 @@ export function TableTabModal({
                   type="button"
                   onClick={() => onPrintKitchenTicket(table)}
                   disabled={isPending || !order || !order.items || order.items.length === 0}
-                  className="flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white py-2 font-semibold text-zinc-800 hover:bg-zinc-50 active:scale-95 transition"
+                  className="flex items-center justify-center gap-1.5 rounded-[12px] border border-[#DCE3EF] bg-white py-2 font-semibold text-[#526B90] transition hover:bg-[#F7F9FD] active:scale-95"
                   title="طباعة بون المطبخ (KOT)"
                 >
-                  <ChefHat className="size-3.5 text-zinc-600" />
+                  <ChefHat className="size-3.5 text-[#2D61C9]" />
                   <span>بون المطبخ</span>
                 </button>
               )}
@@ -308,9 +308,9 @@ export function TableTabModal({
               <button
                 type="button"
                 onClick={() => setCurrentView('SPLIT')}
-                className="flex items-center justify-center gap-1.5 rounded-xl border border-zinc-200 bg-white py-2 font-semibold text-zinc-800 hover:bg-zinc-50 active:scale-95 transition"
+                className="flex items-center justify-center gap-1.5 rounded-[12px] border border-[#DCE3EF] bg-white py-2 font-semibold text-[#526B90] transition hover:bg-[#F7F9FD] active:scale-95"
               >
-                <Scissors className="size-3.5 text-zinc-600" />
+                <Scissors className="size-3.5 text-[#2D61C9]" />
                 <span>تقسيم الشيك</span>
               </button>
             </div>
@@ -332,24 +332,24 @@ export function TableTabModal({
         {/* 2. Sub-View: Transfer Table */}
         {currentView === 'TRANSFER' && (
           <div className="py-4 space-y-4 text-xs">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-2">
-              <span className="font-bold text-zinc-900 text-sm">نقل الطلب إلى طاولة أخرى</span>
+            <div className="flex items-center justify-between border-b border-[#E7ECF4] pb-2">
+              <span className="text-sm font-bold text-[#142644]">نقل الطلب إلى طاولة أخرى</span>
               <button
                 type="button"
                 onClick={() => setCurrentView('DETAILS')}
-                className="text-zinc-500 hover:text-zinc-800"
+                className="text-[#72819A] hover:text-[#142644]"
               >
                 رجوع للحساب
               </button>
             </div>
 
-            <p className="text-zinc-600">
+            <p className="text-[#526B90]">
               اختر الطاولة الفارغة لنقل الطلب المفتوح الحالي من طاولة{' '}
-              <strong className="text-zinc-900">{table.tableNumber}</strong>:
+              <strong className="text-[#142644]">{table.tableNumber}</strong>:
             </p>
 
             {availableTables.filter((t) => t.id !== table.id).length === 0 ? (
-              <p className="py-6 text-center text-zinc-400 border rounded-xl border-dashed">
+              <p className="rounded-[12px] border border-dashed border-[#DCE3EF] py-6 text-center text-[#8D9AB2]">
                 لا توجد طاولات فارغة متاحة حالياً لنقل الطلب إليها.
               </p>
             ) : (
@@ -364,7 +364,7 @@ export function TableTabModal({
                       className={`flex flex-col justify-between rounded-xl border p-2.5 text-right transition ${
                         targetTableId === t.id
                         ? 'border-[#2D61C9] bg-[#2D61C9] text-white'
-                          : 'border-[#e0e6f3] bg-[#f8faff] hover:bg-[#f0f2fb] text-[#40527c]'
+                        : 'border-[#DCE3EF] bg-[#F7F9FD] text-[#526B90] hover:bg-[#E9EEFC]'
                       }`}
                     >
                       <span className="font-bold text-sm">طاولة {t.tableNumber}</span>
@@ -374,11 +374,11 @@ export function TableTabModal({
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-zinc-100">
+            <div className="flex items-center justify-end gap-2 border-t border-[#E7ECF4] pt-3">
               <button
                 type="button"
                 onClick={() => setCurrentView('DETAILS')}
-                className="rounded-xl border border-zinc-200 px-4 py-2 font-medium text-zinc-600"
+                className="rounded-[12px] border border-[#DCE3EF] px-4 py-2 font-medium text-[#526B90] hover:bg-[#E9EEFC]"
               >
                 إلغاء
               </button>
@@ -397,19 +397,19 @@ export function TableTabModal({
         {/* 3. Sub-View: Split Bill */}
         {currentView === 'SPLIT' && (
           <div className="py-4 space-y-4 text-xs">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-2">
-              <span className="font-bold text-zinc-900 text-sm">تقسيم الشيك بالتساوي</span>
+            <div className="flex items-center justify-between border-b border-[#E7ECF4] pb-2">
+              <span className="text-sm font-bold text-[#142644]">تقسيم الشيك بالتساوي</span>
               <button
                 type="button"
                 onClick={() => setCurrentView('DETAILS')}
-                className="text-zinc-500 hover:text-zinc-800"
+                className="text-[#72819A] hover:text-[#142644]"
               >
                 رجوع للحساب
               </button>
             </div>
 
-            <div className="flex items-center justify-between bg-zinc-50 p-3 rounded-xl border border-zinc-200">
-              <span className="font-semibold text-zinc-700">عدد الأفراد للتقسيم:</span>
+            <div className="flex items-center justify-between rounded-[12px] border border-[#DCE3EF] bg-[#F7F9FD] p-3">
+              <span className="font-semibold text-[#526B90]">عدد الأفراد للتقسيم:</span>
               <div className="flex items-center gap-1.5">
                 {[2, 3, 4, 5, 6].map((count) => (
                   <button
@@ -419,7 +419,7 @@ export function TableTabModal({
                     className={`size-8 rounded-lg font-bold transition ${
                       splitCount === count
                       ? 'bg-[#2D61C9] text-white'
-                        : 'bg-white border border-zinc-200 text-zinc-700 hover:bg-zinc-100'
+                        : 'border border-[#DCE3EF] bg-white text-[#526B90] hover:bg-[#E9EEFC]'
                     }`}
                   >
                     {count}
@@ -432,17 +432,17 @@ export function TableTabModal({
               {splitParts.map((part, index) => (
                 <div
                   key={index}
-                  className="flex items-center justify-between rounded-xl border border-zinc-100 bg-white p-2.5 text-xs shadow-2xs"
+                  className="flex items-center justify-between rounded-[12px] border border-[#E7ECF4] bg-white p-2.5 text-xs shadow-2xs"
                 >
-                  <span className="font-medium text-zinc-700">الضيف رقم {index + 1}:</span>
-                  <span className="font-bold font-mono text-zinc-900 text-sm">
+                  <span className="font-medium text-[#526B90]">الضيف رقم {index + 1}:</span>
+                  <span className="text-sm font-mono font-bold text-[#142644]">
                     {(part.amount / 100).toFixed(2)} {currencySymbol}
                   </span>
                 </div>
               ))}
             </div>
 
-            <div className="pt-2 border-t border-zinc-100 flex items-center justify-between text-xs text-zinc-500">
+            <div className="flex items-center justify-between border-t border-[#E7ECF4] pt-2 text-xs text-[#72819A]">
               <span>الإجمالي: {(totalMinor / 100).toFixed(2)} {currencySymbol}</span>
               <button
                 type="button"
@@ -458,12 +458,12 @@ export function TableTabModal({
         {/* 4. Sub-View: Settle (Pay & Close) */}
         {currentView === 'SETTLE' && (
           <div className="py-4 space-y-4 text-xs">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-2">
-              <span className="font-bold text-zinc-900 text-sm">تحصيل الحساب وإغلاق الطاولة</span>
+            <div className="flex items-center justify-between border-b border-[#E7ECF4] pb-2">
+              <span className="text-sm font-bold text-[#142644]">تحصيل الحساب وإغلاق الطاولة</span>
               <button
                 type="button"
                 onClick={() => setCurrentView('DETAILS')}
-                className="text-zinc-500 hover:text-zinc-800"
+                className="text-[#72819A] hover:text-[#142644]"
               >
                 رجوع
               </button>
@@ -479,7 +479,7 @@ export function TableTabModal({
 
             {/* Payment Method Selector */}
             <div className="space-y-1.5">
-              <label className="block font-semibold text-zinc-700">طريقة الدفع:</label>
+              <label className="block font-semibold text-[#526B90]">طريقة الدفع:</label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
@@ -487,7 +487,7 @@ export function TableTabModal({
                   className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 font-bold transition ${
                     paymentMethod === PaymentMethod.CASH
                       ? 'border-[#2D61C9] bg-[#2D61C9] text-white'
-                      : 'border-[#e0e6f3] bg-white text-[#526286] hover:bg-[#f7f8ff]'
+                      : 'border-[#DCE3EF] bg-white text-[#526B90] hover:bg-[#F7F9FD]'
                   }`}
                 >
                   <Banknote className="size-4" />
@@ -500,7 +500,7 @@ export function TableTabModal({
                   className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 font-bold transition ${
                     paymentMethod === PaymentMethod.CARD
                       ? 'border-[#2D61C9] bg-[#2D61C9] text-white'
-                      : 'border-[#e0e6f3] bg-white text-[#526286] hover:bg-[#f7f8ff]'
+                      : 'border-[#DCE3EF] bg-white text-[#526B90] hover:bg-[#F7F9FD]'
                   }`}
                 >
                   <CreditCard className="size-4" />
@@ -511,9 +511,9 @@ export function TableTabModal({
 
             {/* Cash Tender & Change (if cash) */}
             {paymentMethod === PaymentMethod.CASH && (
-              <div className="space-y-2 rounded-xl border border-zinc-200 bg-zinc-50/70 p-3">
+              <div className="space-y-2 rounded-[12px] border border-[#DCE3EF] bg-[#F7F9FD] p-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-zinc-700">المبلغ المستلم:</span>
+                  <span className="font-semibold text-[#526B90]">المبلغ المستلم:</span>
                   <input
                     type="number"
                     step="0.5"
@@ -525,7 +525,7 @@ export function TableTabModal({
                   />
                 </div>
 
-                <div className="flex items-center justify-between pt-1 border-t border-zinc-200/60 font-semibold text-emerald-800">
+                <div className="flex items-center justify-between border-t border-[#DCE3EF] pt-1 font-semibold text-emerald-800">
                   <span>الباقي للعميل:</span>
                   <span className="font-mono font-bold">
                     {(changeDue.amount / 100).toFixed(2)} {currencySymbol}
@@ -535,11 +535,11 @@ export function TableTabModal({
             )}
 
             {/* Confirm Settle */}
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-zinc-100">
+            <div className="flex items-center justify-end gap-2 border-t border-[#E7ECF4] pt-3">
               <button
                 type="button"
                 onClick={() => setCurrentView('DETAILS')}
-                className="rounded-xl border border-zinc-200 px-4 py-2 font-medium text-zinc-600"
+                className="rounded-[12px] border border-[#DCE3EF] px-4 py-2 font-medium text-[#526B90] hover:bg-[#E9EEFC]"
               >
                 إلغاء
               </button>

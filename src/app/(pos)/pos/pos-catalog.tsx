@@ -39,8 +39,8 @@ export function PosCatalog({ categories, currency, locale, disabled, onSelect }:
             posButton +
             ' min-h-[74px] min-w-[88px] shrink-0 flex-col gap-1.5 rounded-[14px] px-4 py-2 text-xs' +
             (!categoryId
-              ? ' border-[#2D61C9] bg-[#2D61C9] text-white hover:border-[#2756B8] hover:bg-[#2756B8]'
-              : ' bg-[#E9EEFC] text-[#142644]')
+              ? ' border-[#2D61C9] !bg-[#2D61C9] text-white hover:border-[#2756B8] hover:!bg-[#2756B8]'
+              : ' !bg-[#E9EEFC] text-[#142644]')
           }
         >
           <ShoppingBag size={20} strokeWidth={1.7} />
@@ -58,8 +58,8 @@ export function PosCatalog({ categories, currency, locale, disabled, onSelect }:
                 posButton +
                 ' min-h-[74px] min-w-[132px] shrink-0 justify-between rounded-[14px] px-4 py-2 text-xs' +
                 (categoryId === category.id
-                  ? ' border-[#2D61C9] bg-[#2D61C9] text-white hover:border-[#2756B8] hover:bg-[#2756B8]'
-                  : ' bg-[#E9EEFC] text-[#142644]')
+                  ? ' border-[#2D61C9] !bg-[#2D61C9] text-white hover:border-[#2756B8] hover:!bg-[#2756B8]'
+                  : ' !bg-[#E9EEFC] text-[#142644]')
               }
             >
               {category.nameAr}
@@ -76,19 +76,19 @@ export function PosCatalog({ categories, currency, locale, disabled, onSelect }:
             type="button"
             disabled={disabled}
             onClick={() => onSelect(product)}
-            className="group flex min-h-[256px] flex-col justify-between rounded-[14px] border border-[#DCE3EF] bg-white p-3.5 text-start shadow-[0_4px_12px_rgba(20,38,68,0.05)] transition hover:-translate-y-0.5 hover:border-[#B9C9E2] hover:shadow-[0_10px_20px_rgba(20,38,68,0.1)] active:scale-[0.98] disabled:opacity-50"
+            className="group flex h-[256px] min-h-0 flex-col justify-between rounded-[14px] border border-[#DCE3EF] bg-white p-3 text-start shadow-[0_4px_12px_rgba(20,38,68,0.05)] transition hover:-translate-y-0.5 hover:border-[#B9C9E2] hover:shadow-[0_10px_20px_rgba(20,38,68,0.1)] active:scale-[0.98] disabled:opacity-50"
           >
             <div
               aria-hidden="true"
-              className="relative mb-2 flex h-[154px] w-full items-center justify-center overflow-hidden rounded-[12px] bg-[radial-gradient(circle_at_50%_48%,#fff_0%,#f7f8fc_70%,#eef2f9_100%)] bg-contain bg-center bg-no-repeat"
+              className="relative mb-1.5 flex h-[138px] w-full items-center justify-center overflow-hidden rounded-[12px] bg-[radial-gradient(circle_at_50%_48%,#fff_0%,#f7f8fc_70%,#eef2f9_100%)] bg-contain bg-center bg-no-repeat"
               style={product.imageUrl ? { backgroundImage: `url(\"${product.imageUrl}\")` } : undefined}
             >
               {!product.imageUrl && <Coffee size={38} strokeWidth={1.35} className="text-[#AAB8D0]" />}
             </div>
-            <strong className="line-clamp-2 min-h-9 text-xs font-bold leading-snug text-[#142644] sm:text-sm">
+            <strong className="line-clamp-2 min-h-8 text-xs font-bold leading-snug text-[#142644] sm:text-sm">
               {product.nameAr}
             </strong>
-            <div className="mt-auto flex w-full items-center justify-between gap-1 pt-2">
+            <div className="mt-auto flex w-full items-center justify-between gap-1 pt-1.5">
               <span className="font-mono text-[11px] font-bold text-[#1D6C6B]">
                 من {Money.fromMinor(Math.min(...product.sizes.map((size) => size.price)), currency).format(locale)}
               </span>

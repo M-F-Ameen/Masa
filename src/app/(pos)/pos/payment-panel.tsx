@@ -48,7 +48,7 @@ export function PaymentPanel({
             className={`flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-xs font-semibold transition ${
               value === mode
                 ? 'border-[#2D61C9] bg-[#2D61C9] text-white shadow-[0_5px_12px_rgba(45,97,201,0.2)]'
-                : 'border-[#e0e6f3] bg-white text-[#526286] hover:bg-[#f7f8ff]'
+                : 'border-[#DCE3EF] bg-white text-[#526B90] hover:bg-[#F7F9FD]'
             }`}
           >
             <Icon size={14} strokeWidth={1.75} />
@@ -59,8 +59,8 @@ export function PaymentPanel({
 
       {mode !== PosPaymentMode.CARD && (
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between gap-2 rounded-[12px] border border-[#e0e6f3] bg-white px-2.5 py-1 text-xs">
-            <span className="text-[11px] text-zinc-500 shrink-0">
+          <div className="flex items-center justify-between gap-2 rounded-[12px] border border-[#DCE3EF] bg-white px-2.5 py-1 text-xs">
+            <span className="shrink-0 text-[11px] text-[#72819A]">
               {mode === PosPaymentMode.MIXED ? 'الجزء النقدي' : 'المبلغ المستلم'}
             </span>
             <input
@@ -89,7 +89,7 @@ export function PaymentPanel({
                     key={amt}
                     type="button"
                     onClick={() => setCash(amt.toString())}
-                    className="shrink-0 rounded-md bg-[#f1f3f9] px-2 py-0.5 text-[10px] font-mono font-medium text-[#66769b] transition hover:bg-[#e7eaf4]"
+                    className="shrink-0 rounded-md bg-[#F7F9FD] px-2 py-0.5 text-[10px] font-mono font-medium text-[#72819A] transition hover:bg-[#E9EEFC]"
                   >
                     {amt}
                   </button>

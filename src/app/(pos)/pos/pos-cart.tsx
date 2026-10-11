@@ -93,7 +93,7 @@ export function CartTypeSelector({
                 </div>
                 <div className="truncate">
                   <p className="font-bold text-[#243663] truncate">طاولة {selectedTable.tableNumber}</p>
-                  <p className="text-[10px] text-[#7b89a9] truncate">
+                  <p className="truncate text-[10px] text-[#72819A]">
                     {selectedTable.sectionNameAr || 'صالة عامة'}
                   </p>
                 </div>
@@ -203,7 +203,7 @@ export function CartLines({
                 </p>
               </div>
               {(size.nameAr || modifiers.length > 0) && (
-                <p className="mt-0.5 truncate text-[10px] text-[#7b89a9]">
+                <p className="mt-0.5 truncate text-[10px] text-[#72819A]">
                   {size.nameAr}
                   {modifiers.map((m) => ` + ${m.nameAr}`)}
                 </p>
@@ -335,7 +335,7 @@ export function CartTotals({
 
   return (
     <div className="space-y-1 border-t border-[#e8ecf5] pt-3 text-xs">
-      <div className="flex justify-between text-[#7b89a9] text-[11px]">
+      <div className="flex justify-between text-[11px] text-[#72819A]">
         <span>
           المجموع: {money(totals?.subtotalMinor ?? 0)} · الضريبة ({settings.taxRatePercent}%): {money(totals?.taxMinor ?? 0)}
         </span>

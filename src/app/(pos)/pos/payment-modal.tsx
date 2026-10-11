@@ -104,16 +104,16 @@ export function PaymentModal({
     >
       <div className="w-full max-w-lg overflow-hidden rounded-[16px] border border-[#DCE3EF] bg-white text-[#142644] shadow-[0_20px_60px_rgba(20,38,68,0.16)] animate-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#edf0f7] bg-[#f8faff] px-5 py-4">
+        <div className="flex items-center justify-between border-b border-[#DCE3EF] bg-[#F7F9FD] px-5 py-4">
           <div className="flex items-center gap-2.5">
-            <div className="grid size-9 place-items-center rounded-xl bg-[#2D61C9] text-white shadow-[0_6px_14px_rgba(45,97,201,0.2)]">
+            <div className="grid size-9 place-items-center rounded-[12px] bg-[#2D61C9] text-white shadow-[0_6px_14px_rgba(45,97,201,0.2)]">
               <Calculator size={18} strokeWidth={2} />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#142957]">
+              <h3 className="text-base font-bold text-[#142644]">
                 تحصيل الحساب وإتمام البيع
               </h3>
-              <p className="text-xs text-[#7b89a9]">
+              <p className="text-xs text-[#72819A]">
                 {orderType === OrderType.DINE_IN && tableNumber
                   ? `صالة — طاولة ${tableNumber}`
                   : 'طلب سفري / كاونتر'}
@@ -124,7 +124,7 @@ export function PaymentModal({
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="rounded-lg p-1 text-[#8a96b0] transition hover:bg-[#eef0ff] hover:text-[#40527c]"
+            className="rounded-[10px] p-1 text-[#72819A] transition hover:bg-[#E9EEFC] hover:text-[#142644]"
           >
             <X size={18} />
           </button>
@@ -162,7 +162,7 @@ export function PaymentModal({
                     className={`flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl border text-xs font-bold transition active:scale-95 ${
                       isSelected
                          ? 'border-[#2D61C9] bg-[#2D61C9] text-white shadow-[0_6px_14px_rgba(45,97,201,0.2)]'
-                         : 'border-[#e0e6f3] bg-white text-[#526286] hover:bg-[#f7f8ff]'
+                         : 'border-[#DCE3EF] bg-white text-[#526B90] hover:bg-[#F7F9FD]'
                     }`}
                   >
                     <Icon size={20} strokeWidth={1.8} />
@@ -177,9 +177,9 @@ export function PaymentModal({
           {isCashMode && (
             <div className="space-y-3 pt-1">
               <div className="space-y-1">
-                <label className="font-bold text-zinc-700 flex items-center justify-between">
+                <label className="flex items-center justify-between font-bold text-[#142644]">
                   <span>المبلغ المستلم نقداً من العميل:</span>
-                  <span className="text-[11px] font-normal text-zinc-400 font-mono">
+                  <span className="font-mono text-[11px] font-normal text-[#8D9AB2]">
                     ({settings.currency})
                   </span>
                 </label>
@@ -196,13 +196,13 @@ export function PaymentModal({
 
               {/* Quick Cash Buttons */}
               <div className="space-y-1">
-                <span className="text-[11px] text-zinc-500 font-medium">مبالغ سريعة:</span>
+                <span className="text-[11px] font-medium text-[#72819A]">مبالغ سريعة:</span>
                 <div className="flex flex-wrap gap-1.5">
                   <button
                     type="button"
                     disabled={isPending}
                     onClick={() => setCash(total.toMajor().toString())}
-                    className="flex-1 py-1.5 px-2.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-100 text-xs font-mono font-bold text-zinc-800 transition shadow-2xs"
+                    className="flex-1 rounded-lg border border-[#DCE3EF] bg-white px-2.5 py-1.5 text-xs font-mono font-bold text-[#142644] shadow-2xs transition hover:bg-[#F7F9FD]"
                   >
                     التمام ({total.toMajor()})
                   </button>
@@ -212,7 +212,7 @@ export function PaymentModal({
                       type="button"
                       disabled={isPending}
                       onClick={() => setCash(amt.toString())}
-                      className="py-1.5 px-3 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-100 text-xs font-mono font-semibold text-zinc-700 transition shadow-2xs"
+                      className="rounded-lg border border-[#DCE3EF] bg-white px-3 py-1.5 text-xs font-mono font-semibold text-[#526B90] shadow-2xs transition hover:bg-[#F7F9FD]"
                     >
                       {amt}
                     </button>
@@ -244,10 +244,10 @@ export function PaymentModal({
 
           {/* CARD MODE NOTICE */}
           {isCardMode && (
-            <div className="p-4 rounded-xl border border-zinc-200 bg-zinc-50 text-center space-y-1.5">
-              <CreditCard size={28} className="mx-auto text-zinc-700" strokeWidth={1.5} />
-              <p className="font-bold text-zinc-900">جاهز للدفع عبر نقطة البيع الإلكترونية</p>
-              <p className="text-zinc-500 text-[11px]">
+            <div className="space-y-1.5 rounded-[14px] border border-[#DCE3EF] bg-[#F7F9FD] p-4 text-center">
+              <CreditCard size={28} className="mx-auto text-[#142644]" strokeWidth={1.5} />
+              <p className="font-bold text-[#142644]">جاهز للدفع عبر نقطة البيع الإلكترونية</p>
+              <p className="text-[11px] text-[#72819A]">
                 مرر بطاقة العميل على جهاز الـ POS لتحصيل كامل المبلغ: {total.format(settings.locale)}
               </p>
             </div>
@@ -257,14 +257,14 @@ export function PaymentModal({
           {isMixedMode && (
             <div className="space-y-3 pt-1">
               <div className="space-y-1">
-                <label className="font-bold text-zinc-700 block">الجزء النقدي المستلم:</label>
+                <label className="block font-bold text-[#142644]">الجزء النقدي المستلم:</label>
                 <input
                   disabled={isPending}
                   inputMode="decimal"
                   value={cash}
                   onChange={(e) => setCash(e.target.value)}
                   placeholder="0.00"
-                  className="w-full h-10 text-center font-mono font-bold text-base rounded-xl border border-zinc-300 bg-zinc-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-zinc-900 transition"
+                  className="h-10 w-full rounded-[12px] border border-[#DCE3EF] bg-[#F7F9FD] text-center font-mono text-base font-bold transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2D61C9]/25"
                 />
               </div>
 
@@ -282,12 +282,12 @@ export function PaymentModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="flex items-center gap-3 border-t border-[#edf0f7] bg-[#f8faff] px-5 py-4">
+        <div className="flex items-center gap-3 border-t border-[#DCE3EF] bg-[#F7F9FD] px-5 py-4">
           <button
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="flex-1 rounded-xl border border-[#e0e6f3] bg-white py-2.5 text-xs font-semibold text-[#526286] transition hover:bg-[#f0f2fb]"
+            className="flex-1 rounded-[12px] border border-[#DCE3EF] bg-white py-2.5 text-xs font-semibold text-[#526B90] transition hover:bg-[#E9EEFC]"
           >
             تراجع
           </button>
