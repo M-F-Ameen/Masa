@@ -99,9 +99,9 @@ export function PosFloorPlan({
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-zinc-50 overflow-hidden" dir="rtl">
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-[#f8faff]" dir="rtl">
       {/* 1. Floor Plan Control Bar */}
-      <div className="shrink-0 border-b border-zinc-200 bg-white p-3 sm:px-6 sm:py-3 shadow-2xs space-y-2.5">
+      <div className="shrink-0 space-y-2.5 border-b border-[#e4e9f4] bg-white p-3 shadow-[0_4px_18px_rgba(55,77,132,0.04)] sm:px-6 sm:py-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
           {/* Section Pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
@@ -110,8 +110,8 @@ export function PosFloorPlan({
               onClick={() => setSelectedSectionId('ALL')}
               className={`shrink-0 rounded-xl px-3 py-1.5 font-bold transition ${
                 selectedSectionId === 'ALL'
-                  ? 'bg-zinc-900 text-white shadow-2xs'
-                  : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200/70'
+                ? 'bg-[#2D61C9] text-white shadow-[0_5px_12px_rgba(45,97,201,0.2)]'
+                  : 'bg-[#f1f3fb] text-[#526286] hover:bg-[#e7eaf7]'
               }`}
             >
               كافة الصالة ({tables.length})
@@ -125,8 +125,8 @@ export function PosFloorPlan({
                   onClick={() => setSelectedSectionId(sec.id)}
                   className={`shrink-0 rounded-xl px-3 py-1.5 font-bold transition ${
                     selectedSectionId === sec.id
-                      ? 'bg-zinc-900 text-white shadow-2xs'
-                      : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200/70'
+                ? 'bg-[#2D61C9] text-white shadow-[0_5px_12px_rgba(45,97,201,0.2)]'
+                       : 'bg-[#f1f3fb] text-[#526286] hover:bg-[#e7eaf7]'
                   }`}
                 >
                   {sec.nameAr} ({count})
@@ -160,7 +160,7 @@ export function PosFloorPlan({
               disabled={isRefreshing}
               title="تحديث حالات الصالة"
               aria-label="تحديث حالات الصالة"
-              className="grid size-8 place-items-center rounded-lg border border-zinc-200 text-zinc-600 hover:bg-zinc-100 disabled:opacity-50"
+              className="grid size-8 place-items-center rounded-lg border border-[#e0e6f3] text-[#526286] hover:bg-[#f0f2fb] disabled:opacity-50"
             >
               <RefreshCw className={`size-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
             </button>
@@ -176,7 +176,7 @@ export function PosFloorPlan({
               placeholder="بحث برقم الطاولة..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-zinc-200 bg-zinc-50/70 py-1 pr-8 pl-3 text-xs text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-zinc-900"
+            className="w-full rounded-lg border border-[#DCE3EF] bg-[#F7F9FD] py-1 pr-8 pl-3 text-xs text-[#142644] placeholder-[#8D9AB2] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2D61C9]/25"
             />
           </div>
 
@@ -194,7 +194,7 @@ export function PosFloorPlan({
           <button
             type="button"
             onClick={onSwitchToCatalog}
-            className="mr-auto rounded-lg bg-zinc-100 hover:bg-zinc-200 px-3 py-1 font-semibold text-zinc-800 text-xs"
+            className="mr-auto rounded-lg bg-[#E9EEFC] px-3 py-1 text-xs font-semibold text-[#2D61C9] hover:bg-[#DDE7FA]"
           >
             الذهاب للطلب السريع / المنيو
           </button>
@@ -318,13 +318,13 @@ export function PosFloorPlan({
       {/* 3. Modal: Quick Open Table */}
       {openModalTable && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#10204a]/35 p-4 backdrop-blur-[2px] animate-in fade-in"
           dir="rtl"
         >
-          <div className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-2xl animate-in zoom-in-95">
+          <div className="w-full max-w-sm rounded-[24px] border border-[#e1e7f3] bg-white p-5 text-[#243663] shadow-[0_24px_80px_rgba(31,50,105,0.18)] animate-in zoom-in-95">
             <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
               <div className="flex items-center gap-2">
-                <div className="grid size-8 place-items-center rounded-xl bg-emerald-600 text-white font-bold text-xs">
+              <div className="grid size-8 place-items-center rounded-xl bg-[#2D61C9] text-white font-bold text-xs shadow-[0_6px_14px_rgba(45,97,201,0.2)]">
                   {openModalTable.tableNumber}
                 </div>
                 <div>
@@ -383,7 +383,7 @@ export function PosFloorPlan({
               <button
                 type="button"
                 onClick={handleConfirmOpenTable}
-                className="flex items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2 font-bold text-white shadow-xs hover:bg-zinc-800"
+          className="flex items-center gap-1.5 rounded-xl bg-[#2D61C9] px-4 py-2 font-bold text-white shadow-[0_8px_18px_rgba(45,97,201,0.2)] hover:bg-[#2756B8]"
               >
                 <Plus className="size-3.5" />
                 <span>فتح الطاولة واختيار الأصناف</span>

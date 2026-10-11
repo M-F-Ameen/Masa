@@ -4,17 +4,18 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import {
   ArrowRight,
+  CalendarDays,
   History,
   Printer,
   Store,
   ShoppingCart,
+  UserRound,
   ChevronLeft,
   X,
   Armchair,
   Plus,
   ChefHat,
   CheckCircle2,
-  Wifi,
   WifiOff,
   RefreshCw,
 } from 'lucide-react';
@@ -207,32 +208,67 @@ function PosHeader({
   cartItemCount: number;
   onOpenMobileCart: () => void;
 }) {
+  const [headerDateTime, setHeaderDateTime] = useState('');
+
+  useEffect(() => {
+    const updateDateTime = () => {
+      setHeaderDateTime(
+        new Intl.DateTimeFormat(state.settings.locale || 'ar-EG', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          hour: '2-digit',
+          minute: '2-digit',
+        }).format(new Date())
+      );
+    };
+    updateDateTime();
+    const timer = window.setInterval(updateDateTime, 30_000);
+    return () => window.clearInterval(timer);
+  }, [state.settings.locale]);
+
   const occupiedTablesCount = state.tables.filter(
     (t) => t.status === TableStatus.OCCUPIED || t.status === TableStatus.BILL_PRINTED
   ).length;
 
   return (
-    <header className="shrink-0 flex items-center justify-between gap-2 border-b border-zinc-200 bg-white px-3 py-2 sm:px-6 sm:py-2.5 shadow-2xs">
+    <header className="min-h-[88px] shrink-0 flex items-center justify-between gap-3 border-b border-[#DCE3EF] bg-[#F7F8FC]/95 px-4 py-3 sm:px-6 lg:min-h-[112px] lg:px-8 shadow-[0_3px_14px_rgba(20,38,68,0.035)]">
       <div className="flex items-center gap-2.5 min-w-0">
-        <span className="grid size-9 sm:size-10 place-items-center rounded-xl bg-zinc-900 text-white shadow-xs shrink-0">
+        <span className="grid size-12 shrink-0 place-items-center rounded-[16px] bg-[#142644] text-white shadow-[0_7px_15px_rgba(20,38,68,0.14)] sm:size-16">
           <Store size={18} strokeWidth={1.75} />
         </span>
         <div className="truncate">
-          <h1 className="text-xs sm:text-sm font-bold text-zinc-900 truncate">
+          <h1 className="truncate text-sm font-bold text-[#142644] sm:text-base">
             {state.settings.nameAr} — نقطة البيع
           </h1>
-          <p className="text-[10px] sm:text-xs text-zinc-500 truncate">
+          <p className="truncate text-[11px] text-[#7180a4] sm:text-xs">
             {state.branch.nameAr} · {state.shift ? 'وردية مفتوحة' : 'الوردية مغلقة'}
           </p>
         </div>
       </div>
 
       <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <div className="hidden min-h-16 items-center gap-2 rounded-[16px] border border-[#DCE3EF] bg-white px-4 py-2 text-[#405675] shadow-[0_3px_12px_rgba(20,38,68,0.04)] xl:flex">
+          <CalendarDays size={18} className="text-[#2D61C9]" />
+          <span className="whitespace-nowrap text-[11px] font-semibold" dir="rtl">
+            {headerDateTime || '—'}
+          </span>
+        </div>
+        <button type="button" aria-label="الفواتير الأخيرة" title="الفواتير الأخيرة" onClick={() => state.setShowHistory(true)} className="grid size-16 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#405675] shadow-[0_3px_12px_rgba(20,38,68,0.04)] transition hover:bg-[#F1F5FD]">
+          <History size={18} strokeWidth={1.8} />
+        </button>
+        <button type="button" aria-label="طباعة" title="طباعة" onClick={() => window.print()} className="hidden size-16 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#405675] shadow-[0_3px_12px_rgba(20,38,68,0.04)] transition hover:bg-[#F1F5FD] sm:grid">
+          <Printer size={18} strokeWidth={1.8} />
+        </button>
+        <Link href="/admin" aria-label="فتح لوحة الإدارة" title="فتح لوحة الإدارة" className="hidden min-h-16 items-center gap-3 rounded-[16px] border border-[#DCE3EF] bg-white px-4 py-2 text-[#142644] shadow-[0_3px_12px_rgba(20,38,68,0.04)] transition hover:bg-[#F1F5FD] xl:flex">
+          <UserRound size={20} className="text-[#6D7C99]" />
+          <span className="text-right text-[10px] leading-4"><span className="block text-[#8490ad]">المستخدم</span><span className="block font-bold">الكاشير</span></span>
+        </Link>
         {/* Offline / Online Sync Indicator */}
         {!state.offlineSync.isOnline ? (
           <div
             title="نظام الكاشير يعمل محلياً في وضع عدم الاتصال (أوفلاين). يتم حفظ الفواتير وطباعتها وتجهيزها للمزامنة التلقائية فور عودة الإنترنت."
-            className="flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-2.5 py-1 text-[11px] font-bold text-rose-700 shadow-2xs"
+            className="flex items-center gap-1.5 rounded-xl border border-rose-200 bg-rose-50 px-2.5 py-1 text-[11px] font-bold text-rose-700 shadow-[0_4px_12px_rgba(200,70,100,0.06)]"
           >
             <WifiOff size={13} className="text-rose-600 animate-pulse" />
             <span className="hidden md:inline">أوفلاين</span>
@@ -248,7 +284,7 @@ function PosHeader({
             onClick={() => state.offlineSync.syncNow()}
             disabled={state.offlineSync.isSyncing}
             title="توجد فواتير محلية بانتظار المزامنة مع الخادم. انقر للمزامنة الفورية."
-            className="flex items-center gap-1.5 rounded-xl border border-amber-300 bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-800 hover:bg-amber-100 shadow-2xs transition disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-800 hover:bg-amber-100 shadow-[0_4px_12px_rgba(180,130,40,0.08)] transition disabled:opacity-50"
           >
             <RefreshCw
               size={13}
@@ -279,8 +315,8 @@ function PosHeader({
             }
             className={`${posButton} px-2 sm:px-3 text-xs flex items-center gap-1.5 ${
               state.viewMode === 'FLOOR_PLAN'
-                ? 'bg-zinc-900 text-white hover:bg-zinc-800'
-                : 'text-zinc-700 hover:bg-zinc-100'
+                ? 'bg-[#2D61C9] text-white hover:bg-[#2756B8]'
+                : 'text-[#405675] hover:bg-[#E9EEFC]'
             }`}
           >
             <Armchair size={15} strokeWidth={1.8} />
@@ -289,10 +325,10 @@ function PosHeader({
             </span>
             {occupiedTablesCount > 0 && (
               <span
-                className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold ${
                   state.viewMode === 'FLOOR_PLAN'
-                    ? 'bg-white text-zinc-900'
-                    : 'bg-zinc-900 text-white'
+                    ? 'bg-white text-[#2D61C9]'
+                    : 'bg-[#2D61C9] text-white'
                 }`}
               >
                 {occupiedTablesCount}
@@ -307,11 +343,11 @@ function PosHeader({
             type="button"
             onClick={onOpenMobileCart}
             aria-label="سلة الطلب الحالية"
-            className="relative grid size-8 sm:size-9 place-items-center rounded-xl border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 lg:hidden shadow-2xs transition"
+            className="relative grid size-11 place-items-center rounded-[14px] border border-[#DCE3EF] bg-white text-[#405675] hover:bg-[#E9EEFC] lg:hidden shadow-[0_3px_12px_rgba(20,38,68,0.05)] transition"
           >
             <ShoppingCart size={16} strokeWidth={1.75} />
             {cartItemCount > 0 && (
-              <span className="absolute -top-1 -right-1 size-4 rounded-full bg-emerald-600 text-white font-bold text-[9px] grid place-items-center">
+              <span className="absolute -right-1 -top-1 grid size-4 place-items-center rounded-full bg-[#2D61C9] text-[9px] font-bold text-white">
                 {cartItemCount}
               </span>
             )}
@@ -352,9 +388,9 @@ function PosSalePanel({
   const { sale, totals, pricingError } = state;
 
   return (
-    <aside className="h-full flex flex-col justify-between border-s border-zinc-200 bg-white overflow-hidden shadow-xs">
+    <aside className="flex h-full flex-col justify-between overflow-hidden rounded-[16px] border border-[#DCE3EF] bg-white shadow-[0_5px_16px_rgba(20,38,68,0.05)]">
       {/* 1. Header: Order Title & Order Type (سفري / صالة) */}
-      <div className="shrink-0 p-3 sm:p-4 border-b border-zinc-100 bg-white">
+      <div className="shrink-0 border-b border-[#E7ECF4] bg-white p-4 sm:p-5">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             {isMobile && (
@@ -367,8 +403,8 @@ function PosSalePanel({
                 <X size={16} />
               </button>
             )}
-            <h2 className="flex items-center gap-2 font-bold text-sm text-zinc-900">
-              <ShoppingCart size={17} strokeWidth={1.75} className="text-zinc-700" />
+            <h2 className="flex items-center gap-2 text-sm font-bold text-[#142644] sm:text-base">
+              <ShoppingCart size={19} strokeWidth={1.75} className="text-[#142644]" />
               الطلب الحالي
             </h2>
           </div>
@@ -393,7 +429,7 @@ function PosSalePanel({
       </div>
 
       {/* 2. Middle: Cart Lines (THE ONLY SCROLLABLE PART) */}
-      <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 bg-zinc-50/40">
+      <div className="min-h-0 flex-1 overflow-y-auto bg-[#FBFCFF] p-3 sm:p-4">
         <CartLines
           items={state.items}
           products={state.products}
@@ -404,7 +440,7 @@ function PosSalePanel({
       </div>
 
       {/* 3. Bottom: Pinned Summary, Compact Options, Payment Trigger */}
-      <div className="shrink-0 border-t border-zinc-200 bg-white p-3 sm:p-4 space-y-2.5 shadow-sm">
+      <div className="shrink-0 space-y-2.5 border-t border-[#E7ECF4] bg-white p-4 sm:p-5">
         <CartTotals totals={totals} settings={state.settings} />
         <CartOptions
           canDiscount={state.canDiscount}
@@ -427,7 +463,7 @@ function PosSalePanel({
           <button
             disabled={!state.items.length}
             onClick={() => state.addItemsToTab(state.activeTabOrderId!)}
-            className="flex items-center justify-center gap-2 rounded-xl bg-indigo-700 hover:bg-indigo-800 w-full py-2.5 text-sm font-bold text-white shadow-xs active:scale-95 transition disabled:opacity-50"
+            className="flex min-h-14 items-center justify-center gap-2 rounded-[14px] bg-[#2D61C9] hover:bg-[#2756B8] w-full py-2.5 text-sm font-bold text-white shadow-[0_7px_16px_rgba(45,97,201,0.18)] active:scale-95 transition disabled:opacity-50"
           >
             <Plus size={16} />
             <span>إرسال الأصناف لطاولة {state.selectedTable?.tableNumber}</span>
@@ -437,7 +473,7 @@ function PosSalePanel({
             <button
               disabled={!state.items.length}
               onClick={() => state.openTableTab(state.selectedTable!.id, state.guestCount)}
-              className="flex items-center justify-center gap-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 w-full py-2.5 text-xs font-bold text-white shadow-xs active:scale-95 transition disabled:opacity-50"
+              className="flex min-h-14 items-center justify-center gap-2 rounded-[14px] bg-[#142644] hover:bg-[#0F1D35] w-full py-2.5 text-xs font-bold text-white shadow-[0_6px_14px_rgba(20,38,68,0.14)] active:scale-95 transition disabled:opacity-50"
             >
               <Armchair size={15} />
               <span>حفظ كطلب مفتوح لطاولة {state.selectedTable.tableNumber}</span>
@@ -445,7 +481,7 @@ function PosSalePanel({
             <button
               disabled={sale.pending || (!sale.uncertain && !totals) || !state.items.length}
               onClick={() => state.setIsPaymentModalOpen(true)}
-              className="flex items-center justify-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 w-full py-2 text-xs font-semibold text-zinc-700 active:scale-95 transition disabled:opacity-50"
+              className="flex min-h-11 items-center justify-center gap-2 rounded-[14px] border border-[#DCE3EF] bg-[#F7F9FD] hover:bg-[#E9EEFC] w-full py-2 text-xs font-semibold text-[#405675] active:scale-95 transition disabled:opacity-50"
             >
               <span>دفع وتحصيل فوري بالكاونتر</span>
             </button>
@@ -460,7 +496,7 @@ function PosSalePanel({
                 state.setIsPaymentModalOpen(true);
               }
             }}
-            className={posPrimary + ' w-full py-2.5 text-sm font-bold shadow-xs'}
+            className={posPrimary + ' min-h-[76px] w-full py-2.5 rounded-[14px] text-sm font-bold shadow-[0_8px_18px_rgba(45,97,201,0.18)]'}
           >
             {sale.pending
               ? 'جارٍ تسجيل البيع...'
@@ -613,9 +649,9 @@ function PosContent({
   }
 
   return (
-    <div className="flex-1 min-h-0 relative flex flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_400px] xl:grid-cols-[minmax(0,1fr)_420px] overflow-hidden">
+    <div className="relative flex min-h-0 flex-1 flex-col gap-3 overflow-hidden bg-[#F7F8FC] p-2.5 sm:p-3 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(280px,25%)] lg:gap-3.5 lg:p-2">
       {/* 1. Catalog / Floor Plan Area */}
-      <div className="flex-1 h-full overflow-hidden flex flex-col bg-zinc-50 pb-24 lg:pb-0">
+      <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden rounded-[16px] border border-[#DCE3EF] bg-white pb-24 shadow-[0_5px_16px_rgba(20,38,68,0.04)] lg:pb-0">
         {state.viewMode === 'FLOOR_PLAN' ? (
           <PosFloorPlan
             tables={state.tables}
@@ -649,7 +685,7 @@ function PosContent({
       </div>
 
       {/* 2. Desktop Permanent Sale Panel (Hidden on mobile, pristine on lg+) */}
-      <div className="hidden lg:block h-full overflow-hidden">
+      <div className="hidden h-full overflow-hidden lg:block">
         <PosSalePanel state={state} />
       </div>
 
@@ -659,17 +695,17 @@ function PosContent({
           <button
             type="button"
             onClick={() => setShowMobileCart(true)}
-            className="w-full bg-zinc-900 text-white rounded-2xl p-3 shadow-2xl flex items-center justify-between active:scale-[0.99] transition border border-zinc-800"
+            className="flex w-full items-center justify-between rounded-[16px] border border-[#2756B8] bg-[#2D61C9] p-3 text-white shadow-[0_12px_26px_rgba(45,97,201,0.24)] transition active:scale-[0.99]"
           >
             <div className="flex items-center gap-3">
-              <span className="grid size-9 place-items-center rounded-xl bg-zinc-800 text-white relative">
+               <span className="relative grid size-9 place-items-center rounded-xl bg-white/15 text-white">
                 <ShoppingCart size={18} strokeWidth={1.8} />
-                <span className="absolute -top-1.5 -right-1.5 size-5 rounded-full bg-emerald-500 text-zinc-950 font-black text-[10px] grid place-items-center shadow-xs">
+                  <span className="absolute -right-1.5 -top-1.5 grid size-5 place-items-center rounded-full bg-white text-[10px] font-black text-[#2D61C9] shadow-xs">
                   {cartItemCount}
                 </span>
               </span>
               <div className="text-right">
-                <p className="text-[10px] text-zinc-400">إجمالي الطلب</p>
+                 <p className="text-[10px] text-white/70">إجمالي الطلب</p>
                 <p className="text-xs sm:text-sm font-extrabold text-white">
                   {Money.fromMinor(
                     state.totals?.totalMinor ?? 0,
@@ -679,7 +715,7 @@ function PosContent({
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl transition">
+                <div className="flex items-center gap-1.5 rounded-xl bg-white/15 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-white/25">
               <span>عرض السلة والدفع</span>
               <ChevronLeft size={15} />
             </div>
@@ -866,7 +902,7 @@ export function PosClient(props: PosClientProps) {
   return (
     <div
       dir="rtl"
-      className="h-screen max-h-screen overflow-hidden flex flex-col bg-zinc-50 text-zinc-900 font-sans"
+      className="h-screen max-h-screen overflow-hidden flex flex-col bg-[#F7F8FC] text-[#142644] font-sans"
     >
       <div className="flex flex-col flex-1 min-h-0 print:hidden overflow-hidden">
         <PosHeader

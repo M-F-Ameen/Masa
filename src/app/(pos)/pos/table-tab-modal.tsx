@@ -135,26 +135,26 @@ export function TableTabModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#10204a]/35 p-3 backdrop-blur-[2px] sm:p-4 animate-in fade-in"
       dir="rtl"
     >
-      <div className="w-full max-w-xl rounded-2xl bg-white p-4 sm:p-5 shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-in zoom-in-95">
+      <div className="flex max-h-[90vh] w-full max-w-xl flex-col overflow-hidden rounded-[24px] border border-[#e1e7f3] bg-white p-4 text-[#243663] shadow-[0_24px_80px_rgba(31,50,105,0.18)] sm:p-5 animate-in zoom-in-95">
         {/* Modal Top Header */}
-        <div className="flex items-center justify-between border-b border-zinc-100 pb-3 shrink-0">
+        <div className="flex shrink-0 items-center justify-between border-b border-[#edf0f7] pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="grid size-9 place-items-center rounded-xl bg-zinc-900 text-white font-bold">
+            <div className="grid size-9 place-items-center rounded-xl bg-[#2D61C9] font-bold text-white shadow-[0_6px_14px_rgba(45,97,201,0.2)]">
               {table.tableNumber}
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-zinc-900">
+                <h3 className="text-base font-bold text-[#142957]">
                   جلسة طاولة {table.tableNumber}
                 </h3>
                 <span
                   className={`rounded-md px-1.5 py-0.5 text-[10px] font-bold ${
                     table.status === TableStatus.BILL_PRINTED
                       ? 'bg-amber-100 text-amber-800'
-                      : 'bg-zinc-900 text-white'
+                      : 'bg-[#2D61C9] text-white'
                   }`}
                 >
                   {table.status === TableStatus.BILL_PRINTED ? 'مطبوع الشيك' : 'مشغولة'}
@@ -170,7 +170,7 @@ export function TableTabModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700"
+            className="rounded-lg p-1 text-[#8a96b0] hover:bg-[#eef0ff] hover:text-[#40527c]"
           >
             <X className="size-4" />
           </button>
@@ -320,7 +320,7 @@ export function TableTabModal({
               <button
                 type="button"
                 onClick={() => setCurrentView('SETTLE')}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-zinc-900 py-3 text-sm font-bold text-white shadow-xs hover:bg-zinc-800 active:scale-95 transition"
+              className="flex w-full items-center justify-center gap-2 rounded-[14px] bg-[#2D61C9] py-3 text-sm font-bold text-white shadow-[0_8px_18px_rgba(45,97,201,0.2)] hover:bg-[#2756B8] active:scale-95 transition"
               >
                 <CheckCircle2 className="size-4" />
                 <span>تحصيل وإغلاق الطاولة ({(totalMinor / 100).toFixed(2)} {currencySymbol})</span>
@@ -363,8 +363,8 @@ export function TableTabModal({
                       onClick={() => setTargetTableId(t.id)}
                       className={`flex flex-col justify-between rounded-xl border p-2.5 text-right transition ${
                         targetTableId === t.id
-                          ? 'border-zinc-900 bg-zinc-900 text-white'
-                          : 'border-zinc-200 bg-zinc-50 hover:bg-zinc-100 text-zinc-800'
+                        ? 'border-[#2D61C9] bg-[#2D61C9] text-white'
+                          : 'border-[#e0e6f3] bg-[#f8faff] hover:bg-[#f0f2fb] text-[#40527c]'
                       }`}
                     >
                       <span className="font-bold text-sm">طاولة {t.tableNumber}</span>
@@ -386,7 +386,7 @@ export function TableTabModal({
                 type="button"
                 onClick={handleTransferSubmit}
                 disabled={!targetTableId || isPending}
-                className="rounded-xl bg-zinc-900 px-4 py-2 font-semibold text-white disabled:opacity-50"
+              className="rounded-xl bg-[#2D61C9] px-4 py-2 font-semibold text-white hover:bg-[#2756B8] disabled:opacity-50"
               >
                 {isPending ? 'جاري النقل...' : 'تأكيد نقل الطلب'}
               </button>
@@ -418,7 +418,7 @@ export function TableTabModal({
                     onClick={() => setSplitCount(count)}
                     className={`size-8 rounded-lg font-bold transition ${
                       splitCount === count
-                        ? 'bg-zinc-900 text-white'
+                      ? 'bg-[#2D61C9] text-white'
                         : 'bg-white border border-zinc-200 text-zinc-700 hover:bg-zinc-100'
                     }`}
                   >
@@ -447,7 +447,7 @@ export function TableTabModal({
               <button
                 type="button"
                 onClick={() => setCurrentView('SETTLE')}
-                className="rounded-xl bg-zinc-900 px-4 py-2 font-semibold text-white"
+              className="rounded-xl bg-[#2D61C9] px-4 py-2 font-semibold text-white hover:bg-[#2756B8]"
               >
                 المتابعة للدفع
               </button>
@@ -470,8 +470,8 @@ export function TableTabModal({
             </div>
 
             {/* Total due display */}
-            <div className="text-center rounded-2xl bg-zinc-900 p-4 text-white">
-              <p className="text-[11px] text-zinc-400">إجمالي المبلغ المطلوب تحصيله</p>
+            <div className="rounded-2xl bg-[#2D61C9] p-4 text-center text-white">
+              <p className="text-[11px] text-white/70">إجمالي المبلغ المطلوب تحصيله</p>
               <h2 className="mt-1 text-2xl font-black font-mono">
                 {(totalMinor / 100).toFixed(2)} {currencySymbol}
               </h2>
@@ -486,8 +486,8 @@ export function TableTabModal({
                   onClick={() => setPaymentMethod(PaymentMethod.CASH)}
                   className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 font-bold transition ${
                     paymentMethod === PaymentMethod.CASH
-                      ? 'border-zinc-900 bg-zinc-900 text-white'
-                      : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'
+                      ? 'border-[#2D61C9] bg-[#2D61C9] text-white'
+                      : 'border-[#e0e6f3] bg-white text-[#526286] hover:bg-[#f7f8ff]'
                   }`}
                 >
                   <Banknote className="size-4" />
@@ -499,8 +499,8 @@ export function TableTabModal({
                   onClick={() => setPaymentMethod(PaymentMethod.CARD)}
                   className={`flex items-center justify-center gap-1.5 rounded-xl border py-2.5 font-bold transition ${
                     paymentMethod === PaymentMethod.CARD
-                      ? 'border-zinc-900 bg-zinc-900 text-white'
-                      : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'
+                      ? 'border-[#2D61C9] bg-[#2D61C9] text-white'
+                      : 'border-[#e0e6f3] bg-white text-[#526286] hover:bg-[#f7f8ff]'
                   }`}
                 >
                   <CreditCard className="size-4" />
@@ -520,7 +520,7 @@ export function TableTabModal({
                     placeholder={(totalMinor / 100).toFixed(2)}
                     value={tenderedInput}
                     onChange={(e) => setTenderedInput(e.target.value)}
-                    className="w-32 rounded-lg border border-zinc-200 bg-white px-2.5 py-1 text-left font-mono font-bold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900"
+              className="w-32 rounded-lg border border-[#DCE3EF] bg-[#F7F9FD] px-2.5 py-1 text-left font-mono font-bold text-[#142644] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2D61C9]/25"
                     dir="ltr"
                   />
                 </div>
@@ -547,7 +547,7 @@ export function TableTabModal({
                 type="button"
                 onClick={handleSettleSubmit}
                 disabled={isPending}
-                className="rounded-xl bg-emerald-600 px-5 py-2.5 font-bold text-white shadow-xs hover:bg-emerald-700 disabled:opacity-50"
+              className="rounded-xl bg-[#2D61C9] px-5 py-2.5 font-bold text-white shadow-[0_8px_18px_rgba(45,97,201,0.2)] hover:bg-[#2756B8] disabled:opacity-50"
               >
                 {isPending ? 'جاري إتمام التحصيل...' : 'تأكيد استلام المبلغ وإغلاق الطاولة'}
               </button>

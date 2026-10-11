@@ -6,6 +6,7 @@ export interface PosModifier { id: string; nameAr: string; nameEn: string; price
 export interface PosModifierGroup { id: string; nameAr: string; minSelect: number; maxSelect: number; modifiers: PosModifier[] }
 export interface PosProduct {
   id: string; categoryId: string; nameAr: string; nameEn: string;
+  imageUrl?: string | null;
   sizes: PosSize[]; modifierGroups: PosModifierGroup[];
 }
 export interface PosCategory { id: string; nameAr: string; products: PosProduct[] }

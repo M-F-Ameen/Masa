@@ -64,23 +64,23 @@ export function TablePickerModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in" dir="rtl">
-      <div className="w-full max-w-xl rounded-2xl bg-white p-4 sm:p-5 shadow-2xl flex flex-col max-h-[88vh] overflow-hidden animate-in zoom-in-95">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#10204a]/35 p-3 backdrop-blur-[2px] sm:p-4 animate-in fade-in" dir="rtl">
+      <div className="flex max-h-[88vh] w-full max-w-xl flex-col overflow-hidden rounded-[24px] border border-[#e1e7f3] bg-white p-4 text-[#243663] shadow-[0_24px_80px_rgba(31,50,105,0.18)] sm:p-5 animate-in zoom-in-95">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-100 pb-3 shrink-0">
+        <div className="flex shrink-0 items-center justify-between border-b border-[#edf0f7] pb-3">
           <div className="flex items-center gap-2">
-            <div className="grid size-8 place-items-center rounded-xl bg-zinc-900 text-white">
+          <div className="grid size-8 place-items-center rounded-xl bg-[#2D61C9] text-white shadow-[0_6px_14px_rgba(45,97,201,0.2)]">
               <Armchair className="size-4" strokeWidth={1.8} />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base font-bold text-zinc-900">تحديد طاولة للطلب</h3>
-              <p className="text-[11px] text-zinc-500">اختر طاولة متاحة لفتح الشيك أو فتح طلبها المفتوح</p>
+              <h3 className="text-sm font-bold text-[#142957] sm:text-base">تحديد طاولة للطلب</h3>
+              <p className="text-[11px] text-[#7b89a9]">اختر طاولة متاحة لفتح الشيك أو فتح طلبها المفتوح</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700"
+            className="rounded-lg p-1 text-[#8a96b0] hover:bg-[#eef0ff] hover:text-[#40527c]"
           >
             <X className="size-4" />
           </button>
@@ -94,8 +94,8 @@ export function TablePickerModal({
               onClick={() => setSelectedSectionId('ALL')}
               className={`shrink-0 rounded-xl px-3 py-1 font-semibold transition ${
                 selectedSectionId === 'ALL'
-                  ? 'bg-zinc-900 text-white'
-                  : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200/70'
+                ? 'bg-[#2D61C9] text-white'
+                  : 'bg-[#f1f3fb] text-[#526286] hover:bg-[#e7eaf7]'
               }`}
             >
               كافة الأقسام ({tables.length})
@@ -107,8 +107,8 @@ export function TablePickerModal({
                 onClick={() => setSelectedSectionId(sec.id)}
                 className={`shrink-0 rounded-xl px-3 py-1 font-semibold transition ${
                   selectedSectionId === sec.id
-                    ? 'bg-zinc-900 text-white'
-                    : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200/70'
+                ? 'bg-[#2D61C9] text-white'
+                    : 'bg-[#f1f3fb] text-[#526286] hover:bg-[#e7eaf7]'
                 }`}
               >
                 {sec.nameAr}
@@ -123,7 +123,7 @@ export function TablePickerModal({
               placeholder="بحث برقم الطاولة..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-zinc-200 bg-zinc-50/70 py-1.5 pr-8 pl-3 text-xs text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-zinc-900"
+            className="w-full rounded-xl border border-[#DCE3EF] bg-[#F7F9FD] py-1.5 pr-8 pl-3 text-xs text-[#142644] placeholder-[#8D9AB2] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2D61C9]/25"
             />
           </div>
         </div>
@@ -154,10 +154,10 @@ export function TablePickerModal({
                     }}
                     className={`flex flex-col justify-between rounded-xl border p-3 text-right transition ${
                       isSelected
-                        ? 'border-zinc-900 bg-zinc-900 text-white shadow-xs'
+                        ? 'border-[#2D61C9] bg-[#2D61C9] text-white shadow-[0_6px_14px_rgba(45,97,201,0.2)]'
                         : isAvailable
                         ? 'border-emerald-200/80 bg-emerald-50/40 hover:border-emerald-300 hover:bg-emerald-50'
-                        : 'border-zinc-200 bg-zinc-50 hover:bg-zinc-100'
+                        : 'border-[#e0e6f3] bg-[#f8faff] hover:bg-[#f0f2fb]'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-1 w-full">
@@ -218,7 +218,7 @@ export function TablePickerModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-zinc-200 px-4 py-1.5 font-semibold text-zinc-600 hover:bg-zinc-50"
+            className="rounded-xl border border-[#e0e6f3] px-4 py-1.5 font-semibold text-[#526286] hover:bg-[#f7f8ff]"
           >
             إغلاق
           </button>

@@ -52,17 +52,17 @@ export function CartTypeSelector({
 }) {
   return (
     <div className="space-y-1.5">
-      <div className="flex gap-1 bg-zinc-100 p-1 rounded-xl">
+      <div className="flex h-[56px] gap-1 rounded-[14px] border border-[#DCE3EF] bg-[#E9EEFC] p-1">
         {([OrderType.TAKEAWAY, OrderType.DINE_IN] as const).map((t) => (
           <button
             key={t}
             disabled={locked}
             type="button"
             onClick={() => setType(t)}
-            className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`flex-1 rounded-[11px] text-xs font-semibold transition ${
               type === t
-                ? 'bg-white text-zinc-900 shadow-2xs font-bold'
-                : 'text-zinc-500 hover:text-zinc-900'
+                ? 'bg-[#2D61C9] text-white shadow-[0_5px_12px_rgba(45,97,201,0.2)] font-bold'
+                : 'text-[#6A7894] hover:text-[#142644]'
             }`}
           >
             {t === OrderType.TAKEAWAY ? 'سفري' : 'صالة'}
@@ -74,26 +74,26 @@ export function CartTypeSelector({
       {type === OrderType.DINE_IN && (
         <div className="animate-in fade-in">
           {activeTabOrderId ? (
-            <div className="flex items-center justify-between rounded-xl border border-indigo-200 bg-indigo-50/70 p-2 text-xs">
+            <div className="flex items-center justify-between rounded-[14px] border border-[#C6D5F1] bg-[#EDF3FF] p-2 text-xs">
               <div className="flex items-center gap-2">
-                <div className="grid size-6 place-items-center rounded-lg bg-indigo-900 text-white font-bold text-[11px]">
+                <div className="grid size-6 place-items-center rounded-lg bg-[#2D61C9] text-white font-bold text-[11px]">
                   {selectedTable?.tableNumber || '#'}
                 </div>
                 <div>
-                  <p className="font-bold text-indigo-950">إضافة طلبات لطاولة {selectedTable?.tableNumber}</p>
-                  <p className="text-[10px] text-indigo-700">طلب مفتوح جاري</p>
+                <p className="font-bold text-[#253765]">إضافة طلبات لطاولة {selectedTable?.tableNumber}</p>
+                <p className="text-[10px] text-[#6574a0]">طلب مفتوح جاري</p>
                 </div>
               </div>
             </div>
           ) : selectedTable ? (
-            <div className="flex items-center justify-between rounded-xl border border-zinc-200 bg-zinc-50 p-2 text-xs">
+            <div className="flex items-center justify-between rounded-[14px] border border-[#DCE3EF] bg-[#F7F9FD] p-2 text-xs">
               <div className="flex items-center gap-2 min-w-0">
-                <div className="grid size-7 shrink-0 place-items-center rounded-lg bg-zinc-900 text-white font-bold text-xs">
+                <div className="grid size-7 shrink-0 place-items-center rounded-lg bg-[#142644] text-white font-bold text-xs">
                   {selectedTable.tableNumber}
                 </div>
                 <div className="truncate">
-                  <p className="font-bold text-zinc-900 truncate">طاولة {selectedTable.tableNumber}</p>
-                  <p className="text-[10px] text-zinc-500 truncate">
+                  <p className="font-bold text-[#243663] truncate">طاولة {selectedTable.tableNumber}</p>
+                  <p className="text-[10px] text-[#7b89a9] truncate">
                     {selectedTable.sectionNameAr || 'صالة عامة'}
                   </p>
                 </div>
@@ -102,7 +102,7 @@ export function CartTypeSelector({
               <div className="flex items-center gap-1.5">
                 {/* Guest Count Stepper */}
                 <div className="flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-1.5 py-0.5">
-                  <button
+        <button
                     type="button"
                     onClick={() => onGuestCountChange?.(Math.max(1, guestCount - 1))}
                     className="size-4 text-zinc-500 hover:text-zinc-900 font-bold text-[11px]"
@@ -145,7 +145,7 @@ export function CartTypeSelector({
               type="button"
               disabled={locked}
               onClick={onOpenTablePicker}
-              className="flex w-full items-center justify-between rounded-xl border border-dashed border-zinc-300 bg-zinc-50/80 px-2.5 py-2 text-xs font-semibold text-zinc-700 hover:border-zinc-400 hover:bg-zinc-100 active:scale-[0.99] transition"
+              className="flex w-full items-center justify-between rounded-[14px] border border-dashed border-[#C6D2E5] bg-[#F7F9FD] px-2.5 py-2 text-xs font-semibold text-[#405675] hover:border-[#8EAAD8] hover:bg-white active:scale-[0.99] transition"
             >
               <div className="flex items-center gap-2">
                 <Armchair className="size-4 text-zinc-500" strokeWidth={1.8} />
@@ -169,10 +169,10 @@ export function CartLines({
 }: Pick<PosCartProps, 'items' | 'products' | 'settings' | 'locked' | 'changeQuantity'>) {
   if (!items.length) {
     return (
-      <div className="flex h-full flex-col items-center justify-center py-10 text-center text-zinc-400">
-        <ShoppingCart size={28} strokeWidth={1.5} className="mb-2 text-zinc-300" />
-        <p className="text-xs font-semibold text-zinc-600">سلة الطلب فارغة</p>
-        <span className="text-[11px] text-zinc-400 mt-0.5">اضغط على أي صنف لإضافته للطلب</span>
+      <div className="flex h-full flex-col items-center justify-center py-10 text-center text-[#a4b1ce]">
+        <ShoppingCart size={42} strokeWidth={1.35} className="mb-3 text-[#a8b5d8]" />
+        <p className="text-sm font-bold text-[#142644]">سلة الطلب فارغة</p>
+        <span className="mt-1 text-xs text-[#97A6BF]">اضغط على أي صنف لإضافته للطلب</span>
       </div>
     );
   }
@@ -193,17 +193,17 @@ export function CartLines({
         return (
           <div
             key={index}
-            className="flex items-center justify-between gap-2 rounded-xl border border-zinc-200/80 bg-white p-2 shadow-2xs transition-colors hover:border-zinc-300"
+            className="flex items-center justify-between gap-2 rounded-[14px] border border-[#DCE3EF] bg-white p-2.5 shadow-[0_3px_10px_rgba(20,38,68,0.04)] transition-colors hover:border-[#B9C9E2]"
           >
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-1">
-                <p className="truncate text-xs font-bold text-zinc-900">{product.nameAr}</p>
+              <p className="truncate text-xs font-bold text-[#142644]">{product.nameAr}</p>
                 <p className="font-mono text-xs font-bold text-zinc-950 shrink-0">
                   {price.multiply(item.quantity).format(settings.locale)}
                 </p>
               </div>
               {(size.nameAr || modifiers.length > 0) && (
-                <p className="truncate text-[10px] text-zinc-500 mt-0.5">
+                <p className="mt-0.5 truncate text-[10px] text-[#7b89a9]">
                   {size.nameAr}
                   {modifiers.map((m) => ` + ${m.nameAr}`)}
                 </p>
@@ -216,7 +216,7 @@ export function CartLines({
                 disabled={locked}
                 aria-label={'تقليل ' + product.nameAr}
                 onClick={() => changeQuantity(index, -1)}
-                className="grid size-6 place-items-center rounded-md border border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100 active:scale-95 disabled:opacity-40 transition"
+                className="grid size-7 place-items-center rounded-lg border border-[#DCE3EF] bg-[#F4F7FC] text-[#526B90] hover:bg-[#E9EEFC] active:scale-95 disabled:opacity-40 transition"
               >
                 <Minus size={12} />
               </button>
@@ -228,7 +228,7 @@ export function CartLines({
                 disabled={locked || item.quantity >= 99}
                 aria-label={'زيادة ' + product.nameAr}
                 onClick={() => changeQuantity(index, 1)}
-                className="grid size-6 place-items-center rounded-md border border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100 active:scale-95 disabled:opacity-40 transition"
+                className="grid size-7 place-items-center rounded-lg border border-[#DCE3EF] bg-[#F4F7FC] text-[#526B90] hover:bg-[#E9EEFC] active:scale-95 disabled:opacity-40 transition"
               >
                 <Plus size={12} />
               </button>
@@ -334,8 +334,8 @@ export function CartTotals({
     Money.fromMinor(value, settings.currency).format(settings.locale);
 
   return (
-    <div className="space-y-1 text-xs border-t border-zinc-100 pt-2">
-      <div className="flex justify-between text-zinc-500 text-[11px]">
+    <div className="space-y-1 border-t border-[#e8ecf5] pt-3 text-xs">
+      <div className="flex justify-between text-[#7b89a9] text-[11px]">
         <span>
           المجموع: {money(totals?.subtotalMinor ?? 0)} · الضريبة ({settings.taxRatePercent}%): {money(totals?.taxMinor ?? 0)}
         </span>
@@ -346,8 +346,8 @@ export function CartTotals({
         )}
       </div>
       <div className="flex justify-between items-baseline pt-0.5">
-        <span className="text-xs font-bold text-zinc-700">المستحق للدفع:</span>
-        <span className="text-lg font-black font-mono text-zinc-950">
+        <span className="text-xs font-bold text-[#344a78]">المستحق للدفع:</span>
+        <span className="text-lg font-black font-mono text-[#2D61C9]">
           {money(totals?.totalMinor ?? 0)}
         </span>
       </div>
