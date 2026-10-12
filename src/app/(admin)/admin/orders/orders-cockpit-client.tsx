@@ -323,23 +323,23 @@ export function OrdersCockpitClient({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case OrderStatus.PENDING:
-        return { label: 'جديد قيد المراجعة', cls: 'bg-blue-50 text-blue-700 border-blue-200' };
+        return { label: 'جديد قيد المراجعة', cls: 'admin-badge-info' };
       case OrderStatus.CONFIRMED:
-        return { label: 'تم التأكيد', cls: 'bg-amber-50 text-amber-700 border-amber-200' };
+        return { label: 'تم التأكيد', cls: 'admin-badge-warning' };
       case OrderStatus.PREPARING:
-        return { label: 'جاري التجهيز', cls: 'bg-orange-50 text-orange-700 border-orange-200' };
+        return { label: 'جاري التجهيز', cls: 'admin-badge-warning' };
       case OrderStatus.READY_FOR_PICKUP:
-        return { label: 'جاهز للتوصيل', cls: 'bg-indigo-50 text-indigo-700 border-indigo-200' };
+        return { label: 'جاهز للتوصيل', cls: 'admin-badge-info' };
       case OrderStatus.OUT_FOR_DELIVERY:
-        return { label: 'مع المندوب', cls: 'bg-purple-50 text-purple-700 border-purple-200' };
+        return { label: 'مع المندوب', cls: 'admin-badge-info' };
       case OrderStatus.DELIVERED:
-        return { label: 'تم التسليم', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+        return { label: 'تم التسليم', cls: 'admin-badge-success' };
       case OrderStatus.CANCELLED:
-        return { label: 'ملغي', cls: 'bg-rose-50 text-rose-700 border-rose-200' };
+        return { label: 'ملغي', cls: 'admin-badge-danger' };
       case OrderStatus.REJECTED:
-        return { label: 'مرفوض', cls: 'bg-zinc-100 text-zinc-700 border-zinc-200' };
+        return { label: 'مرفوض', cls: 'admin-badge-neutral' };
       default:
-        return { label: status, cls: 'bg-zinc-100 text-zinc-700 border-zinc-200' };
+        return { label: status, cls: 'admin-badge-neutral' };
     }
   };
 
@@ -392,12 +392,12 @@ export function OrdersCockpitClient({
 
       {/* 4. Operational Cards Grid */}
       {orders.length === 0 ? (
-        <div className="p-12 text-center border border-dashed border-zinc-200 rounded-2xl bg-white space-y-2">
-          <div className="w-12 h-12 rounded-full bg-zinc-100 flex items-center justify-center mx-auto text-zinc-400">
+        <div className="p-12 text-center border border-dashed border-[var(--admin-border)] rounded-2xl bg-[var(--admin-surface)] space-y-2">
+          <div className="w-12 h-12 rounded-full bg-[var(--admin-background)] flex items-center justify-center mx-auto text-[var(--admin-muted)]">
             <ShoppingBag className="w-6 h-6" />
           </div>
-          <h3 className="text-sm font-bold text-zinc-800">لا توجد طلبات مطابقة</h3>
-          <p className="text-xs text-zinc-500 max-w-sm mx-auto">
+          <h3 className="text-sm font-bold text-[var(--admin-foreground)]">لا توجد طلبات مطابقة</h3>
+          <p className="text-xs admin-muted max-w-sm mx-auto">
             لا توجد أي طلبات تتطابق مع الفلتر الحالي أو معايير البحث المحددة.
           </p>
         </div>

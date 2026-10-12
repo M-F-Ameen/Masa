@@ -195,12 +195,12 @@ export function FleetManagementModal({
   const getVehicleIcon = (vehicle: VehicleType) => {
     switch (vehicle) {
       case VehicleType.CAR:
-        return <Car className="size-4 text-zinc-600" />;
+        return <Car className="size-4 admin-muted" />;
       case VehicleType.BICYCLE:
-        return <Bike className="size-4 text-zinc-600" />;
+        return <Bike className="size-4 admin-muted" />;
       case VehicleType.MOTORCYCLE:
       default:
-        return <Bike className="size-4 text-zinc-600" />;
+        return <Bike className="size-4 admin-muted" />;
     }
   };
 
@@ -210,21 +210,21 @@ export function FleetManagementModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-3 sm:p-4 animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--admin-foreground)]/60 backdrop-blur-xs p-3 sm:p-4 animate-in fade-in"
       dir="rtl"
     >
-      <div className="bg-white rounded-2xl shadow-2xl border border-zinc-200 w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95">
+      <div className="admin-card w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-100 px-5 py-4 bg-zinc-50/70 shrink-0">
+        <div className="flex items-center justify-between border-b border-[var(--admin-border)] px-5 py-4 bg-[var(--admin-background)] shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="grid size-9 place-items-center rounded-xl bg-purple-100 text-purple-700">
+            <div className="admin-status-info grid size-9 place-items-center rounded-xl border">
               <Bike className="size-5" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-zinc-900">
+              <h3 className="font-bold text-sm text-[var(--admin-foreground)]">
                 أسطول التوصيل والطيارين — {branchName}
               </h3>
-              <p className="text-[11px] text-zinc-500">
+              <p className="text-[11px] admin-muted">
                 إدارة طاقم التوصيل وتوزيع الطلبات وتسوية العهد النقدية
               </p>
             </div>
@@ -232,14 +232,14 @@ export function FleetManagementModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700"
+            className="rounded-lg p-1 admin-muted hover:bg-[var(--admin-background)] hover:text-[var(--admin-foreground)]"
           >
             <X className="size-4" />
           </button>
         </div>
 
         {/* Tab Selector */}
-        <div className="flex items-center gap-2 border-b border-zinc-200 px-5 py-2.5 bg-zinc-50 shrink-0 text-xs">
+        <div className="flex items-center gap-2 border-b border-[var(--admin-border)] px-5 py-2.5 bg-[var(--admin-background)] shrink-0 text-xs">
           <button
             type="button"
             onClick={() => {
@@ -248,8 +248,8 @@ export function FleetManagementModal({
             }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition ${
               activeTab === 'ROSTER'
-                ? 'bg-zinc-900 text-white shadow-2xs'
-                : 'text-zinc-600 hover:bg-zinc-200/70'
+                ? 'admin-primary-action shadow-2xs'
+                : 'admin-muted hover:bg-[var(--admin-background)]'
             }`}
           >
             <Users className="size-3.5" />
@@ -264,8 +264,8 @@ export function FleetManagementModal({
             }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold transition ${
               activeTab === 'SETTLEMENTS'
-                ? 'bg-zinc-900 text-white shadow-2xs'
-                : 'text-zinc-600 hover:bg-zinc-200/70'
+                ? 'admin-primary-action shadow-2xs'
+                : 'admin-muted hover:bg-[var(--admin-background)]'
             }`}
           >
             <Banknote className="size-3.5" />
@@ -276,7 +276,7 @@ export function FleetManagementModal({
             type="button"
             onClick={loadDrivers}
             disabled={isLoading}
-            className="mr-auto grid size-7 place-items-center rounded-lg border border-zinc-200 text-zinc-600 hover:bg-zinc-100 disabled:opacity-50"
+            className="mr-auto grid size-7 place-items-center rounded-lg border admin-control disabled:opacity-50"
             title="تحديث البيانات"
           >
             <RefreshCw className={`size-3.5 ${isLoading ? 'animate-spin' : ''}`} />
@@ -285,14 +285,14 @@ export function FleetManagementModal({
 
         {/* Banners */}
         {errorMsg && (
-          <div className="mx-5 mt-3 flex items-center gap-2 rounded-xl bg-rose-50 p-2.5 text-xs text-rose-700 font-medium shrink-0">
-            <AlertCircle className="size-4 shrink-0 text-rose-600" />
+          <div className="mx-5 mt-3 flex items-center gap-2 rounded-xl bg-[var(--admin-danger-soft)] p-2.5 text-xs text-[var(--admin-danger)] font-medium shrink-0">
+            <AlertCircle className="size-4 shrink-0 text-[var(--admin-danger)]" />
             <span>{errorMsg}</span>
           </div>
         )}
         {successMsg && (
-          <div className="mx-5 mt-3 flex items-center gap-2 rounded-xl bg-emerald-50 p-2.5 text-xs text-emerald-800 font-medium shrink-0">
-            <CheckCircle2 className="size-4 shrink-0 text-emerald-600" />
+          <div className="mx-5 mt-3 flex items-center gap-2 rounded-xl bg-[var(--admin-success-soft)] p-2.5 text-xs text-[var(--admin-accent-hover)] font-medium shrink-0">
+            <CheckCircle2 className="size-4 shrink-0 text-[var(--admin-accent-hover)]" />
             <span>{successMsg}</span>
           </div>
         )}
@@ -305,8 +305,8 @@ export function FleetManagementModal({
               {/* Header with Quick Add Button */}
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="font-bold text-zinc-900 text-xs">سجل طياري الفرع</h4>
-                  <p className="text-[11px] text-zinc-500">
+                  <h4 className="font-bold text-[var(--admin-foreground)] text-xs">سجل طياري الفرع</h4>
+                  <p className="text-[11px] admin-muted">
                     كافة كباتن التوصيل المسجلين على قوة فرع {branchName}
                   </p>
                 </div>
@@ -315,7 +315,7 @@ export function FleetManagementModal({
                   <button
                     type="button"
                     onClick={() => setIsAddingDriver(true)}
-                    className="flex items-center gap-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 px-3 py-1.5 font-bold text-white shadow-2xs text-xs"
+                    className="flex items-center gap-1.5 rounded-xl admin-primary-action px-3 py-1.5 font-bold shadow-2xs text-xs"
                   >
                     <Plus className="size-3.5" />
                     <span>إضافة كابتن جديد</span>
@@ -327,14 +327,14 @@ export function FleetManagementModal({
               {isAddingDriver && (
                 <form
                   onSubmit={handleCreateDriver}
-                  className="rounded-2xl border border-purple-200 bg-purple-50/40 p-4 space-y-3 animate-in fade-in"
+                  className="rounded-2xl border admin-status-info p-4 space-y-3 animate-in fade-in"
                 >
-                  <div className="flex items-center justify-between border-b border-purple-100 pb-2">
-                    <span className="font-bold text-purple-950">بيانات الكابتن الجديد</span>
+                  <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-2">
+                    <span className="font-bold text-[var(--admin-info)]">بيانات الكابتن الجديد</span>
                     <button
                       type="button"
                       onClick={() => setIsAddingDriver(false)}
-                      className="text-zinc-500 hover:text-zinc-800 text-[11px]"
+                      className="admin-muted hover:text-[var(--admin-foreground)] text-[11px]"
                     >
                       إلغاء
                     </button>
@@ -342,19 +342,19 @@ export function FleetManagementModal({
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-zinc-700 font-semibold mb-1">الاسم بالكامل:</label>
+                      <label className="block text-[var(--admin-foreground)] font-semibold mb-1">الاسم بالكامل:</label>
                       <input
                         type="text"
                         required
                         placeholder="مثال: أحمد عبد الله"
                         value={newDriverName}
                         onChange={(e) => setNewDriverName(e.target.value)}
-                        className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-900 focus:outline-none focus:ring-2 focus:ring-purple-600"
+                        className="w-full rounded-lg border border-[var(--admin-border)] bg-[var(--admin-surface)] px-3 py-1.5 text-xs text-[var(--admin-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-zinc-700 font-semibold mb-1">رقم الهاتف:</label>
+                      <label className="block text-[var(--admin-foreground)] font-semibold mb-1">رقم الهاتف:</label>
                       <input
                         type="text"
                         required
@@ -362,16 +362,16 @@ export function FleetManagementModal({
                         dir="ltr"
                         value={newDriverPhone}
                         onChange={(e) => setNewDriverPhone(e.target.value)}
-                        className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-900 focus:outline-none focus:ring-2 focus:ring-purple-600"
+                        className="w-full rounded-lg border border-[var(--admin-border)] bg-[var(--admin-surface)] px-3 py-1.5 text-xs text-[var(--admin-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-zinc-700 font-semibold mb-1">وسيلة الانتقال:</label>
+                      <label className="block text-[var(--admin-foreground)] font-semibold mb-1">وسيلة الانتقال:</label>
                       <select
                         value={newDriverVehicle}
                         onChange={(e) => setNewDriverVehicle(e.target.value as VehicleType)}
-                        className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-900 focus:outline-none focus:ring-2 focus:ring-purple-600"
+                        className="w-full rounded-lg border border-[var(--admin-border)] bg-[var(--admin-surface)] px-3 py-1.5 text-xs text-[var(--admin-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                       >
                         <option value={VehicleType.MOTORCYCLE}>دراجة نارية (موتوسيكل)</option>
                         <option value={VehicleType.CAR}>سيارة</option>
@@ -380,13 +380,13 @@ export function FleetManagementModal({
                     </div>
 
                     <div>
-                      <label className="block text-zinc-700 font-semibold mb-1">رقم اللوحة (اختياري):</label>
+                      <label className="block text-[var(--admin-foreground)] font-semibold mb-1">رقم اللوحة (اختياري):</label>
                       <input
                         type="text"
                         placeholder="مثال: أ ب ج 123"
                         value={newDriverPlate}
                         onChange={(e) => setNewDriverPlate(e.target.value)}
-                        className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-900 focus:outline-none focus:ring-2 focus:ring-purple-600"
+                        className="w-full rounded-lg border border-[var(--admin-border)] bg-[var(--admin-surface)] px-3 py-1.5 text-xs text-[var(--admin-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                       />
                     </div>
                   </div>
@@ -395,7 +395,7 @@ export function FleetManagementModal({
                     <button
                       type="submit"
                       disabled={isPending}
-                      className="rounded-xl bg-purple-700 hover:bg-purple-800 px-4 py-2 font-bold text-white shadow-xs transition disabled:opacity-50"
+                      className="rounded-xl admin-primary-action px-4 py-2 font-bold shadow-xs transition disabled:opacity-50"
                     >
                       {isPending ? 'جارٍ الحفظ...' : 'حفظ وإضافة الطيار'}
                     </button>
@@ -405,15 +405,15 @@ export function FleetManagementModal({
 
               {/* Drivers Cards Grid */}
               {isLoading ? (
-                <div className="py-12 text-center text-zinc-400">
-                  <Clock className="size-6 mx-auto mb-1 animate-spin text-zinc-400" />
+                <div className="py-12 text-center admin-muted">
+                  <Clock className="size-6 mx-auto mb-1 animate-spin text-[var(--admin-muted)]" />
                   <p>جارٍ تحميل الطيارين...</p>
                 </div>
               ) : drivers.length === 0 ? (
-                <div className="py-12 text-center text-zinc-400 rounded-2xl border border-dashed border-zinc-200">
-                  <Bike className="size-8 mx-auto mb-2 text-zinc-300" strokeWidth={1.5} />
-                  <p className="font-bold text-zinc-700">لا يوجد طيارين مسجلين في هذا الفرع بعد</p>
-                  <p className="text-[11px] text-zinc-400 mt-1">
+                <div className="py-12 text-center admin-muted rounded-2xl border border-dashed border-[var(--admin-border)]">
+                  <Bike className="size-8 mx-auto mb-2 text-[var(--admin-muted)]" strokeWidth={1.5} />
+                  <p className="font-bold text-[var(--admin-foreground)]">لا يوجد طيارين مسجلين في هذا الفرع بعد</p>
+                  <p className="text-[11px] admin-muted mt-1">
                     أضف كباتن التوصيل للبدء في إسناد وتوزيع طلبات الدليفري.
                   </p>
                 </div>
@@ -426,38 +426,38 @@ export function FleetManagementModal({
                     return (
                       <div
                         key={d.id}
-                        className="rounded-xl border border-zinc-200 bg-white p-3.5 space-y-2.5 shadow-2xs hover:border-zinc-300 transition"
+                        className="admin-card admin-card-hover p-3.5 space-y-2.5"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-2.5">
-                            <div className="grid size-9 place-items-center rounded-xl bg-zinc-100">
+                            <div className="grid size-9 place-items-center rounded-xl bg-[var(--admin-background)]">
                               {getVehicleIcon(d.vehicleType)}
                             </div>
                             <div>
-                              <h5 className="font-bold text-zinc-900 text-xs">{d.fullName}</h5>
-                              <span className="text-[11px] text-zinc-500 font-mono" dir="ltr">
+                              <h5 className="font-bold text-[var(--admin-foreground)] text-xs">{d.fullName}</h5>
+                              <span className="text-[11px] admin-muted font-mono" dir="ltr">
                                 {d.phone}
                               </span>
                             </div>
                           </div>
 
                           <span
-                            className={`rounded-md px-2 py-0.5 text-[10px] font-bold ${
+                            className={`admin-badge ${
                               isAvailable
-                                ? 'bg-emerald-100 text-emerald-800'
+                                ? 'admin-badge-success'
                                 : isOnDelivery
-                                ? 'bg-purple-100 text-purple-800'
-                                : 'bg-zinc-100 text-zinc-600'
+                                ? 'admin-badge-info'
+                                : 'admin-badge-neutral'
                             }`}
                           >
                             {isAvailable ? 'متاح بالفرع' : isOnDelivery ? 'في مشوار' : 'غير نشط'}
                           </span>
                         </div>
 
-                        <div className="flex items-center justify-between text-[11px] text-zinc-600 pt-1 border-t border-zinc-100">
+                        <div className="flex items-center justify-between text-[11px] admin-muted pt-1 border-t border-[var(--admin-border)]">
                           <span>طلبات في الطريق: <strong>{d.activeOrdersCount}</strong></span>
                           {d.pendingCashMinor > 0 && (
-                            <span className="text-amber-700 font-bold">
+                            <span className="text-[var(--admin-warning)] font-bold">
                               عهدة معلقة: {(d.pendingCashMinor / 100).toFixed(2)} {currencySymbol}
                             </span>
                           )}
@@ -476,17 +476,17 @@ export function FleetManagementModal({
               {!reviewingDriverId ? (
                 <>
                   <div>
-                    <h4 className="font-bold text-zinc-900 text-xs">تسوية عهد طياري التوصيل</h4>
-                    <p className="text-[11px] text-zinc-500">
+                    <h4 className="font-bold text-[var(--admin-foreground)] text-xs">تسوية عهد طياري التوصيل</h4>
+                    <p className="text-[11px] admin-muted">
                       قائمة الكباتن الذين قاموا بتسليم طلبات دفع عند الاستلام (COD) ويحملون مبالغ نقدية معلقة
                     </p>
                   </div>
 
                   {pendingSettlementDrivers.length === 0 ? (
-                    <div className="py-12 text-center text-zinc-400 rounded-2xl border border-dashed border-zinc-200">
-                      <CheckCircle2 className="size-8 mx-auto mb-2 text-emerald-500" strokeWidth={1.5} />
-                      <p className="font-bold text-zinc-800">كافة عهد الطيارين مسوّاة بالكامل</p>
-                      <p className="text-[11px] text-zinc-400 mt-1">
+                    <div className="py-12 text-center admin-muted rounded-2xl border border-dashed border-[var(--admin-border)]">
+                      <CheckCircle2 className="size-8 mx-auto mb-2 text-[var(--admin-accent)]" strokeWidth={1.5} />
+                      <p className="font-bold text-[var(--admin-foreground)]">كافة عهد الطيارين مسوّاة بالكامل</p>
+                      <p className="text-[11px] admin-muted mt-1">
                         لا توجد أي مبالغ نقدية معلقة بذمة أي طيار حالياً.
                       </p>
                     </div>
@@ -495,20 +495,20 @@ export function FleetManagementModal({
                       {pendingSettlementDrivers.map((d) => (
                         <div
                           key={d.id}
-                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-xl border border-amber-200 bg-amber-50/40 shadow-2xs"
+                          className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 rounded-xl border admin-status-warning shadow-2xs"
                         >
                           <div className="flex items-center gap-3">
-                            <div className="grid size-10 place-items-center rounded-xl bg-amber-100 text-amber-800">
+                            <div className="admin-status-warning grid size-10 place-items-center rounded-xl border">
                               <Banknote className="size-5" />
                             </div>
                             <div>
                               <div className="flex items-center gap-2">
-                                <h5 className="font-bold text-zinc-900 text-xs">{d.fullName}</h5>
-                                <span className="font-mono text-[11px] text-zinc-500" dir="ltr">
+                                <h5 className="font-bold text-[var(--admin-foreground)] text-xs">{d.fullName}</h5>
+                                <span className="font-mono text-[11px] admin-muted" dir="ltr">
                                   ({d.phone})
                                 </span>
                               </div>
-                              <p className="text-[11px] text-zinc-600 mt-0.5">
+                              <p className="text-[11px] admin-muted mt-0.5">
                                 سلّم {d.unsettledDeliveredCount} طلبات بانتظار توريد النقدية
                               </p>
                             </div>
@@ -516,16 +516,16 @@ export function FleetManagementModal({
 
                           <div className="flex items-center justify-between sm:justify-end gap-3">
                             <div className="text-left font-mono" dir="ltr">
-                              <span className="text-sm font-bold text-amber-900">
+                              <span className="text-sm font-bold text-[var(--admin-warning)]">
                                 {(d.pendingCashMinor / 100).toFixed(2)} {currencySymbol}
                               </span>
-                              <span className="block text-[10px] text-zinc-500">مطلوب توريده</span>
+                              <span className="block text-[10px] admin-muted">مطلوب توريده</span>
                             </div>
 
                             <button
                               type="button"
                               onClick={() => handleOpenSettleReview(d.id)}
-                              className="rounded-xl bg-amber-700 hover:bg-amber-800 px-3.5 py-2 font-bold text-white shadow-2xs text-xs active:scale-95 transition"
+                              className="rounded-xl admin-action-warning px-3.5 py-2 font-bold shadow-2xs text-xs active:scale-95 transition"
                             >
                               استعراض وتوريد العهدة
                             </button>
@@ -538,64 +538,64 @@ export function FleetManagementModal({
               ) : (
                 /* Settlement Confirmation Panel */
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between border-b border-zinc-100 pb-2.5">
+                  <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-2.5">
                     <button
                       type="button"
                       onClick={() => {
                         setReviewingDriverId(null);
                         setSettlementDetails(null);
                       }}
-                      className="flex items-center gap-1 text-zinc-600 hover:text-zinc-900 text-xs font-semibold"
+                      className="flex items-center gap-1 admin-muted hover:text-[var(--admin-foreground)] text-xs font-semibold"
                     >
                       <ChevronLeft className="size-4 rotate-180" />
                       <span>رجوع لقائمة العهد</span>
                     </button>
 
-                    <span className="font-bold text-zinc-900 text-xs">
+                    <span className="font-bold text-[var(--admin-foreground)] text-xs">
                       مراجعة وتوريد عهدة: {settlementDetails?.driver.fullName}
                     </span>
                   </div>
 
                   {!settlementDetails ? (
-                    <div className="py-12 text-center text-zinc-400">
-                      <Clock className="size-6 mx-auto mb-1 animate-spin text-zinc-400" />
+                    <div className="py-12 text-center admin-muted">
+                      <Clock className="size-6 mx-auto mb-1 animate-spin text-[var(--admin-muted)]" />
                       <p>جارٍ تجهيز كشف حساب الطيار...</p>
                     </div>
                   ) : (
                     <div className="space-y-3.5">
                       {/* Shift link alert */}
-                      <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3 flex items-center justify-between text-emerald-900">
+                      <div className="rounded-xl border admin-status-success p-3 flex items-center justify-between">
                         <div>
                           <span className="font-bold block">التوريد لوردية الكاشير النشطة:</span>
-                          <span className="text-[11px] text-emerald-700">
+                          <span className="text-[11px] text-[var(--admin-accent-hover)]">
                             {settlementDetails.activeShift
                               ? `سيتم توريد المبلغ لوردية الكاشير (${settlementDetails.activeShift.cashierName}) مباشرة`
                               : 'تنبيه: لا توجد وردية كاشير نشطة حالياً بالفرع، سيتم تسجيل السند بدون قيد وردية'}
                           </span>
                         </div>
-                        <CheckCircle2 className="size-5 text-emerald-600 shrink-0" />
+                        <CheckCircle2 className="size-5 text-[var(--admin-accent-hover)] shrink-0" />
                       </div>
 
                       {/* Orders Breakdown */}
-                      <div className="rounded-xl border border-zinc-200 bg-zinc-50/50 p-3 space-y-2">
-                        <p className="font-bold text-zinc-800">الطلبات المسلّمة بالكشف ({settlementDetails.orders.length} طلبات):</p>
+                      <div className="rounded-xl border border-[var(--admin-border)] bg-[var(--admin-background)] p-3 space-y-2">
+                        <p className="font-bold text-[var(--admin-foreground)]">الطلبات المسلّمة بالكشف ({settlementDetails.orders.length} طلبات):</p>
                         <div className="max-h-48 overflow-y-auto space-y-1.5 pr-0.5">
                           {settlementDetails.orders.map((o) => (
                             <div
                               key={o.id}
-                              className="flex items-center justify-between p-2 rounded-lg bg-white border border-zinc-100 text-xs"
+                              className="flex items-center justify-between p-2 rounded-lg bg-[var(--admin-surface)] border border-[var(--admin-border)] text-xs"
                             >
                               <div>
-                                <span className="font-mono font-bold text-zinc-900" dir="ltr">
+                                <span className="font-mono font-bold text-[var(--admin-foreground)]" dir="ltr">
                                   {o.orderNumber}
                                 </span>
-                                <span className="text-zinc-500 mr-2">· {o.customerName || 'عميل'}</span>
+                                <span className="admin-muted mr-2">· {o.customerName || 'عميل'}</span>
                               </div>
                               <div className="text-left font-mono" dir="ltr">
-                                <span className="font-bold text-zinc-950">
+                                <span className="font-bold text-[var(--admin-foreground)]">
                                   {(o.totalMinor / 100).toFixed(2)} {currencySymbol}
                                 </span>
-                                <span className="text-[10px] text-zinc-500 block">
+                                <span className="text-[10px] admin-muted block">
                                   {o.paymentMethod === 'CASH' ? 'دفع عند الاستلام' : 'بطاقة'}
                                 </span>
                               </div>
@@ -605,18 +605,18 @@ export function FleetManagementModal({
                       </div>
 
                       {/* Totals Summary */}
-                      <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-3 space-y-1.5">
-                        <div className="flex justify-between text-zinc-600">
+                      <div className="rounded-xl border border-[var(--admin-border)] bg-[var(--admin-background)] p-3 space-y-1.5">
+                        <div className="flex justify-between admin-muted">
                           <span>إجمالي الطلبات:</span>
                           <span>{settlementDetails.summary.totalOrdersCount} طلبات</span>
                         </div>
-                        <div className="flex justify-between text-zinc-600">
+                        <div className="flex justify-between admin-muted">
                           <span>طلبات الدفع عند الاستلام (COD):</span>
                           <span>{settlementDetails.summary.codOrdersCount} طلبات</span>
                         </div>
-                        <div className="flex justify-between pt-1 border-t border-zinc-200 font-bold text-sm text-zinc-900">
+                        <div className="flex justify-between pt-1 border-t border-[var(--admin-border)] font-bold text-sm text-[var(--admin-foreground)]">
                           <span>المبلغ النقدي الواجب توريده بالدرج:</span>
-                          <span className="font-mono text-base text-emerald-700">
+                          <span className="font-mono text-base text-[var(--admin-accent-hover)]">
                             {(settlementDetails.summary.totalCollectedCashMinor / 100).toFixed(2)} {currencySymbol}
                           </span>
                         </div>
@@ -624,13 +624,13 @@ export function FleetManagementModal({
 
                       {/* Notes input */}
                       <div>
-                        <label className="block text-zinc-700 font-semibold mb-1">ملاحظات التسوية (اختياري):</label>
+                        <label className="block text-[var(--admin-foreground)] font-semibold mb-1">ملاحظات التسوية (اختياري):</label>
                         <input
                           type="text"
                           placeholder="مثال: توريد نهاية وردية الغداء"
                           value={settlementNotes}
                           onChange={(e) => setSettlementNotes(e.target.value)}
-                          className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900"
+                          className="w-full rounded-lg border border-[var(--admin-border)] bg-[var(--admin-surface)] px-3 py-1.5 text-xs text-[var(--admin-foreground)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
                         />
                       </div>
 
@@ -639,7 +639,7 @@ export function FleetManagementModal({
                         <button
                           type="button"
                           onClick={() => setReviewingDriverId(null)}
-                          className="rounded-xl border border-zinc-200 px-4 py-2 font-medium text-zinc-600 hover:bg-zinc-100"
+                          className="rounded-xl border admin-control px-4 py-2 font-medium"
                         >
                           إلغاء
                         </button>
@@ -648,7 +648,7 @@ export function FleetManagementModal({
                           type="button"
                           onClick={handleConfirmSettlement}
                           disabled={isPending}
-                          className="flex items-center gap-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 px-4 py-2 font-bold text-white shadow-xs transition disabled:opacity-50"
+                          className="flex items-center gap-1.5 rounded-xl bg-[var(--admin-success)] hover:bg-[var(--admin-accent-hover)] px-4 py-2 font-bold text-white shadow-xs transition disabled:opacity-50"
                         >
                           <Printer className="size-3.5" />
                           <span>{isPending ? 'جارٍ التوريد...' : 'تأكيد التوريد وإيداع النقدية بالدرج'}</span>

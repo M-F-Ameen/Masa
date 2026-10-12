@@ -6,8 +6,8 @@ import { CatalogResource } from '../../../../../domain/catalog/enums/catalog-res
 import { Category, Group, DeleteTarget, DraftModifier } from './menu-types';
 
 const inputClass =
-  'min-h-12 w-full rounded-xl border border-zinc-300 bg-white px-3.5 text-base text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10';
-const labelClass = 'block space-y-1.5 text-sm font-medium text-zinc-700';
+  'min-h-12 w-full rounded-xl border border-[var(--admin-border)] bg-[var(--admin-surface)] px-3.5 text-base text-[var(--admin-foreground)] outline-none placeholder:text-[var(--admin-muted)] focus:border-[var(--admin-primary)] focus:ring-2 focus:ring-[var(--admin-primary-soft)]';
+const labelClass = 'block space-y-1.5 text-sm font-medium text-[var(--admin-foreground)]';
 
 function toMajor(value: number) {
   return (value / 100).toFixed(2);
@@ -54,10 +54,10 @@ function Field({
 
 function EmptyState({ title, description }: { title: string; description: string }) {
   return (
-    <div className="col-span-full rounded-2xl border border-dashed border-zinc-300 bg-white px-5 py-12 text-center">
-      <Archive className="mx-auto text-zinc-400" size={24} />
-      <h2 className="mt-3 font-semibold text-zinc-800">{title}</h2>
-      <p className="mt-1 text-sm text-zinc-500">{description}</p>
+    <div className="col-span-full rounded-2xl border border-dashed border-[var(--admin-border)] bg-[var(--admin-surface)] px-5 py-12 text-center">
+      <Archive className="mx-auto text-[var(--admin-muted)]" size={24} />
+      <h2 className="mt-3 font-semibold text-[var(--admin-foreground)]">{title}</h2>
+      <p className="mt-1 text-sm admin-muted">{description}</p>
     </div>
   );
 }
@@ -92,16 +92,16 @@ export function CategoriesGrid({
       {categories.map((category) => (
         <article
           key={category.id}
-          className="flex items-center gap-3 rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm"
+          className="admin-card flex items-center gap-3 p-4"
         >
-          <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-zinc-100 text-zinc-600">
+          <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[var(--admin-background)] text-[var(--admin-muted)]">
             <FolderOpen size={18} />
           </span>
           <div className="min-w-0 flex-1">
-            <h2 className={`truncate font-semibold ${category.isActive ? 'text-zinc-900' : 'text-zinc-400'}`}>
+            <h2 className={`truncate font-semibold ${category.isActive ? 'text-[var(--admin-foreground)]' : 'text-[var(--admin-muted)]'}`}>
               {category.nameAr}
             </h2>
-            <p className="truncate text-xs text-zinc-500">
+            <p className="truncate text-xs admin-muted">
               {category.nameEn}
               {!category.isActive && ' · مؤرشف'}
             </p>
@@ -110,7 +110,7 @@ export function CategoriesGrid({
             type="button"
             onClick={() => onEdit(category.id)}
             aria-label={`تعديل ${category.nameAr}`}
-            className="grid size-10 shrink-0 place-items-center rounded-xl border border-zinc-200 text-zinc-600 hover:bg-zinc-50"
+            className="grid size-10 shrink-0 place-items-center rounded-xl border border-[var(--admin-border)] text-[var(--admin-muted)] hover:bg-[var(--admin-background)]"
           >
             <Pencil size={16} />
           </button>
@@ -118,7 +118,7 @@ export function CategoriesGrid({
             type="button"
             onClick={() => onToggleStatus(CatalogResource.CATEGORY, category.id, !category.isActive)}
             aria-label={category.isActive ? 'أرشفة التصنيف' : 'إعادة تفعيل التصنيف'}
-            className="grid size-10 shrink-0 place-items-center rounded-xl border border-zinc-200 text-zinc-600 hover:bg-zinc-50"
+            className="grid size-10 shrink-0 place-items-center rounded-xl border border-[var(--admin-border)] text-[var(--admin-muted)] hover:bg-[var(--admin-background)]"
           >
             <Archive size={16} />
           </button>
@@ -127,7 +127,7 @@ export function CategoriesGrid({
             onClick={() => onDelete({ type: 'category', id: category.id, name: category.nameAr })}
             aria-label={`حذف ${category.nameAr}`}
             title="حذف التصنيف"
-            className="grid size-10 shrink-0 place-items-center rounded-xl border border-zinc-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition"
+            className="grid size-10 shrink-0 place-items-center rounded-xl border border-[var(--admin-border)] text-[var(--admin-danger)] hover:bg-[var(--admin-danger-soft)] hover:border-[var(--admin-danger)] transition"
           >
             <Trash2 size={16} />
           </button>
@@ -171,12 +171,12 @@ export function ModifierGroupsGrid({
       {groups.map((group) => (
         <article
           key={group.id}
-          className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5"
+          className="admin-card p-4 sm:p-5"
         >
           <div className="flex items-start justify-between gap-3">
             <div>
-              <h2 className="font-semibold text-zinc-950">{group.nameAr}</h2>
-              <p className="mt-1 text-xs text-zinc-500">
+              <h2 className="font-semibold text-[var(--admin-foreground)]">{group.nameAr}</h2>
+              <p className="mt-1 text-xs admin-muted">
                 اختيار {group.minSelect} إلى {group.maxSelect}
               </p>
             </div>
@@ -185,7 +185,7 @@ export function ModifierGroupsGrid({
                 type="button"
                 onClick={() => onEdit(group.id)}
                 aria-label={`تعديل ${group.nameAr}`}
-                className="grid size-10 place-items-center rounded-xl border border-zinc-200 text-zinc-600 hover:bg-zinc-50"
+                className="grid size-10 place-items-center rounded-xl border border-[var(--admin-border)] text-[var(--admin-muted)] hover:bg-[var(--admin-background)]"
               >
                 <Pencil size={16} />
               </button>
@@ -193,7 +193,7 @@ export function ModifierGroupsGrid({
                 type="button"
                 onClick={() => onToggleStatus(CatalogResource.MODIFIER_GROUP, group.id, false)}
                 aria-label={`أرشفة ${group.nameAr}`}
-                className="grid size-10 place-items-center rounded-xl border border-zinc-200 text-zinc-600 hover:bg-zinc-50"
+                className="grid size-10 place-items-center rounded-xl border border-[var(--admin-border)] text-[var(--admin-muted)] hover:bg-[var(--admin-background)]"
               >
                 <Archive size={16} />
               </button>
@@ -202,7 +202,7 @@ export function ModifierGroupsGrid({
                 onClick={() => onDelete({ type: 'modifier', id: group.id, name: group.nameAr })}
                 aria-label={`حذف ${group.nameAr}`}
                 title="حذف المجموعة"
-                className="grid size-10 place-items-center rounded-xl border border-zinc-200 text-rose-600 hover:bg-rose-50 hover:border-rose-300 transition"
+                className="grid size-10 place-items-center rounded-xl border border-[var(--admin-border)] text-[var(--admin-danger)] hover:bg-[var(--admin-danger-soft)] hover:border-[var(--admin-danger)] transition"
               >
                 <Trash2 size={16} />
               </button>
@@ -212,10 +212,10 @@ export function ModifierGroupsGrid({
             {group.modifiers.map((modifier) => (
               <div
                 key={modifier.id}
-                className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 text-sm"
+                className="flex items-center justify-between rounded-lg bg-[var(--admin-background)] px-3 py-2 text-sm"
               >
-                <span className="text-zinc-700">{modifier.nameAr}</span>
-                <span className="text-xs font-medium text-zinc-500">
+                <span className="text-[var(--admin-foreground)]">{modifier.nameAr}</span>
+                <span className="text-xs font-medium admin-muted">
                   {modifier.priceDelta ? `+ ${money(modifier.priceDelta, currency)}` : 'بدون زيادة'}
                 </span>
               </div>
@@ -260,7 +260,7 @@ export function CategoryEditor({
             type="button"
             onClick={onCancel}
             disabled={pending}
-            className="min-h-12 rounded-xl border border-zinc-200 bg-white px-5 text-sm font-semibold text-zinc-700 hover:bg-zinc-50 transition disabled:opacity-50"
+            className="admin-control min-h-12 rounded-xl border px-5 text-sm font-semibold transition disabled:opacity-50"
           >
             إلغاء
           </button>
@@ -268,7 +268,7 @@ export function CategoryEditor({
         <button
           disabled={pending}
           type="submit"
-          className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-zinc-900 px-4 text-sm font-semibold text-white disabled:opacity-60 hover:bg-zinc-800 transition"
+          className="admin-primary-action flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold disabled:opacity-60 transition"
         >
           {pending ? 'جارٍ الحفظ...' : <><Check size={17} />حفظ التغييرات</>}
         </button>
@@ -320,13 +320,13 @@ export function GroupEditor({
           defaultValue={group?.maxSelect ?? 1}
         />
       </div>
-      <div className="space-y-3 rounded-2xl bg-zinc-50 p-3">
+      <div className="space-y-3 rounded-2xl bg-[var(--admin-background)] p-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-zinc-800">الخيارات</h3>
+          <h3 className="text-sm font-semibold text-[var(--admin-foreground)]">الخيارات</h3>
           <button
             type="button"
             onClick={() => setModifiers((items) => [...items, { nameAr: '', nameEn: '', price: '0' }])}
-            className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 hover:bg-zinc-50"
+            className="admin-control inline-flex min-h-10 items-center gap-1.5 rounded-lg border px-3 text-xs font-medium"
           >
             <CirclePlus size={15} />
             إضافة خيار
@@ -335,7 +335,7 @@ export function GroupEditor({
         {modifiers.map((modifier, index) => (
           <div
             key={index}
-            className="grid grid-cols-1 gap-2 rounded-xl border border-zinc-200 bg-white p-3 sm:grid-cols-[1fr_1fr_0.8fr_auto] sm:items-end"
+            className="grid grid-cols-1 gap-2 rounded-xl border border-[var(--admin-border)] bg-[var(--admin-surface)] p-3 sm:grid-cols-[1fr_1fr_0.8fr_auto] sm:items-end"
           >
             <Field
               label="اسم الخيار بالعربية"
@@ -375,7 +375,7 @@ export function GroupEditor({
                 type="button"
                 aria-label="حذف الخيار"
                 onClick={() => setModifiers((items) => items.filter((_, itemIndex) => itemIndex !== index))}
-                className="grid size-11 place-items-center rounded-lg text-zinc-500 hover:bg-zinc-100"
+                className="grid size-11 place-items-center rounded-lg text-[var(--admin-muted)] hover:bg-[var(--admin-background)]"
               >
                 <X size={16} />
               </button>
@@ -389,7 +389,7 @@ export function GroupEditor({
             type="button"
             onClick={onCancel}
             disabled={pending}
-            className="min-h-12 rounded-xl border border-zinc-200 bg-white px-5 text-sm font-semibold text-zinc-700 hover:bg-zinc-50 transition disabled:opacity-50"
+            className="admin-control min-h-12 rounded-xl border px-5 text-sm font-semibold transition disabled:opacity-50"
           >
             إلغاء
           </button>
@@ -397,7 +397,7 @@ export function GroupEditor({
         <button
           disabled={pending}
           type="submit"
-          className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-zinc-900 px-4 text-sm font-semibold text-white disabled:opacity-60 hover:bg-zinc-800 transition"
+          className="admin-primary-action flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold disabled:opacity-60 transition"
         >
           {pending ? 'جارٍ الحفظ...' : <><Check size={17} />حفظ التغييرات</>}
         </button>

@@ -13,6 +13,7 @@ model RestaurantSetting {
   id              String   @id @default(uuid())
   nameAr          String   @map("name_ar")
   nameEn          String   @map("name_en")
+  logoUrl         String?  @map("logo_url")
   currency        String   @db.Char(3)
   currencySymbol  String   @default("ج.م") @map("currency_symbol")
   locale          String   @default("ar-EG")

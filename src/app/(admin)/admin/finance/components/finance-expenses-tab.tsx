@@ -24,45 +24,45 @@ export function FinanceExpensesTab({
     <div className="space-y-6">
       {/* KPI Cards for Expenses */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-xs">
-          <div className="flex items-center justify-between text-zinc-500">
+        <div className="admin-card p-4">
+          <div className="flex items-center justify-between admin-muted">
             <span className="text-xs font-medium">إجمالي المصروفات</span>
-            <Receipt className="h-4 w-4 text-zinc-600" />
+            <Receipt className="h-4 w-4" />
           </div>
-          <p className="mt-2 text-2xl font-bold text-zinc-900">
+          <p className="mt-2 text-2xl font-bold text-[var(--admin-foreground)]">
             {formatMoney(expenses.reduce((acc, e) => acc + e.amountMinor, 0))}
           </p>
-          <p className="mt-1 text-[11px] text-zinc-500">كافة السندات المسجلة لهذا الفرع</p>
+          <p className="mt-1 text-[11px] admin-muted">كافة السندات المسجلة لهذا الفرع</p>
         </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-xs">
-          <div className="flex items-center justify-between text-zinc-500">
+        <div className="admin-card p-4">
+          <div className="flex items-center justify-between admin-muted">
             <span className="text-xs font-medium">مصروفات من درج الكاشير</span>
-            <ArrowDownLeft className="h-4 w-4 text-amber-600" />
+            <ArrowDownLeft className="h-4 w-4 text-[var(--admin-warning)]" />
           </div>
-          <p className="mt-2 text-2xl font-bold text-zinc-900">
+          <p className="mt-2 text-2xl font-bold text-[var(--admin-foreground)]">
             {formatMoney(
               expenses
                 .filter((e) => e.source === ExpenseSource.REGISTER_CASH)
                 .reduce((acc, e) => acc + e.amountMinor, 0)
             )}
           </p>
-          <p className="mt-1 text-[11px] text-zinc-500">خُصمت مباشرة من النقد المتوقع بالأدراج</p>
+          <p className="mt-1 text-[11px] admin-muted">خُصمت مباشرة من النقد المتوقع بالأدراج</p>
         </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-4 shadow-xs">
-          <div className="flex items-center justify-between text-zinc-500">
+        <div className="admin-card p-4">
+          <div className="flex items-center justify-between admin-muted">
             <span className="text-xs font-medium">مصروفات من الخزينة / العهدة</span>
-            <ArrowUpRight className="h-4 w-4 text-indigo-600" />
+            <ArrowUpRight className="h-4 w-4 text-[var(--admin-info)]" />
           </div>
-          <p className="mt-2 text-2xl font-bold text-zinc-900">
+          <p className="mt-2 text-2xl font-bold text-[var(--admin-foreground)]">
             {formatMoney(
               expenses
                 .filter((e) => e.source === ExpenseSource.SAFE_PETTY_CASH)
                 .reduce((acc, e) => acc + e.amountMinor, 0)
             )}
           </p>
-          <p className="mt-1 text-[11px] text-zinc-500">من الخزينة الميدانية المستقلة</p>
+          <p className="mt-1 text-[11px] admin-muted">من الخزينة الميدانية المستقلة</p>
         </div>
       </div>
 
@@ -70,7 +70,7 @@ export function FinanceExpensesTab({
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="text-xs font-medium text-zinc-500">مصدر الصرف:</span>
-          <div className="inline-flex rounded-lg border border-zinc-200 bg-white p-1 text-xs">
+          <div className="inline-flex rounded-lg border border-[var(--admin-border)] bg-[var(--admin-surface)] p-1 text-xs">
             {(['ALL', ExpenseSource.REGISTER_CASH, ExpenseSource.SAFE_PETTY_CASH] as const).map(
               (src) => (
                 <button
@@ -79,8 +79,8 @@ export function FinanceExpensesTab({
                   onClick={() => onSourceFilterChange(src)}
                   className={`rounded-md px-2.5 py-1 font-medium transition-colors ${
                     expenseSourceFilter === src
-                      ? 'bg-zinc-900 text-white'
-                      : 'text-zinc-600 hover:text-zinc-900'
+                      ? 'admin-primary-action'
+                      : 'text-[var(--admin-foreground)] hover:bg-[var(--admin-background)]'
                   }`}
                 >
                   {src === 'ALL'

@@ -235,6 +235,7 @@ export default async function AdminLayout({
     <AdminShell
       restaurantNameAr={settings?.nameAr ?? 'منظومة المطعم'}
       restaurantNameEn={settings?.nameEn ?? 'Restaurant Platform'}
+      restaurantLogoUrl={settings?.logoUrl ?? null}
       currency={settings?.currency ?? 'EGP'}
       currencySymbol={settings?.currencySymbol ?? 'ج.م'}
       branches={branches}

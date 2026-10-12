@@ -257,17 +257,17 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
   return (
     <div className="space-y-6 p-4 sm:p-6 lg:p-8" dir="rtl">
       {/* Top Header & Navigation Bar */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-[var(--admin-border)] pb-5">
         <div>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900 text-white">
-              <Wallet className="h-5 w-5 text-zinc-100" strokeWidth={1.75} />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--admin-primary)] text-white">
+              <Wallet className="h-5 w-5" strokeWidth={1.75} />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-zinc-900 sm:text-2xl">
+              <h1 className="text-xl font-bold text-[var(--admin-foreground)] sm:text-2xl">
                 المالية والورديات والمصروفات
               </h1>
-              <p className="text-xs text-zinc-500 sm:text-sm">
+              <p className="text-xs admin-muted sm:text-sm">
                 متابعة حركة النقد بالأدراج، تسجيل المصروفات الميدانية، ومجمل أرباح التشغيل
               </p>
             </div>
@@ -277,12 +277,12 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Branch Selector */}
           {initialData.allowedBranches.length > 1 && (
-            <div className="flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs shadow-xs">
-              <Building2 className="h-4 w-4 text-zinc-500" strokeWidth={1.75} />
+            <div className="flex items-center gap-1.5 rounded-lg border border-[var(--admin-border)] bg-[var(--admin-surface)] px-3 py-2 text-xs shadow-xs">
+              <Building2 className="h-4 w-4 admin-muted" strokeWidth={1.75} />
               <select
                 value={initialData.branchId}
                 onChange={(e) => handleBranchChange(e.target.value)}
-                className="bg-transparent font-medium text-zinc-800 outline-hidden"
+                className="bg-transparent font-medium text-[var(--admin-foreground)] outline-hidden"
               >
                 {initialData.allowedBranches.map((b) => (
                   <option key={b.id} value={b.id}>
@@ -300,9 +300,9 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
               setFeedback(null);
               setShowMovementModal(true);
             }}
-            className="flex min-h-11 items-center gap-2 rounded-lg border border-zinc-300 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-700 shadow-xs transition-colors hover:bg-zinc-50 sm:text-sm"
+            className="admin-control flex min-h-11 items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold shadow-xs transition-colors sm:text-sm"
           >
-            <ArrowDownUp className="h-4 w-4 text-zinc-600" strokeWidth={1.75} />
+            <ArrowDownUp className="h-4 w-4" strokeWidth={1.75} />
             <span>إيداع / سحب نقد</span>
           </button>
 
@@ -313,7 +313,7 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
               setFeedback(null);
               setShowExpenseModal(true);
             }}
-            className="flex min-h-11 items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-zinc-800 sm:text-sm"
+            className="admin-primary-action flex min-h-11 items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold shadow-xs transition-colors sm:text-sm"
           >
             <Plus className="h-4 w-4" strokeWidth={2} />
             <span>تسجيل مصروف</span>
@@ -326,22 +326,22 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
         <div
           className={`flex items-center justify-between rounded-lg p-3.5 text-xs sm:text-sm font-medium ${
             feedback.type === 'success'
-              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-              : 'bg-rose-50 text-rose-800 border border-rose-200'
+              ? 'bg-[var(--admin-success-soft)] text-[var(--admin-success)] border border-[var(--admin-success)]/30'
+              : 'bg-[var(--admin-danger-soft)] text-[var(--admin-danger)] border border-[var(--admin-danger)]/30'
           }`}
         >
           <div className="flex items-center gap-2">
             {feedback.type === 'success' ? (
-              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="h-4 w-4 text-[var(--admin-success)] shrink-0" />
             ) : (
-              <AlertTriangle className="h-4 w-4 text-rose-600 shrink-0" />
+              <AlertTriangle className="h-4 w-4 text-[var(--admin-danger)] shrink-0" />
             )}
             <span>{feedback.message}</span>
           </div>
           <button
             type="button"
             onClick={() => setFeedback(null)}
-            className="p-1 text-zinc-400 hover:text-zinc-700"
+            className="p-1 admin-muted hover:text-[var(--admin-foreground)]"
           >
             <X className="h-4 w-4" />
           </button>
@@ -349,14 +349,14 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
       )}
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-zinc-200 overflow-x-auto">
+      <div className="flex border-b border-[var(--admin-border)] overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab('shifts')}
           className={`flex min-h-11 items-center gap-2 border-b-2 px-4 py-2.5 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
             activeTab === 'shifts'
-              ? 'border-zinc-900 text-zinc-900 font-semibold'
-              : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              ? 'border-[var(--admin-primary)] text-[var(--admin-primary)] font-semibold'
+              : 'border-transparent admin-muted hover:text-[var(--admin-foreground)]'
           }`}
         >
           <Wallet className="h-4 w-4" strokeWidth={1.75} />

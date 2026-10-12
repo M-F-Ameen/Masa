@@ -27,20 +27,20 @@ export function OrdersHeader({
   onRefresh,
 }: OrdersHeaderProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-5">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--admin-border)] pb-5">
       <div>
         <div className="flex items-center gap-2.5">
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[var(--admin-foreground)]">
             مركز إدارة الطلبات الإلكترونية
           </h1>
           {pendingCount > 0 && (
             <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-600"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--admin-info)] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 admin-status-dot-info"></span>
             </span>
           )}
         </div>
-        <p className="text-xs sm:text-sm text-zinc-500 mt-1">
+        <p className="text-xs sm:text-sm admin-muted mt-1">
           قمرة القيادة الحية لمتابعة تدفق طلبات التوصيل وإسنادها للفروع لحظة بلحظة.
         </p>
       </div>
@@ -53,8 +53,8 @@ export function OrdersHeader({
           onClick={toggleSound}
           className={`p-2 rounded-lg border text-xs font-semibold flex items-center gap-1.5 transition ${
             isMuted
-              ? 'border-zinc-200 text-zinc-400 bg-zinc-50 hover:bg-zinc-100'
-              : 'border-blue-200 text-blue-700 bg-blue-50 hover:bg-blue-100'
+              ? 'border-[var(--admin-border)] text-[var(--admin-muted)] bg-[var(--admin-background)] hover:bg-[var(--admin-border)]'
+              : 'admin-soft-primary'
           }`}
           title={isMuted ? 'تفعيل التنبيه الصوتي عند وصول طلب جديد' : 'كتم التنبيه الصوتي'}
         >
@@ -68,8 +68,8 @@ export function OrdersHeader({
           onClick={() => setAutoRefreshEnabled(!autoRefreshEnabled)}
           className={`px-2.5 py-1.5 rounded-lg border text-xs font-medium transition ${
             autoRefreshEnabled
-              ? 'border-emerald-200 text-emerald-800 bg-emerald-50'
-              : 'border-zinc-200 text-zinc-500 bg-zinc-50'
+              ? 'admin-status-success'
+              : 'border-[var(--admin-border)] text-[var(--admin-muted)] bg-[var(--admin-background)]'
           }`}
         >
           {autoRefreshEnabled ? 'تحديث تلقائي (20ث)' : 'التحديث معطل'}
@@ -80,10 +80,10 @@ export function OrdersHeader({
           <button
             type="button"
             onClick={onOpenFleetModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-purple-700 bg-purple-50 border border-purple-200 rounded-lg hover:bg-purple-100 transition shadow-2xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-lg admin-soft-primary transition shadow-2xs"
             title="إدارة أسطول الكباتن وإقفال العهدة النقدية"
           >
-            <Bike className="w-4 h-4 text-purple-600" />
+            <Bike className="w-4 h-4 text-[var(--admin-primary)]" />
             <span className="hidden md:inline">أسطول التوصيل والطيارين</span>
           </button>
         )}
@@ -93,10 +93,10 @@ export function OrdersHeader({
           type="button"
           onClick={onRefresh}
           disabled={isRefreshing}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-zinc-700 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-100 transition disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold border rounded-lg admin-control transition disabled:opacity-50"
           title="تحديث البيانات فوراً"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-zinc-900' : ''}`} />
+          <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[var(--admin-foreground)]' : ''}`} />
           <span>تحديث</span>
         </button>
       </div>

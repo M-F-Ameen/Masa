@@ -59,9 +59,10 @@ interface AdminNavProps {
   items?: AdminNavItem[];
   onItemClick?: () => void;
   className?: string;
+  searchQuery?: string;
 }
 
-export function AdminNav({ sections, items, onItemClick, className }: AdminNavProps) {
+export function AdminNav({ sections, items, onItemClick, className, searchQuery }: AdminNavProps) {
   const pathname = usePathname();
 
   // Normalize sections (backwards-compatible with flat items)
@@ -71,11 +72,24 @@ export function AdminNav({ sections, items, onItemClick, className }: AdminNavPr
     ? [{ items }]
     : [];
 
+  const query = (searchQuery ?? '').trim().toLowerCase();
+  const visibleSections = query
+    ? effectiveSections
+        .map((section) => ({
+          ...section,
+          items: section.items.filter((item) => item.label.toLowerCase().includes(query)),
+        }))
+        .filter((section) => section.items.length > 0)
+    : effectiveSections;
+
   return (
     <nav className={className || 'space-y-4'}>
-      {effectiveSections.map((section, sIdx) => (
-        <div key={section.title || `section-${sIdx}`} className="space-y-1">
-          <div className="space-y-1">
+      {query && visibleSections.length === 0 && (
+        <p className="admin-muted px-4 py-3 text-xs">لا توجد نتائج مطابقة.</p>
+      )}
+      {visibleSections.map((section, sIdx) => (
+        <div key={section.title || `section-${sIdx}`} className="space-y-2">
+          <div className="space-y-2">
             {section.items.map((item) => {
               const Icon = ICON_MAP[item.iconName] || LayoutDashboard;
               const isActive =
@@ -98,16 +112,16 @@ export function AdminNav({ sections, items, onItemClick, className }: AdminNavPr
                   key={item.href}
                   href={item.href}
                   onClick={onItemClick}
-                    className={`group flex min-h-12 shrink-0 items-center justify-between rounded-xl border border-transparent px-3.5 py-2.5 text-sm md:w-full ${
+                    className={`group flex min-h-12 shrink-0 items-center justify-between rounded-lg border border-transparent px-4 py-2.5 text-sm md:w-full ${
                     isActive
                       ? 'admin-nav-link-active font-bold'
                       : 'admin-nav-link font-medium'
                   }`}
                 >
-                  <div className="flex min-w-0 items-center gap-2.5 truncate">
+                  <div className="flex min-w-0 items-center gap-3 truncate">
                     <Icon
-                      className="admin-nav-icon size-5 shrink-0 transition-colors"
-                      strokeWidth={isActive ? 2.15 : 1.9}
+                      className="admin-nav-icon size-6 shrink-0 transition-colors"
+                      strokeWidth={isActive ? 2.1 : 1.8}
                     />
                     <span className="truncate">{item.label}</span>
                   </div>

@@ -230,12 +230,14 @@ body {
 
 .admin-app .admin-topbar {
   position: sticky;
-  top: 0;
+  top: 0.375rem;
   z-index: 40;
   flex-shrink: 0;
-  border-color: var(--admin-border);
-  background: color-mix(in srgb, var(--admin-surface) 94%, var(--admin-background));
-  box-shadow: 0 2px 10px rgba(20, 32, 51, 0.04);
+  border-color: color-mix(in srgb, var(--admin-border) 12%, transparent);
+  background-color: color-mix(in srgb, #FFFFFF 18%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px -14px rgba(20, 32, 51, 0.14);
 }
 
 .admin-app .admin-header-branch > div {
@@ -256,9 +258,30 @@ body {
 }
 
 .admin-app .admin-sidebar {
-  background: var(--admin-surface);
   color: var(--admin-foreground);
+  border-color: color-mix(in srgb, var(--admin-border) 85%, transparent);
+  background-color: #FFFFFF;
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #F3F6FC 100%);
+  background-size: 100% 4rem;
+  background-repeat: no-repeat;
+  background-position: top;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(20, 32, 51, 0.05),
+    0 1px 2px rgba(20, 32, 51, 0.08),
+    0 18px 36px -18px rgba(20, 32, 51, 0.34);
+}
+
+.admin-app .admin-sidebar-brand,
+.admin-app .admin-sidebar-brand-compact {
   border-color: var(--admin-border);
+  background: transparent;
+}
+
+.admin-app .admin-sidebar-logo {
+  background: var(--admin-primary-soft);
+  color: var(--admin-primary);
+  box-shadow: 0 4px 12px rgba(40, 89, 217, 0.1);
 }
 
 .admin-app .admin-sidebar-header {
@@ -273,8 +296,22 @@ body {
 
 .admin-app .admin-sidebar-footer {
   border-color: var(--admin-border);
-  background: var(--admin-surface);
+  background: transparent;
   color: var(--admin-muted);
+}
+
+.admin-app .admin-sidebar-user-chip {
+  border-color: color-mix(in srgb, var(--admin-primary) 12%, var(--admin-border));
+  background: color-mix(in srgb, var(--admin-primary-soft) 35%, var(--admin-surface));
+}
+
+.admin-app .admin-sidebar-status-dot {
+  background: var(--admin-accent);
+  box-shadow: 0 0 0 3px var(--admin-accent-soft);
+}
+
+.admin-app .admin-header-context-icon {
+  color: var(--admin-primary);
 }
 
 .admin-app .admin-control {
@@ -383,6 +420,8 @@ body {
 }
 
 .admin-app .admin-nav-link {
+  border-color: color-mix(in srgb, var(--admin-border) 40%, transparent);
+  background: color-mix(in srgb, var(--admin-primary) 1.5%, var(--admin-surface));
   color: var(--admin-foreground);
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
 }
@@ -400,30 +439,33 @@ body {
 
 .admin-app .admin-nav-link-active {
   position: relative;
-  border-color: color-mix(in srgb, var(--admin-primary) 14%, var(--admin-border));
-  background: var(--admin-primary-soft);
-  color: var(--admin-primary-hover);
-  box-shadow: 0 4px 12px rgba(40, 89, 217, 0.08);
+  border-color: var(--admin-primary);
+  background: var(--admin-primary);
+  color: #FFFFFF;
+  box-shadow: 0 7px 18px rgba(40, 89, 217, 0.2);
 }
 
 .admin-app .admin-nav-link-active::after {
-  position: absolute;
-  top: 9px;
-  right: -1px;
-  bottom: 9px;
-  width: 4px;
-  border-radius: 4px 0 0 4px;
-  background: var(--admin-primary);
-  content: '';
+  display: none;
+}
+
+.admin-app .admin-nav-link-active:hover {
+  border-color: var(--admin-primary-hover);
+  background: var(--admin-primary-hover);
+  color: #FFFFFF;
 }
 
 .admin-app .admin-nav-icon {
-  color: var(--admin-muted);
+  color: var(--admin-primary);
 }
 
 .admin-app .admin-nav-link:hover .admin-nav-icon,
 .admin-app .admin-nav-link-active .admin-nav-icon {
   color: var(--admin-primary);
+}
+
+.admin-app .admin-nav-link-active .admin-nav-icon {
+  color: #FFFFFF;
 }
 
 .admin-app .admin-sidebar-danger-action {
@@ -494,7 +536,13 @@ body {
 
 @media (max-width: 767px) {
   .admin-app .admin-sidebar {
-    box-shadow: -18px 0 42px rgba(20, 32, 51, 0.16);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      -18px 0 42px rgba(20, 32, 51, 0.18);
+  }
+
+  .admin-app .admin-topbar {
+    top: 0;
   }
 }
 

@@ -15,6 +15,7 @@ export default async function SettingsPage() {
         id: settings.id,
         nameAr: settings.nameAr,
         nameEn: settings.nameEn,
+        logoUrl: settings.logoUrl,
         currency: settings.currency,
         currencySymbol: settings.currencySymbol,
         locale: settings.locale,

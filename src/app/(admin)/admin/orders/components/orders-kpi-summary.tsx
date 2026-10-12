@@ -34,20 +34,20 @@ export function OrdersKpiSummary({
         onClick={() => onFilterChange(OrderStatus.PENDING)}
         className={`cursor-pointer p-4 rounded-xl border transition shadow-2xs ${
           selectedStatus === OrderStatus.PENDING
-            ? 'border-blue-500 bg-blue-50/50 ring-2 ring-blue-500/20'
-            : 'border-zinc-200 bg-white hover:border-zinc-300'
+            ? 'border-[var(--admin-info)] bg-[var(--admin-info-soft)] ring-2 ring-[var(--admin-info-soft)]'
+            : 'border-[var(--admin-border)] bg-[var(--admin-surface)] hover:border-[var(--admin-primary)]'
         }`}
       >
-        <div className="flex items-center justify-between text-xs text-zinc-500 mb-1">
+        <div className="flex items-center justify-between text-xs admin-muted mb-1">
           <span>طلبات معلقة جديدة</span>
           <div
             className={`w-2 h-2 rounded-full ${
-              metrics.pendingCount > 0 ? 'bg-blue-600 animate-pulse' : 'bg-zinc-300'
+              metrics.pendingCount > 0 ? 'admin-status-dot-info animate-pulse' : 'bg-[var(--admin-border)]'
             }`}
           />
         </div>
-        <div className="text-2xl font-bold text-zinc-900">{metrics.pendingCount}</div>
-        <span className="text-[11px] text-zinc-500">تحتاج مراجعة وإسناد</span>
+        <div className="text-2xl font-bold text-[var(--admin-foreground)]">{metrics.pendingCount}</div>
+        <span className="text-[11px] admin-muted">تحتاج مراجعة وإسناد</span>
       </div>
 
       {/* Preparing */}
@@ -55,16 +55,16 @@ export function OrdersKpiSummary({
         onClick={() => onFilterChange(OrderStatus.PREPARING)}
         className={`cursor-pointer p-4 rounded-xl border transition shadow-2xs ${
           selectedStatus === OrderStatus.PREPARING
-            ? 'border-orange-500 bg-orange-50/50 ring-2 ring-orange-500/20'
-            : 'border-zinc-200 bg-white hover:border-zinc-300'
+            ? 'border-[var(--admin-warning)] bg-[var(--admin-warning-soft)] ring-2 ring-[var(--admin-warning-soft)]'
+            : 'border-[var(--admin-border)] bg-[var(--admin-surface)] hover:border-[var(--admin-primary)]'
         }`}
       >
-        <div className="flex items-center justify-between text-xs text-zinc-500 mb-1">
+        <div className="flex items-center justify-between text-xs admin-muted mb-1">
           <span>قيد التجهيز بالمطبخ</span>
-          <ChefHat className="w-3.5 h-3.5 text-orange-600" />
+          <ChefHat className="w-3.5 h-3.5 text-[var(--admin-warning)]" />
         </div>
-        <div className="text-2xl font-bold text-zinc-900">{metrics.preparingCount}</div>
-        <span className="text-[11px] text-zinc-500">في المطابخ حالياً</span>
+        <div className="text-2xl font-bold text-[var(--admin-foreground)]">{metrics.preparingCount}</div>
+        <span className="text-[11px] admin-muted">في المطابخ حالياً</span>
       </div>
 
       {/* In Delivery */}
@@ -72,16 +72,16 @@ export function OrdersKpiSummary({
         onClick={() => onFilterChange(OrderStatus.OUT_FOR_DELIVERY)}
         className={`cursor-pointer p-4 rounded-xl border transition shadow-2xs ${
           selectedStatus === OrderStatus.OUT_FOR_DELIVERY
-            ? 'border-purple-500 bg-purple-50/50 ring-2 ring-purple-500/20'
-            : 'border-zinc-200 bg-white hover:border-zinc-300'
+            ? 'border-[var(--admin-info)] bg-[var(--admin-info-soft)] ring-2 ring-[var(--admin-info-soft)]'
+            : 'border-[var(--admin-border)] bg-[var(--admin-surface)] hover:border-[var(--admin-primary)]'
         }`}
       >
-        <div className="flex items-center justify-between text-xs text-zinc-500 mb-1">
+        <div className="flex items-center justify-between text-xs admin-muted mb-1">
           <span>مع المندوب</span>
-          <Truck className="w-3.5 h-3.5 text-purple-600" />
+          <Truck className="w-3.5 h-3.5 text-[var(--admin-info)]" />
         </div>
-        <div className="text-2xl font-bold text-zinc-900">{metrics.inDeliveryCount}</div>
-        <span className="text-[11px] text-zinc-500">في طريقها للزبائن</span>
+        <div className="text-2xl font-bold text-[var(--admin-foreground)]">{metrics.inDeliveryCount}</div>
+        <span className="text-[11px] admin-muted">في طريقها للزبائن</span>
       </div>
 
       {/* Delivered Today */}
@@ -89,29 +89,29 @@ export function OrdersKpiSummary({
         onClick={() => onFilterChange(OrderStatus.DELIVERED)}
         className={`cursor-pointer p-4 rounded-xl border transition shadow-2xs ${
           selectedStatus === OrderStatus.DELIVERED
-            ? 'border-emerald-500 bg-emerald-50/50 ring-2 ring-emerald-500/20'
-            : 'border-zinc-200 bg-white hover:border-zinc-300'
+            ? 'border-[var(--admin-success)] bg-[var(--admin-success-soft)] ring-2 ring-[var(--admin-success-soft)]'
+            : 'border-[var(--admin-border)] bg-[var(--admin-surface)] hover:border-[var(--admin-primary)]'
         }`}
       >
-        <div className="flex items-center justify-between text-xs text-zinc-500 mb-1">
+        <div className="flex items-center justify-between text-xs admin-muted mb-1">
           <span>تم تسليمها اليوم</span>
-          <CheckCheck className="w-3.5 h-3.5 text-emerald-600" />
+          <CheckCheck className="w-3.5 h-3.5 text-[var(--admin-accent-hover)]" />
         </div>
-        <div className="text-2xl font-bold text-zinc-900">{metrics.deliveredTodayCount}</div>
-        <span className="text-[11px] text-zinc-500">طلبات مكتملة بنجاح</span>
+        <div className="text-2xl font-bold text-[var(--admin-foreground)]">{metrics.deliveredTodayCount}</div>
+        <span className="text-[11px] admin-muted">طلبات مكتملة بنجاح</span>
       </div>
 
       {/* Sales Today */}
-      <div className="col-span-2 sm:col-span-1 p-4 rounded-xl border border-zinc-200 bg-white shadow-2xs">
-        <div className="flex items-center justify-between text-xs text-zinc-500 mb-1">
+      <div className="admin-card col-span-2 sm:col-span-1 p-4">
+        <div className="flex items-center justify-between text-xs admin-muted mb-1">
           <span>مبيعات اليوم المحققة</span>
-          <DollarSign className="w-3.5 h-3.5 text-zinc-700" />
+          <DollarSign className="w-3.5 h-3.5 text-[var(--admin-foreground)]" />
         </div>
-        <div className="text-2xl font-bold text-zinc-900">
+        <div className="text-2xl font-bold text-[var(--admin-foreground)]">
           {formatMoney(metrics.todaySalesMinor)}
-          <span className="text-xs font-normal text-zinc-500 mr-1">{currencySymbol}</span>
+          <span className="text-xs font-normal admin-muted mr-1">{currencySymbol}</span>
         </div>
-        <span className="text-[11px] text-zinc-500">للطلبات المسلمة</span>
+        <span className="text-[11px] admin-muted">للطلبات المسلمة</span>
       </div>
     </div>
   );

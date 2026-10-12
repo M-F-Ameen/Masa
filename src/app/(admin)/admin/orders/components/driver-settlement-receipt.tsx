@@ -70,7 +70,7 @@ export function DriverSettlementReceipt({
   return (
     <section
       id="printable-settlement-receipt"
-      className="printable-document hidden bg-white text-black print:block print:w-[76mm] print:p-2 font-sans"
+      className="printable-document hidden bg-[var(--admin-surface)] text-black print:block print:w-[76mm] print:p-2 font-sans"
       dir="rtl"
     >
 
@@ -86,23 +86,23 @@ export function DriverSettlementReceipt({
       {/* Meta Info */}
       <div className="my-2 space-y-1 text-xs border-b border-dashed border-black pb-2">
         <div className="flex justify-between">
-          <span className="text-zinc-600">التاريخ والوقت:</span>
+          <span className="admin-muted">التاريخ والوقت:</span>
           <span>{new Date(settlement.settledAt).toLocaleString('ar-EG')}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-zinc-600">كابتن التوصيل:</span>
+          <span className="admin-muted">كابتن التوصيل:</span>
           <span className="font-bold">{driver.fullName}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-zinc-600">رقم الهاتف:</span>
+          <span className="admin-muted">رقم الهاتف:</span>
           <span className="font-mono" dir="ltr">{driver.phone}</span>
         </div>
         <div className="flex justify-between">
-          <span className="text-zinc-600">الكاشير المستلم:</span>
+          <span className="admin-muted">الكاشير المستلم:</span>
           <span>{cashier.fullName}</span>
         </div>
         {financials.linkedCashShiftId && (
-          <div className="flex justify-between text-[10px] text-zinc-500">
+          <div className="flex justify-between text-[10px] admin-muted">
             <span>تم التوريد لوردية رقم:</span>
             <span className="font-mono">{financials.linkedCashShiftId.slice(0, 8)}...</span>
           </div>
@@ -111,16 +111,16 @@ export function DriverSettlementReceipt({
 
       {/* Orders List */}
       <div className="my-2 space-y-1 text-xs">
-        <p className="font-bold border-b border-zinc-300 pb-1">الطلبات المسلّمة ({orders.length}):</p>
+        <p className="font-bold border-b border-[var(--admin-border)] pb-1">الطلبات المسلّمة ({orders.length}):</p>
         {orders.map((o, idx) => (
-          <div key={idx} className="flex justify-between border-b border-dashed border-zinc-200 py-1 text-[11px]">
+          <div key={idx} className="flex justify-between border-b border-dashed border-[var(--admin-border)] py-1 text-[11px]">
             <div>
               <span className="font-mono font-semibold" dir="ltr">{o.orderNumber}</span>
-              {o.customerName && <p className="text-[10px] text-zinc-500">{o.customerName}</p>}
+              {o.customerName && <p className="text-[10px] admin-muted">{o.customerName}</p>}
             </div>
             <div className="text-left font-mono">
               <span>{(o.totalMinor / 100).toFixed(2)} {curr}</span>
-              <p className="text-[9px] text-zinc-500">
+              <p className="text-[9px] admin-muted">
                 {o.paymentMethod === 'CASH' ? 'دفع عند الاستلام' : 'بطاقة / مدفوع'}
               </p>
             </div>
@@ -139,7 +139,7 @@ export function DriverSettlementReceipt({
           <dd>{financials.codOrdersCount} طلبات</dd>
         </div>
         {financials.prepaidOrdersCount > 0 && (
-          <div className="flex justify-between text-zinc-600">
+          <div className="flex justify-between admin-muted">
             <dt>طلبات مدفوعة مسبقاً:</dt>
             <dd>{financials.prepaidOrdersCount} طلبات</dd>
           </div>
@@ -153,7 +153,7 @@ export function DriverSettlementReceipt({
       </dl>
 
       {settlement.notes && (
-        <p className="my-2 text-[10px] text-zinc-600 border border-zinc-200 p-1.5 rounded">
+        <p className="my-2 text-[10px] admin-muted border border-[var(--admin-border)] p-1.5 rounded">
           ملاحظات: {settlement.notes}
         </p>
       )}
@@ -161,16 +161,16 @@ export function DriverSettlementReceipt({
       {/* Signatures */}
       <div className="mt-6 pt-3 border-t border-dashed border-black grid grid-cols-2 gap-4 text-center text-xs">
         <div>
-          <p className="text-zinc-600 mb-6">توقيع الكابتن</p>
+          <p className="admin-muted mb-6">توقيع الكابتن</p>
           <div className="border-b border-black w-24 mx-auto" />
         </div>
         <div>
-          <p className="text-zinc-600 mb-6">توقيع الكاشير</p>
+          <p className="admin-muted mb-6">توقيع الكاشير</p>
           <div className="border-b border-black w-24 mx-auto" />
         </div>
       </div>
 
-      <p className="mt-4 text-center text-[10px] text-zinc-500">
+      <p className="mt-4 text-center text-[10px] admin-muted">
         هذا الإيصال سند مالي رسمي لتسوية عهدة طيار التوصيل
       </p>
     </section>

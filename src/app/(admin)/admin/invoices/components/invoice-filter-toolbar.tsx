@@ -26,24 +26,24 @@ export function InvoiceFilterToolbar({
   onUpdateFilter,
 }: InvoiceFilterToolbarProps) {
   return (
-    <div className="bg-white p-4 rounded-2xl border border-zinc-200 shadow-2xs space-y-3.5">
+    <div className="admin-card p-4 space-y-3.5">
       {/* Tier 1: Search + Quick Date Range Buttons */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="w-4 h-4 absolute right-3.5 top-3 text-zinc-400" />
+          <Search className="w-4 h-4 absolute right-3.5 top-3 admin-muted" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="بحث برقم الفاتورة، اسم الزبون، أو الطاولة..."
-            className="w-full pr-10 pl-8 py-2 text-xs border border-zinc-200 rounded-xl focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium placeholder:text-zinc-400 bg-zinc-50/50 focus:bg-white transition"
+            className="w-full pr-10 pl-8 py-2 text-xs border border-[var(--admin-border)] rounded-xl focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium placeholder:admin-muted bg-[var(--admin-background)]/50 focus:bg-[var(--admin-surface)] transition"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => onSearchChange('')}
-              className="absolute left-2.5 top-2.5 text-zinc-400 hover:text-zinc-600 cursor-pointer"
+              className="absolute left-2.5 top-2.5 admin-muted hover:text-[var(--admin-foreground)] cursor-pointer"
               title="مسح البحث"
             >
               ✕
@@ -67,8 +67,8 @@ export function InvoiceFilterToolbar({
               onClick={() => onDatePresetChange(preset.id as DatePreset)}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap cursor-pointer ${
                 filters.datePreset === preset.id
-                  ? 'bg-zinc-900 text-white shadow-2xs'
-                  : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+                  ? 'admin-primary-action shadow-2xs'
+                  : 'admin-control hover:bg-[var(--admin-background)]/60'
               }`}
             >
               {preset.label}
@@ -78,7 +78,7 @@ export function InvoiceFilterToolbar({
       </div>
 
       {/* Quick Date Range - Mobile View (Grid 3x2: Full width, zero clipping, touch-optimized) */}
-      <div className="grid sm:hidden grid-cols-3 gap-1 bg-zinc-100/80 p-1 rounded-xl text-xs w-full">
+      <div className="grid sm:hidden grid-cols-3 gap-1 bg-[var(--admin-background)]/80 p-1 rounded-xl text-xs w-full border border-[var(--admin-border)]">
         {[
           { id: 'ALL', label: 'الكل' },
           { id: 'TODAY', label: 'اليوم' },
@@ -93,8 +93,8 @@ export function InvoiceFilterToolbar({
             onClick={() => onDatePresetChange(preset.id as DatePreset)}
             className={`w-full py-2 px-1 text-center rounded-lg text-xs font-bold transition cursor-pointer ${
               filters.datePreset === preset.id
-                ? 'bg-zinc-900 text-white shadow-2xs'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+                ? 'admin-primary-action shadow-2xs'
+                : 'admin-control hover:bg-[var(--admin-background)]/60'
             }`}
           >
             {preset.label}

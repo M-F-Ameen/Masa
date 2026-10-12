@@ -86,11 +86,11 @@ export function AdjustmentModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4" dir="rtl">
-      <div className="w-full max-w-md rounded-xl border border-zinc-200 bg-white shadow-xl">
-        <div className="flex items-center justify-between border-b border-zinc-100 p-4">
+      <div className="w-full max-w-md rounded-xl border border-[var(--admin-border)] bg-[var(--admin-surface)] shadow-xl">
+        <div className="flex items-center justify-between border-b border-[var(--admin-border)] p-4">
           <div className="flex items-center gap-2">
-            <ArrowUpDown className="w-5 h-5 text-zinc-700" strokeWidth={1.75} />
-            <h3 className="font-semibold text-zinc-900 text-base">
+            <ArrowUpDown className="w-5 h-5 text-[var(--admin-foreground)]" strokeWidth={1.75} />
+            <h3 className="font-semibold text-[var(--admin-foreground)] text-base">
               {type === InventoryMovementType.OPERATIONAL_CONSUMPTION
                 ? 'صرف تشغيل مباشر للمطبخ'
                 : 'تسوية حركة مخزون'}
@@ -99,7 +99,7 @@ export function AdjustmentModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100"
+            className="p-1 rounded-lg text-[var(--admin-muted)] hover:text-[var(--admin-foreground)] hover:bg-[var(--admin-background)]"
           >
             <X className="w-5 h-5" />
           </button>
@@ -107,17 +107,17 @@ export function AdjustmentModal({
 
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           {error && (
-            <div className="p-3 text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg">
+            <div className="p-3 text-xs border admin-status-danger rounded-lg">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-medium text-zinc-700 mb-1">نوع الحركة المخزنية *</label>
+            <label className="block text-xs font-medium text-[var(--admin-foreground)] mb-1">نوع الحركة المخزنية *</label>
             <select
               value={type}
               onChange={(e) => handleTypeChange(e.target.value as InventoryMovementType)}
-              className="w-full text-sm border border-zinc-300 rounded-lg px-3 py-2 text-zinc-900 focus:outline-hidden focus:border-zinc-800 bg-white"
+              className="w-full text-sm border border-[var(--admin-border)] rounded-lg px-3 py-2 text-[var(--admin-foreground)] focus:outline-hidden focus:border-[var(--admin-primary)] bg-[var(--admin-surface)]"
             >
               <option value={InventoryMovementType.OPERATIONAL_CONSUMPTION}>
                 {MOVEMENT_TYPE_LABELS[InventoryMovementType.OPERATIONAL_CONSUMPTION].ar} (خصم للمطبخ)
@@ -132,11 +132,11 @@ export function AdjustmentModal({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-zinc-700 mb-1">المكون الخام *</label>
+            <label className="block text-xs font-medium text-[var(--admin-foreground)] mb-1">المكون الخام *</label>
             <select
               value={itemId}
               onChange={(e) => setItemId(e.target.value)}
-              className="w-full text-sm border border-zinc-300 rounded-lg px-3 py-2 text-zinc-900 focus:outline-hidden focus:border-zinc-800 bg-white"
+              className="w-full text-sm border border-[var(--admin-border)] rounded-lg px-3 py-2 text-[var(--admin-foreground)] focus:outline-hidden focus:border-[var(--admin-primary)] bg-[var(--admin-surface)]"
             >
               {allItems.map((item) => (
                 <option key={item.id} value={item.id}>
@@ -148,7 +148,7 @@ export function AdjustmentModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-zinc-700 mb-1">
+              <label className="block text-xs font-medium text-[var(--admin-foreground)] mb-1">
                 الكمية ({currentItem?.unit ?? ''}) *
               </label>
               <input
@@ -159,22 +159,22 @@ export function AdjustmentModal({
                 value={quantity || ''}
                 onChange={(e) => setQuantity(Number(e.target.value))}
                 placeholder="0.000"
-                className="w-full text-sm border border-zinc-300 rounded-lg px-3 py-2 text-zinc-900 focus:outline-hidden focus:border-zinc-800 font-mono"
+                className="w-full text-sm border border-[var(--admin-border)] rounded-lg px-3 py-2 text-[var(--admin-foreground)] focus:outline-hidden focus:border-[var(--admin-primary)] font-mono"
               />
             </div>
             <div>
-              <label className="block text-xs font-medium text-zinc-700 mb-1">اتجاه التأثير</label>
+              <label className="block text-xs font-medium text-[var(--admin-foreground)] mb-1">اتجاه التأثير</label>
               {type === InventoryMovementType.ADJUSTMENT ? (
                 <select
                   value={isNegativeChange ? 'sub' : 'add'}
                   onChange={(e) => setIsNegativeChange(e.target.value === 'sub')}
-                  className="w-full text-sm border border-zinc-300 rounded-lg px-3 py-2 text-zinc-900 focus:outline-hidden focus:border-zinc-800 bg-white"
+                  className="w-full text-sm border border-[var(--admin-border)] rounded-lg px-3 py-2 text-[var(--admin-foreground)] focus:outline-hidden focus:border-[var(--admin-primary)] bg-[var(--admin-surface)]"
                 >
                   <option value="sub">عجز / إنقاص من الرصيد (-)</option>
                   <option value="add">زيادة / فائض في الرصيد (+)</option>
                 </select>
               ) : (
-                <div className="w-full text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg px-3 py-2.5">
+                <div className="w-full text-xs border admin-status-danger rounded-lg px-3 py-2.5">
                   خصم مباشر من المخزن (-)
                 </div>
               )}
@@ -182,28 +182,28 @@ export function AdjustmentModal({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-zinc-700 mb-1">ملاحظات / سبب الحركة</label>
+            <label className="block text-xs font-medium text-[var(--admin-foreground)] mb-1">ملاحظات / سبب الحركة</label>
             <textarea
               rows={2}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="مثال: صرف صباحي لشيف المطبخ، أو توالف تلف حراري"
-              className="w-full text-sm border border-zinc-300 rounded-lg px-3 py-2 text-zinc-900 focus:outline-hidden focus:border-zinc-800"
+              className="w-full text-sm border border-[var(--admin-border)] rounded-lg px-3 py-2 text-[var(--admin-foreground)] focus:outline-hidden focus:border-[var(--admin-primary)]"
             />
           </div>
 
-          <div className="flex justify-end gap-2 pt-4 border-t border-zinc-100">
+          <div className="flex justify-end gap-2 pt-4 border-t border-[var(--admin-border)]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-medium text-zinc-600 border border-zinc-200 rounded-lg hover:bg-zinc-50"
+              className="admin-control px-4 py-2 text-xs font-medium rounded-lg border"
             >
               إلغاء
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-white bg-zinc-900 rounded-lg hover:bg-zinc-800 disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium admin-primary-action rounded-lg disabled:opacity-50"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
               <span>تأكيد وتسجيل الحركة</span>

@@ -43,6 +43,9 @@ if (globalForPrisma.prisma) {
         Order?: {
           fields?: Array<{ name: string }>;
         };
+        RestaurantSetting?: {
+          fields?: Array<{ name: string }>;
+        };
       };
     };
   };
@@ -56,8 +59,12 @@ if (globalForPrisma.prisma) {
 
   const orderFields = p._runtimeDataModel?.models?.Order?.fields?.map((f) => f.name) ?? [];
   const hasOrderDriver = orderFields.length === 0 || orderFields.includes('driver');
+  const restaurantSettingFields =
+    p._runtimeDataModel?.models?.RestaurantSetting?.fields?.map((f) => f.name) ?? [];
+  const hasRestaurantLogo =
+    restaurantSettingFields.length === 0 || restaurantSettingFields.includes('logoUrl');
 
-  if (!hasModels || !hasOrderDriver) {
+  if (!hasModels || !hasOrderDriver || !hasRestaurantLogo) {
     globalForPrisma.prisma = undefined;
   }
 }
