@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   WifiOff,
   RefreshCw,
+  Search,
 } from 'lucide-react';
 import { PosReceipt, PosShift } from '../../../domain/pos/contracts/pos.repository';
 import { Money } from '../../../domain/shared/value-objects/money';
@@ -205,10 +206,14 @@ function PosHeader({
   state,
   cartItemCount,
   onOpenMobileCart,
+  search,
+  onSearchChange,
 }: {
   state: PosWorkspace;
   cartItemCount: number;
   onOpenMobileCart: () => void;
+  search: string;
+  onSearchChange: (value: string) => void;
 }) {
   const [headerDateTime, setHeaderDateTime] = useState({ date: '', time: '' });
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -243,31 +248,31 @@ function PosHeader({
     (t) => t.status === TableStatus.OCCUPIED || t.status === TableStatus.BILL_PRINTED
   ).length;
 
-  return (
-    <header className="relative z-20 flex min-h-[72px] shrink-0 items-center justify-between gap-4 border-b border-[#DCE3EF] bg-[#F7F8FC] px-4 py-3 shadow-[0_3px_14px_rgba(20,38,68,0.035)] sm:px-6 lg:h-[112px] lg:min-h-0 lg:px-8">
-      <div className="flex min-w-0 items-center gap-3">
-        <span className="grid size-12 shrink-0 place-items-center rounded-[16px] bg-[#142644] text-white shadow-[0_7px_15px_rgba(20,38,68,0.14)] lg:size-16 lg:rounded-[18px]">
-          <Utensils size={22} strokeWidth={1.7} className="lg:size-7" />
+return (
+<header className="relative z-20 flex min-h-[96px] shrink-0 flex-wrap items-center justify-between gap-3 bg-[#F7F8FC] px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-4 lg:px-8">
+      <div dir="rtl" className="flex min-w-0 basis-full items-center gap-3 lg:flex-1 lg:basis-auto">
+        <span className="grid size-14 shrink-0 place-items-center rounded-[16px] bg-[#142644] text-white shadow-[0_7px_15px_rgba(20,38,68,0.14)]">
+          <Utensils size={24} strokeWidth={1.7} />
         </span>
-        <div className="truncate">
-          <h1 className="truncate text-base font-bold text-[#142644] sm:text-lg lg:text-[21px]">
-            {state.settings.nameAr} — نقطة البيع
-          </h1>
-          <p className="mt-1 truncate text-xs text-[#72819A] lg:text-sm">
-            فرع {state.branch.nameAr} · الرئيسي
-          </p>
-        </div>
+        <label className="flex h-14 min-w-0 flex-1 items-center gap-2.5 rounded-[16px] border border-[#DCE3EF] bg-white px-3.5 text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition focus-within:border-[#2D61C9] focus-within:ring-2 focus-within:ring-[#2D61C9]/10">
+          <Search size={20} strokeWidth={1.8} className="shrink-0 text-[#627594]" />
+          <input
+            aria-label="البحث عن صنف"
+            placeholder="ابحث عن صنف بالاسم..."
+            value={search}
+            onChange={(event) => onSearchChange(event.target.value)}
+            className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[#142644] outline-none placeholder:text-[#91A0B8] focus:ring-0"
+          />
+        </label>
       </div>
 
       <div dir="ltr" className="flex shrink-0 items-center gap-2.5 lg:gap-3">
-        <div className="hidden items-center gap-3 lg:flex">
-          <div aria-hidden="true" className="grid size-16 place-items-center rounded-full border border-[#DCE3EF] bg-white text-[#2D61C9] shadow-[0_3px_12px_rgba(20,38,68,0.04)]">
-            <Sun size={26} strokeWidth={1.6} />
-          </div>
-          <span aria-hidden="true" className="h-12 w-px bg-[#DCE3EF]" />
-          <div dir="rtl" className="flex min-w-[150px] flex-col justify-center gap-0.5 text-[#142644]">
-            <span className="text-sm font-bold leading-tight">{headerDateTime.date || '—'}</span>
-            <span className="text-sm font-semibold leading-tight">{headerDateTime.time || '—'}</span>
+<div className="hidden h-14 items-center gap-2.5 rounded-[16px] border border-[#DCE3EF] bg-white px-3 text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] lg:flex">
+          <Sun size={20} strokeWidth={1.7} className="text-[#2D61C9]" />
+          <span aria-hidden="true" className="h-8 w-px bg-[#DCE3EF]" />
+          <div dir="rtl" className="flex min-w-[150px] flex-col justify-center gap-0.5 leading-tight text-[#142644]">
+            <span className="text-sm font-bold">{headerDateTime.date || '—'}</span>
+            <span className="text-sm font-semibold">{headerDateTime.time || '—'}</span>
           </div>
         </div>
 
@@ -276,10 +281,10 @@ function PosHeader({
           aria-label="آخر الفواتير"
           title="آخر الفواتير"
           onClick={() => state.setShowHistory(true)}
-          className="relative grid size-14 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition hover:border-[#B9C9E2] hover:bg-[#F7F9FD] lg:size-16"
+className="relative grid size-14 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition hover:border-[#B9C9E2] hover:bg-[#F7F9FD]"
         >
-          <Bell size={24} strokeWidth={1.7} />
-          {state.receipts.length > 0 && <span className="absolute right-3 top-3 size-2.5 rounded-full bg-[#2D61C9]" />}
+          <Bell size={20} strokeWidth={1.7} />
+          {state.receipts.length > 0 && <span className="absolute right-2 top-2 size-2.5 rounded-full bg-[#2D61C9]" />}
         </button>
 
         <button
@@ -287,9 +292,9 @@ function PosHeader({
           aria-label="طباعة"
           title="طباعة"
           onClick={() => window.print()}
-          className="hidden size-14 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition hover:border-[#B9C9E2] hover:bg-[#F7F9FD] sm:grid lg:size-16"
+className="hidden size-14 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition hover:border-[#B9C9E2] hover:bg-[#F7F9FD] sm:grid"
         >
-          <Printer size={24} strokeWidth={1.7} />
+          <Printer size={20} strokeWidth={1.7} />
         </button>
 
         {/* The reference keeps cashier tools behind a compact user selector. */}
@@ -299,14 +304,14 @@ function PosHeader({
             aria-expanded={userMenuOpen}
             aria-haspopup="menu"
             onClick={() => setUserMenuOpen((open) => !open)}
-            className="flex h-14 min-w-[150px] items-center justify-between gap-3 rounded-[16px] border border-[#DCE3EF] bg-white px-4 text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition hover:border-[#B9C9E2] hover:bg-[#F7F9FD] lg:h-16 lg:min-w-[182px]"
+className="flex h-14 min-w-[150px] items-center justify-between gap-3 rounded-[16px] border border-[#DCE3EF] bg-white px-4 text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition hover:border-[#B9C9E2] hover:bg-[#F7F9FD]"
           >
             <ChevronDown size={18} strokeWidth={1.8} />
             <span dir="rtl" className="flex flex-1 flex-col items-end leading-tight">
               <span className="text-xs text-[#72819A]">المستخدم</span>
               <strong className="text-sm">المدير</strong>
             </span>
-            <UserRound size={22} strokeWidth={1.7} className="text-[#72819A]" />
+            <UserRound size={20} strokeWidth={1.7} className="text-[#72819A]" />
           </button>
 
           {userMenuOpen && (
@@ -375,9 +380,9 @@ function PosHeader({
             type="button"
             onClick={onOpenMobileCart}
             aria-label="سلة الطلب الحالية"
-            className="relative grid size-11 place-items-center rounded-[14px] border border-[#DCE3EF] bg-white text-[#405675] transition hover:bg-[#E9EEFC] lg:hidden"
+className="relative grid size-14 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#405675] transition hover:bg-[#E9EEFC] lg:hidden"
           >
-            <ShoppingCart size={16} strokeWidth={1.75} />
+            <ShoppingCart size={18} strokeWidth={1.75} />
             {cartItemCount > 0 && <span className="absolute -right-1 -top-1 grid size-4 place-items-center rounded-full bg-[#2D61C9] text-[9px] font-bold text-white">{cartItemCount}</span>}
           </button>
         )}
@@ -639,10 +644,12 @@ function PosContent({
   state,
   showMobileCart,
   setShowMobileCart,
+  search,
 }: {
   state: PosWorkspace;
   showMobileCart: boolean;
   setShowMobileCart: (show: boolean) => void;
+  search: string;
 }) {
   const cartItemCount = state.items.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -688,6 +695,7 @@ function PosContent({
               currency={state.settings.currency}
               locale={state.settings.locale}
               disabled={state.sale.locked}
+              search={search}
               onSelect={state.setProduct}
             />
           </div>
@@ -774,6 +782,7 @@ type ActivePrintDoc =
 export function PosClient(props: PosClientProps) {
   const state = usePosWorkspace(props);
   const [showMobileCart, setShowMobileCart] = useState(false);
+  const [search, setSearch] = useState('');
   const [activePrintDoc, setActivePrintDoc] = useState<ActivePrintDoc>(null);
 
   // Auto-print KOT preference (saved in localStorage)
@@ -919,6 +928,8 @@ export function PosClient(props: PosClientProps) {
           state={state}
           cartItemCount={cartItemCount}
           onOpenMobileCart={() => setShowMobileCart(true)}
+          search={search}
+          onSearchChange={setSearch}
         />
         {state.notice && (
           <p
@@ -932,6 +943,7 @@ export function PosClient(props: PosClientProps) {
           state={state}
           showMobileCart={isMobileCartOpen}
           setShowMobileCart={setShowMobileCart}
+          search={search}
         />
         <PosDialogs
           state={state}

@@ -16,6 +16,9 @@ function createPrismaClient(): PrismaClient {
     user,
     password,
     database,
+    // MySQL 8+ / 9.x commonly uses caching_sha2_password. Allow the local
+    // connector to retrieve the server RSA key when TLS is not configured.
+    allowPublicKeyRetrieval: true,
   });
 
   return new PrismaClient({
