@@ -142,23 +142,23 @@ export function OrderDetailModal({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case OrderStatus.PENDING:
-        return { label: 'جديد قيد المراجعة', cls: 'bg-blue-100 text-blue-800 border-blue-200' };
+        return { label: 'جديد قيد المراجعة', cls: 'admin-badge-info' };
       case OrderStatus.CONFIRMED:
-        return { label: 'تم التأكيد', cls: 'bg-amber-100 text-amber-800 border-amber-200' };
+        return { label: 'تم التأكيد', cls: 'admin-badge-warning' };
       case OrderStatus.PREPARING:
-        return { label: 'جاري التجهيز', cls: 'bg-orange-100 text-orange-800 border-orange-200' };
+        return { label: 'جاري التجهيز', cls: 'admin-badge-warning' };
       case OrderStatus.READY_FOR_PICKUP:
-        return { label: 'جاهز للتوصيل', cls: 'bg-indigo-100 text-indigo-800 border-indigo-200' };
+        return { label: 'جاهز للتوصيل', cls: 'admin-badge-info' };
       case OrderStatus.OUT_FOR_DELIVERY:
-        return { label: 'في الطريق مع المندوب', cls: 'bg-purple-100 text-purple-800 border-purple-200' };
+        return { label: 'في الطريق مع المندوب', cls: 'admin-badge-info' };
       case OrderStatus.DELIVERED:
-        return { label: 'تم التسليم بنجاح', cls: 'bg-emerald-100 text-emerald-800 border-emerald-200' };
+        return { label: 'تم التسليم بنجاح', cls: 'admin-badge-success' };
       case OrderStatus.CANCELLED:
-        return { label: 'ملغي', cls: 'bg-rose-100 text-rose-800 border-rose-200' };
+        return { label: 'ملغي', cls: 'admin-badge-danger' };
       case OrderStatus.REJECTED:
-        return { label: 'مرفوض', cls: 'bg-zinc-200 text-zinc-800 border-zinc-300' };
+        return { label: 'مرفوض', cls: 'admin-badge-neutral' };
       default:
-        return { label: status, cls: 'bg-zinc-100 text-zinc-800 border-zinc-200' };
+        return { label: status, cls: 'admin-badge-neutral' };
     }
   };
 
@@ -242,7 +242,7 @@ export function OrderDetailModal({
             type="button"
             onClick={() => handleStatusTransitionClick(targetStatus)}
             disabled={isUpdatingStatus}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg admin-action-warning transition shadow-xs"
           >
             <CheckCircle2 className="w-4 h-4" />
             <span>تأكيد الطلب</span>
@@ -258,8 +258,8 @@ export function OrderDetailModal({
             title={!order.branchId ? 'يرجى إسناد فرع أولاً' : ''}
             className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg transition shadow-xs ${
               !order.branchId
-                ? 'bg-zinc-200 text-zinc-400 cursor-not-allowed'
-                : 'bg-orange-600 text-white hover:bg-orange-700'
+                ? 'bg-[var(--admin-background)] text-[var(--admin-muted)] cursor-not-allowed'
+                : 'admin-action-warning'
             }`}
           >
             <ChefHat className="w-4 h-4" />
@@ -273,7 +273,7 @@ export function OrderDetailModal({
             type="button"
             onClick={() => handleStatusTransitionClick(targetStatus)}
             disabled={isUpdatingStatus}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg admin-primary-action transition shadow-xs"
           >
             <PackageCheck className="w-4 h-4" />
             <span>جاهز للتوصيل</span>
@@ -292,7 +292,7 @@ export function OrderDetailModal({
               }
             }}
             disabled={isUpdatingStatus}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition shadow-xs"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg admin-primary-action transition shadow-xs"
           >
             <Truck className="w-4 h-4" />
             <span>تسليم للمندوب (في الطريق)</span>
@@ -305,7 +305,7 @@ export function OrderDetailModal({
             type="button"
             onClick={() => handleStatusTransitionClick(targetStatus)}
             disabled={isUpdatingStatus}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-xs"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[var(--admin-success)] text-white hover:bg-[var(--admin-accent-hover)] transition shadow-xs"
           >
             <CheckCheck className="w-4 h-4" />
             <span>تسليم للزبون (إتمام الطلب)</span>
@@ -318,7 +318,7 @@ export function OrderDetailModal({
             type="button"
             onClick={() => handleStatusTransitionClick(targetStatus)}
             disabled={isUpdatingStatus}
-            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition shadow-xs"
+            className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-[var(--admin-success)] text-white hover:bg-[var(--admin-accent-hover)] transition shadow-xs"
           >
             <CheckCheck className="w-4 h-4" />
             <span>تأكيد التسليم والتحصيل</span>
@@ -331,7 +331,7 @@ export function OrderDetailModal({
             type="button"
             onClick={() => handleStatusTransitionClick(targetStatus)}
             disabled={isUpdatingStatus}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-rose-300 text-rose-700 hover:bg-rose-50 transition"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-[var(--admin-danger)] text-[var(--admin-danger)] hover:bg-[var(--admin-danger-soft)] transition"
           >
             <Ban className="w-4 h-4" />
             <span>إلغاء الطلب</span>
@@ -344,7 +344,7 @@ export function OrderDetailModal({
             type="button"
             onClick={() => handleStatusTransitionClick(targetStatus)}
             disabled={isUpdatingStatus}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border border-zinc-300 text-zinc-700 hover:bg-zinc-100 transition"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border admin-control transition"
           >
             <XCircle className="w-4 h-4" />
             <span>رفض الطلب</span>
@@ -357,25 +357,25 @@ export function OrderDetailModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--admin-foreground)]/60 backdrop-blur-xs p-3 sm:p-4 overflow-y-auto"
       dir="rtl"
       role="dialog"
       aria-modal="true"
     >
-      <div className="bg-white rounded-2xl shadow-2xl border border-zinc-200 w-full max-w-3xl overflow-hidden my-auto animate-in fade-in zoom-in-95 duration-200">
+      <div className="admin-card w-full max-w-3xl overflow-hidden my-auto animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-100 px-5 py-4 bg-zinc-50/50">
+        <div className="flex items-center justify-between border-b border-[var(--admin-border)] px-5 py-4 bg-[var(--admin-background)]">
           <div className="flex items-center gap-3">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-bold text-zinc-900 tracking-tight">
+                <h2 className="text-base sm:text-lg font-bold text-[var(--admin-foreground)] tracking-tight">
                   طلب {order.orderNumber}
                 </h2>
-                <span className={`px-2.5 py-0.5 text-xs font-medium rounded-full border ${badge.cls}`}>
+                <span className={`admin-badge ${badge.cls}`}>
                   {badge.label}
                 </span>
               </div>
-              <div className="flex items-center gap-3 text-xs text-zinc-500 mt-1">
+              <div className="flex items-center gap-3 text-xs admin-muted mt-1">
                 <span className="flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5" />
                   {new Date(order.createdAt).toLocaleString('ar-EG', {
@@ -393,10 +393,10 @@ export function OrderDetailModal({
             <button
               type="button"
               onClick={onPrint}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-zinc-700 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-100 transition"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border admin-control transition"
               title="طباعة إيصال الطلب"
             >
-              <Printer className="w-4 h-4 text-zinc-600" />
+              <Printer className="w-4 h-4 admin-muted" />
               <span className="hidden sm:inline">طباعة الإيصال</span>
             </button>
 
@@ -404,10 +404,10 @@ export function OrderDetailModal({
               <button
                 type="button"
                 onClick={onPrintKot}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-zinc-700 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-100 transition"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border admin-control transition"
                 title="طباعة بون المطبخ (KOT)"
               >
-                <ChefHat className="w-4 h-4 text-zinc-600" />
+                <ChefHat className="w-4 h-4 admin-muted" />
                 <span className="hidden sm:inline">بون المطبخ (KOT)</span>
               </button>
             )}
@@ -415,7 +415,7 @@ export function OrderDetailModal({
             <button
               type="button"
               onClick={onClose}
-              className="p-1.5 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-lg transition"
+              className="p-1.5 admin-muted hover:text-[var(--admin-foreground)] hover:bg-[var(--admin-background)] rounded-lg transition"
               aria-label="إغلاق"
             >
               <X className="w-5 h-5" />
@@ -426,15 +426,15 @@ export function OrderDetailModal({
         {/* Modal Body */}
         <div className="p-5 space-y-5 max-h-[75vh] overflow-y-auto">
           {actionError && (
-            <div className="p-3 text-xs rounded-lg bg-rose-50 border border-rose-200 text-rose-800 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+            <div className="p-3 text-xs rounded-lg border admin-status-danger flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-[var(--admin-danger)]" />
               <span>{actionError}</span>
             </div>
           )}
 
           {/* Cancellation Reason Alert if Cancelled/Rejected */}
           {(order.status === OrderStatus.CANCELLED || order.status === OrderStatus.REJECTED) && (
-            <div className="p-3 text-xs rounded-lg bg-rose-50 border border-rose-200 text-rose-800">
+            <div className="p-3 text-xs rounded-lg border admin-status-danger">
               <span className="font-bold">سبب الإلغاء/الرفض المسجل: </span>
               <span>{order.cancelReason || 'لم يُحدد سبب'}</span>
             </div>
@@ -442,28 +442,28 @@ export function OrderDetailModal({
 
           {/* Prompt Dialog for cancellation */}
           {showCancelPrompt && (
-            <div className="p-4 rounded-xl border border-rose-200 bg-rose-50/70 space-y-3">
-              <div className="flex items-center gap-2 text-sm font-bold text-rose-900">
-                <Ban className="w-4 h-4 text-rose-600" />
+            <div className="p-4 rounded-xl border admin-status-danger space-y-3">
+              <div className="flex items-center gap-2 text-sm font-bold text-[var(--admin-danger)]">
+                <Ban className="w-4 h-4 text-[var(--admin-danger)]" />
                 <span>
                   {cancelStatusTarget === OrderStatus.REJECTED ? 'رفض الطلب' : 'إلغاء الطلب'}
                 </span>
               </div>
-              <p className="text-xs text-rose-700">
+              <p className="text-xs text-[var(--admin-danger)]">
                 يرجى كتابة سبب الإلغاء بوضوح لحفظه في سجل وتاريخ الطلب:
               </p>
               <textarea
                 value={cancelReasonInput}
                 onChange={(e) => setCancelReasonInput(e.target.value)}
                 placeholder="مثال: تعذر التواصل مع العميل، أو خارج نطاق التوصيل..."
-                className="w-full text-xs p-2.5 rounded-lg border border-rose-300 focus:outline-none focus:ring-2 focus:ring-rose-500 bg-white"
+                className="w-full text-xs p-2.5 rounded-lg border border-[var(--admin-danger)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-danger)] bg-[var(--admin-surface)]"
                 rows={2}
               />
               <div className="flex justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => setShowCancelPrompt(false)}
-                  className="px-3 py-1.5 text-xs text-zinc-600 hover:bg-zinc-100 rounded-lg"
+                  className="px-3 py-1.5 text-xs admin-muted hover:bg-[var(--admin-background)] rounded-lg"
                 >
                   تراجع
                 </button>
@@ -471,7 +471,7 @@ export function OrderDetailModal({
                   type="button"
                   onClick={handleConfirmCancelPrompt}
                   disabled={isUpdatingStatus || !cancelReasonInput.trim()}
-                  className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-lg bg-rose-700 text-white hover:bg-rose-800 disabled:opacity-50"
+                  className="flex items-center gap-1 px-3 py-1.5 text-xs font-semibold rounded-lg admin-action-danger disabled:opacity-50"
                 >
                   {isUpdatingStatus && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>تأكيد الإلغاء</span>
@@ -481,20 +481,20 @@ export function OrderDetailModal({
           )}
 
           {/* Operational Branch Assignment Bar */}
-          <div className="bg-zinc-50 border border-zinc-200 p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="bg-[var(--admin-background)] border border-[var(--admin-border)] p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-zinc-200/70 flex items-center justify-center shrink-0">
-                <Building2 className="w-4 h-4 text-zinc-700" />
+              <div className="w-8 h-8 rounded-lg bg-[var(--admin-background)] flex items-center justify-center shrink-0">
+                <Building2 className="w-4 h-4 text-[var(--admin-foreground)]" />
               </div>
               <div>
-                <span className="text-xs font-bold text-zinc-800 block">الفرع المسؤول عن التجهيز:</span>
-                <span className="text-xs text-zinc-600">
+                <span className="text-xs font-bold text-[var(--admin-foreground)] block">الفرع المسؤول عن التجهيز:</span>
+                <span className="text-xs admin-muted">
                   {order.branch ? (
-                    <span className="font-semibold text-emerald-800">
+                    <span className="font-semibold text-[var(--admin-accent-hover)]">
                       فرع {order.branch.nameAr} ({order.branch.code})
                     </span>
                   ) : (
-                    <span className="text-rose-600 font-bold flex items-center gap-1">
+                    <span className="text-[var(--admin-danger)] font-bold flex items-center gap-1">
                       <AlertCircle className="w-3 h-3" />
                       غير مسند لفرع حتى الآن
                     </span>
@@ -510,7 +510,7 @@ export function OrderDetailModal({
                   <select
                     value={selectedBranchId}
                     onChange={(e) => setSelectedBranchId(e.target.value)}
-                    className="text-xs border border-zinc-300 rounded-lg px-2.5 py-1.5 bg-white focus:outline-none focus:ring-1 focus:ring-zinc-900"
+                    className="text-xs border border-[var(--admin-border)] rounded-lg px-2.5 py-1.5 bg-[var(--admin-surface)] focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary)]"
                   >
                     <option value="">-- اختر الفرع --</option>
                     {branches
@@ -525,14 +525,14 @@ export function OrderDetailModal({
                     type="button"
                     onClick={handleBranchAssignSubmit}
                     disabled={isAssigning || !selectedBranchId || selectedBranchId === order.branchId}
-                    className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-zinc-900 text-white hover:bg-zinc-800 disabled:opacity-40 transition"
+                    className="px-3 py-1.5 text-xs font-semibold rounded-lg admin-primary-action disabled:opacity-40 transition"
                   >
                     {isAssigning ? 'جاري الإسناد...' : order.branchId ? 'تغيير الفرع' : 'إسناد الفرع'}
                   </button>
                 </div>
               )
             ) : (
-              <span className="text-[11px] text-zinc-400">
+              <span className="text-[11px] admin-muted">
                 (إسناد وتغيير الفرع خاص بالإدارة المركزية)
               </span>
             )}
@@ -540,19 +540,19 @@ export function OrderDetailModal({
 
           {/* Driver Assignment Card if assigned */}
           {(order.driverName || order.driver) && (
-            <div className="bg-purple-50/70 border border-purple-200 p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="admin-status-info border p-3.5 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-purple-200/70 flex items-center justify-center shrink-0">
-                  <Bike className="w-4 h-4 text-purple-800" />
+                <div className="w-8 h-8 rounded-lg bg-[var(--admin-info-soft)] flex items-center justify-center shrink-0">
+                  <Bike className="w-4 h-4 text-[var(--admin-info)]" />
                 </div>
                 <div>
-                  <span className="text-xs font-bold text-purple-900 block">كابتن التوصيل المكلف:</span>
+                  <span className="text-xs font-bold text-[var(--admin-info)] block">كابتن التوصيل المكلف:</span>
                   <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-xs font-bold text-purple-950">
+                    <span className="text-xs font-bold text-[var(--admin-info)]">
                       {order.driver?.fullName || order.driverName}
                     </span>
                     {order.dispatchedAt && (
-                      <span className="text-[11px] text-purple-700">
+                      <span className="text-[11px] text-[var(--admin-info)]">
                         (خرج للتوصيل:{' '}
                         {new Date(order.dispatchedAt).toLocaleTimeString('ar-EG', {
                           hour: '2-digit',
@@ -568,7 +568,7 @@ export function OrderDetailModal({
               {order.driver?.phone && (
                 <a
                   href={`tel:${order.driver.phone}`}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-purple-700 text-white hover:bg-purple-800 transition"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg admin-primary-action transition"
                 >
                   <Phone className="w-3.5 h-3.5" />
                   <span dir="ltr">{order.driver.phone}</span>
@@ -580,14 +580,14 @@ export function OrderDetailModal({
           {/* Customer & Address Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Customer Box */}
-            <div className="border border-zinc-200 rounded-xl p-3.5 space-y-2 text-xs">
-              <div className="flex items-center justify-between border-b border-zinc-100 pb-2">
-                <div className="flex items-center gap-2 font-bold text-zinc-900">
-                  <User className="w-4 h-4 text-zinc-500" />
+            <div className="border border-[var(--admin-border)] rounded-xl p-3.5 space-y-2 text-xs">
+              <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-2">
+                <div className="flex items-center gap-2 font-bold text-[var(--admin-foreground)]">
+                  <User className="w-4 h-4 admin-muted" />
                   <span>بيانات العميل</span>
                 </div>
                 {order.customer && (
-                  <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  <span className="admin-badge admin-badge-success">
                     {order.customer.totalOrders > 1
                       ? `عميل دائم (${order.customer.totalOrders} طلبات)`
                       : 'عميل جديد (أول طلب)'}
@@ -596,22 +596,22 @@ export function OrderDetailModal({
               </div>
               <div className="space-y-1 pt-1">
                 <div className="flex justify-between">
-                  <span className="text-zinc-500">الاسم:</span>
-                  <span className="font-semibold text-zinc-900">{order.customerName}</span>
+                  <span className="admin-muted">الاسم:</span>
+                  <span className="font-semibold text-[var(--admin-foreground)]">{order.customerName}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-500">الهاتف:</span>
+                  <span className="admin-muted">الهاتف:</span>
                   <a
                     href={`tel:${order.customerPhone}`}
-                    className="flex items-center gap-1 font-semibold text-zinc-900 hover:text-emerald-700"
+                    className="flex items-center gap-1 font-semibold text-[var(--admin-foreground)] hover:text-[var(--admin-accent-hover)]"
                     dir="ltr"
                   >
-                    <Phone className="w-3 h-3 text-zinc-400" />
+                    <Phone className="w-3 h-3 admin-muted" />
                     <span>{order.customerPhone}</span>
                   </a>
                 </div>
                 {order.customerNotes && (
-                  <div className="mt-2 bg-amber-50/60 p-2 rounded border border-amber-200 text-amber-900">
+                  <div className="mt-2 border admin-status-warning p-2 rounded">
                     <span className="font-bold">ملاحظات العميل: </span>
                     {order.customerNotes}
                   </div>
@@ -620,17 +620,17 @@ export function OrderDetailModal({
             </div>
 
             {/* Address Box */}
-            <div className="border border-zinc-200 rounded-xl p-3.5 space-y-2 text-xs">
-              <div className="flex items-center gap-2 font-bold text-zinc-900 border-b border-zinc-100 pb-2">
-                <MapPin className="w-4 h-4 text-zinc-500" />
+            <div className="border border-[var(--admin-border)] rounded-xl p-3.5 space-y-2 text-xs">
+              <div className="flex items-center gap-2 font-bold text-[var(--admin-foreground)] border-b border-[var(--admin-border)] pb-2">
+                <MapPin className="w-4 h-4 admin-muted" />
                 <span>عنوان التوصيل</span>
               </div>
-              <div className="space-y-1.5 pt-1 text-zinc-700">
-                <p className="font-medium text-zinc-900 leading-relaxed">
+              <div className="space-y-1.5 pt-1 text-[var(--admin-foreground)]">
+                <p className="font-medium text-[var(--admin-foreground)] leading-relaxed">
                   {order.deliveryAddress || 'لم يحدد عنوان مفصل'}
                 </p>
                 {order.deliveryNotes && (
-                  <div className="bg-zinc-100 p-2 rounded text-[11px] text-zinc-600">
+                  <div className="bg-[var(--admin-background)] p-2 rounded text-[11px] admin-muted">
                     <span className="font-bold">تعليمات التوصيل: </span>
                     {order.deliveryNotes}
                   </div>
@@ -640,19 +640,19 @@ export function OrderDetailModal({
           </div>
 
           {/* Ordered Items Table */}
-          <div className="border border-zinc-200 rounded-xl overflow-hidden text-xs">
-            <div className="bg-zinc-50 px-4 py-2.5 font-bold text-zinc-900 border-b border-zinc-200 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-zinc-500" />
+          <div className="border border-[var(--admin-border)] rounded-xl overflow-hidden text-xs">
+            <div className="bg-[var(--admin-background)] px-4 py-2.5 font-bold text-[var(--admin-foreground)] border-b border-[var(--admin-border)] flex items-center gap-2">
+              <FileText className="w-4 h-4 admin-muted" />
               <span>الأصناف المطلوبة ({order.items.length})</span>
             </div>
-            <div className="divide-y divide-zinc-100">
+            <div className="divide-y divide-[var(--admin-border)]">
               {order.items.map((item) => (
                 <div key={item.id} className="p-3.5 flex items-start justify-between gap-3">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-zinc-900">{item.productNameAr}</span>
+                      <span className="font-bold text-[var(--admin-foreground)]">{item.productNameAr}</span>
                       {item.sizeNameAr && (
-                        <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-700 border border-zinc-200">
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-[var(--admin-background)] text-[var(--admin-foreground)] border border-[var(--admin-border)]">
                           {item.sizeNameAr}
                         </span>
                       )}
@@ -662,7 +662,7 @@ export function OrderDetailModal({
                         {item.modifiers.map((m) => (
                           <span
                             key={m.id}
-                            className="inline-flex items-center text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600"
+                            className="inline-flex items-center text-[10px] px-1.5 py-0.5 rounded bg-[var(--admin-background)] text-[var(--admin-muted)]"
                           >
                             + {m.nameAr}
                             {m.priceDeltaMinor > 0 && ` (+${formatMoney(m.priceDeltaMinor)})`}
@@ -670,11 +670,11 @@ export function OrderDetailModal({
                         ))}
                       </div>
                     )}
-                    <span className="text-[11px] text-zinc-500 block">
+                    <span className="text-[11px] admin-muted block">
                       {item.quantity} × {formatMoney(item.unitPriceMinor)} {currencySymbol}
                     </span>
                   </div>
-                  <div className="text-left font-bold text-zinc-900 shrink-0">
+                  <div className="text-left font-bold text-[var(--admin-foreground)] shrink-0">
                     {formatMoney(item.totalPriceMinor)} {currencySymbol}
                   </div>
                 </div>
@@ -683,44 +683,44 @@ export function OrderDetailModal({
           </div>
 
           {/* Financial Breakdown Summary */}
-          <div className="bg-zinc-50/70 border border-zinc-200 rounded-xl p-4 space-y-2 text-xs">
-            <div className="flex justify-between text-zinc-600">
+          <div className="bg-[var(--admin-background)] border border-[var(--admin-border)] rounded-xl p-4 space-y-2 text-xs">
+            <div className="flex justify-between admin-muted">
               <span>المجموع الفرعي:</span>
               <span>{formatMoney(order.subtotalMinor)} {currencySymbol}</span>
             </div>
-            <div className="flex justify-between text-zinc-600">
+            <div className="flex justify-between admin-muted">
               <span>رسوم خدمة التوصيل:</span>
               <span>{formatMoney(order.deliveryFeeMinor)} {currencySymbol}</span>
             </div>
             {order.taxMinor > 0 && (
-              <div className="flex justify-between text-zinc-600">
+              <div className="flex justify-between admin-muted">
                 <span>ضريبة القيمة المضافة:</span>
                 <span>{formatMoney(order.taxMinor)} {currencySymbol}</span>
               </div>
             )}
             {order.discountMinor > 0 && (
-              <div className="flex justify-between text-rose-600">
+              <div className="flex justify-between text-[var(--admin-danger)]">
                 <span>الخصم المطبق:</span>
                 <span>-{formatMoney(order.discountMinor)} {currencySymbol}</span>
               </div>
             )}
-            <div className="flex justify-between text-sm font-bold text-zinc-900 border-t border-zinc-200 pt-2">
+            <div className="flex justify-between text-sm font-bold text-[var(--admin-foreground)] border-t border-[var(--admin-border)] pt-2">
               <span>الإجمالي النهائي:</span>
-              <span className="text-base text-zinc-950">
+              <span className="text-base text-[var(--admin-foreground)]">
                 {formatMoney(order.totalMinor)} {currencySymbol}
               </span>
             </div>
             <div className="flex justify-between items-center text-[11px] pt-1">
-              <span className="text-zinc-500">طريقة وحالة الدفع:</span>
+              <span className="admin-muted">طريقة وحالة الدفع:</span>
               <div className="flex items-center gap-2">
-                <span className="font-semibold text-zinc-800">
+                <span className="font-semibold text-[var(--admin-foreground)]">
                   {order.paymentMethod === PaymentMethod.CASH ? 'الدفع نقداً عند الاستلام' : order.paymentMethod}
                 </span>
                 <span
-                  className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                  className={`admin-badge ${
                     order.paymentStatus === 'PAID'
-                      ? 'bg-emerald-100 text-emerald-800'
-                      : 'bg-amber-100 text-amber-800'
+                      ? 'admin-badge-success'
+                      : 'admin-badge-warning'
                   }`}
                 >
                   {order.paymentStatus === 'PAID' ? 'مدفوع' : 'قيد التحصيل'}
@@ -731,10 +731,10 @@ export function OrderDetailModal({
         </div>
 
         {/* Modal Footer (State Transition Controls) */}
-        <div className="border-t border-zinc-100 bg-zinc-50/50 px-5 py-3.5 flex flex-wrap items-center justify-between gap-3">
-          <div className="text-xs text-zinc-500">
+        <div className="border-t border-[var(--admin-border)] bg-[var(--admin-background)] px-5 py-3.5 flex flex-wrap items-center justify-between gap-3">
+          <div className="text-xs admin-muted">
             {isTerminal ? (
-              <span className="font-semibold text-zinc-700">دورة حياة هذا الطلب مكتملة ({badge.label})</span>
+              <span className="font-semibold text-[var(--admin-foreground)]">دورة حياة هذا الطلب مكتملة ({badge.label})</span>
             ) : (
               <span>الإجراءات المتاحة للمرحلة التالية:</span>
             )}
@@ -745,7 +745,7 @@ export function OrderDetailModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-2 text-xs font-semibold rounded-lg border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-100 transition"
+              className="px-3.5 py-2 text-xs font-semibold rounded-lg border admin-control transition"
             >
               إغلاق
             </button>

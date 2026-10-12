@@ -28,7 +28,7 @@ export default async function AdminTablesPage() {
 
   if (allowedBranches.length === 0) {
     return (
-      <div className="p-8 text-center text-zinc-500" dir="rtl">
+      <div className="p-8 text-center admin-muted" dir="rtl">
         لم يتم العثور على أي فرع متاح أو مخصص لحسابك في النظام.
       </div>
     );

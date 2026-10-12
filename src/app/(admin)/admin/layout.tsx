@@ -107,7 +107,7 @@ export default async function AdminLayout({
       title: 'العمليات الميدانية والتشغيل',
       items: [
         {
-          label: 'نقطة البيع (POS)',
+          label: 'نقطة البيع',
           href: '/pos',
           iconName: 'Store',
           requiredPermission: PermissionCode.POS_ACCESS,
@@ -121,19 +121,19 @@ export default async function AdminLayout({
           badgeColor: 'rose',
         },
         {
-          label: 'شاشة المطبخ (KDS)',
+          label: 'المطبخ',
           href: '/admin/kitchen',
           iconName: 'ChefHat',
           requiredPermission: PermissionCode.KITCHEN_VIEW,
         },
         {
-          label: 'الصالة والطاولات',
+          label: 'الطاولات',
           href: '/admin/tables',
           iconName: 'Armchair',
           requiredPermission: PermissionCode.MANAGE_BRANCHES,
         },
         {
-          label: 'الحجوزات والفعاليات',
+          label: 'الحجوزات',
           href: '/admin/bookings',
           iconName: 'CalendarCheck',
           requiredPermission: PermissionCode.MANAGE_ORDERS,
@@ -146,19 +146,19 @@ export default async function AdminLayout({
       title: 'المالية والرقابة',
       items: [
         {
-          label: 'سجل الفواتير',
+          label: 'فواتير',
           href: '/admin/invoices',
           iconName: 'Receipt',
           anyOfPermissions: [PermissionCode.MANAGE_ORDERS, PermissionCode.VIEW_REPORTS],
         },
         {
-          label: 'المالية والورديات',
+          label: 'المالية',
           href: '/admin/finance',
           iconName: 'Wallet',
           requiredPermission: PermissionCode.MANAGE_FINANCE,
         },
         {
-          label: 'التقارير والتحليلات',
+          label: 'التقارير',
           href: '/admin/reports',
           iconName: 'BarChart3',
           requiredPermission: PermissionCode.VIEW_REPORTS,
@@ -175,13 +175,13 @@ export default async function AdminLayout({
           requiredPermission: PermissionCode.MANAGE_MENU,
         },
         {
-          label: 'المخزون والوصفات',
+          label: 'المخزون',
           href: '/admin/inventory',
           iconName: 'Package',
           requiredPermission: PermissionCode.MANAGE_INVENTORY,
         },
         {
-          label: 'العملاء والعناوين',
+          label: 'العملاء',
           href: '/admin/customers',
           iconName: 'Contact',
           requiredPermission: PermissionCode.MANAGE_CUSTOMERS,
@@ -198,13 +198,13 @@ export default async function AdminLayout({
           requiredPermission: PermissionCode.MANAGE_BRANCHES,
         },
         {
-          label: 'الموظفين والصلاحيات',
+          label: 'الموظفين',
           href: '/admin/staff',
           iconName: 'Users',
           requiredPermission: PermissionCode.MANAGE_STAFF,
         },
         {
-          label: 'الإعدادات العامة',
+          label: 'إعدادات',
           href: '/admin/settings',
           iconName: 'Settings',
           requiredPermission: PermissionCode.MANAGE_SETTINGS,
@@ -235,6 +235,7 @@ export default async function AdminLayout({
     <AdminShell
       restaurantNameAr={settings?.nameAr ?? 'منظومة المطعم'}
       restaurantNameEn={settings?.nameEn ?? 'Restaurant Platform'}
+      restaurantLogoUrl={settings?.logoUrl ?? null}
       currency={settings?.currency ?? 'EGP'}
       currencySymbol={settings?.currencySymbol ?? 'ج.م'}
       branches={branches}

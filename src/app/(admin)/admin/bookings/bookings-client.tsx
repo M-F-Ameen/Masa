@@ -85,16 +85,16 @@ export function BookingsClient({ initialBookings, branches, defaultBranchId }: B
   return (
     <div className="space-y-6 pb-16">
       {/* Top Header */}
-      <section className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-xs">
+      <section className="admin-card p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <span className="grid size-10 place-items-center rounded-xl bg-zinc-900 text-white">
+              <span className="grid size-10 place-items-center rounded-xl bg-[var(--admin-primary)] text-[var(--admin-surface)]">
                 <CalendarDays size={20} />
               </span>
               <div>
-                <h1 className="text-xl font-bold text-zinc-900">إدارة الحجوزات والمناسبات</h1>
-                <p className="text-xs text-zinc-500">
+                <h1 className="text-xl font-bold text-[var(--admin-foreground)]">إدارة الحجوزات والمناسبات</h1>
+                <p className="text-xs admin-muted">
                   متابعة طلبات الفعاليات، البوفيهات، والحفلات الخاصة والتواصل المباشر مع العملاء
                 </p>
               </div>
@@ -103,36 +103,36 @@ export function BookingsClient({ initialBookings, branches, defaultBranchId }: B
 
           {/* Metric Pills */}
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            <div className="rounded-2xl border border-zinc-100 bg-zinc-50 p-3 text-center">
-              <span className="block text-2xs text-zinc-500 font-medium">الإجمالي</span>
-              <span className="text-lg font-black text-zinc-900 font-mono">{stats.total}</span>
+            <div className="rounded-2xl border border-[var(--admin-border)] bg-[var(--admin-background)] p-3 text-center">
+              <span className="block text-2xs admin-muted font-medium">الإجمالي</span>
+              <span className="text-lg font-black text-[var(--admin-foreground)] font-mono">{stats.total}</span>
             </div>
-            <div className="rounded-2xl border border-amber-200 bg-amber-50/60 p-3 text-center">
-              <span className="block text-2xs text-amber-700 font-medium">قيد الانتظار</span>
-              <span className="text-lg font-black text-amber-900 font-mono">{stats.pending}</span>
+            <div className="rounded-2xl border admin-status-warning p-3 text-center">
+              <span className="block text-2xs admin-status-warning-text font-medium">قيد الانتظار</span>
+              <span className="text-lg font-black text-[var(--admin-warning)] font-mono">{stats.pending}</span>
             </div>
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-3 text-center">
-              <span className="block text-2xs text-emerald-700 font-medium">مؤكد</span>
-              <span className="text-lg font-black text-emerald-900 font-mono">{stats.confirmed}</span>
+            <div className="rounded-2xl border admin-status-success p-3 text-center">
+              <span className="block text-2xs admin-status-success-text font-medium">مؤكد</span>
+              <span className="text-lg font-black text-[var(--admin-accent-hover)] font-mono">{stats.confirmed}</span>
             </div>
-            <div className="rounded-2xl border border-blue-200 bg-blue-50/60 p-3 text-center">
-              <span className="block text-2xs text-blue-700 font-medium">مكتمل</span>
-              <span className="text-lg font-black text-blue-900 font-mono">{stats.completed}</span>
+            <div className="rounded-2xl border admin-status-info p-3 text-center">
+              <span className="block text-2xs admin-status-info-text font-medium">مكتمل</span>
+              <span className="text-lg font-black text-[var(--admin-info)] font-mono">{stats.completed}</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Filter Toolbar */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 admin-card p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400" size={16} />
+          <Search className="absolute right-3.5 top-1/2 -translate-y-1/2 admin-muted" size={16} />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="ابحث بالاسم أو رقم الهاتف..."
-            className="w-full rounded-xl border border-zinc-200 bg-zinc-50/50 pr-10 pl-4 py-2.5 text-xs text-zinc-900 outline-none focus:border-zinc-900 focus:bg-white"
+            className="w-full rounded-xl border border-[var(--admin-border)] bg-[var(--admin-background)] pr-10 pl-4 py-2.5 text-xs text-[var(--admin-foreground)] outline-none focus:border-[var(--admin-primary)] focus:bg-[var(--admin-surface)]"
           />
         </div>
 
@@ -142,7 +142,7 @@ export function BookingsClient({ initialBookings, branches, defaultBranchId }: B
             <select
               value={branchFilter}
               onChange={(e) => setBranchFilter(e.target.value)}
-              className="appearance-none rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 pl-8 text-xs font-semibold text-zinc-700 outline-none focus:border-zinc-900 cursor-pointer"
+              className="appearance-none rounded-xl border border-[var(--admin-border)] bg-[var(--admin-background)] px-3.5 py-2.5 pl-8 text-xs font-semibold text-[var(--admin-foreground)] outline-none focus:border-[var(--admin-primary)] cursor-pointer"
             >
               <option value="ALL">كل الفروع</option>
               {branches.map((b) => (
@@ -151,7 +151,7 @@ export function BookingsClient({ initialBookings, branches, defaultBranchId }: B
                 </option>
               ))}
             </select>
-            <ChevronDown size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+            <ChevronDown size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 admin-muted" />
           </div>
 
           {/* Status Filter */}
@@ -159,7 +159,7 @@ export function BookingsClient({ initialBookings, branches, defaultBranchId }: B
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="appearance-none rounded-xl border border-zinc-200 bg-zinc-50 px-3.5 py-2.5 pl-8 text-xs font-semibold text-zinc-700 outline-none focus:border-zinc-900 cursor-pointer"
+              className="appearance-none rounded-xl border border-[var(--admin-border)] bg-[var(--admin-background)] px-3.5 py-2.5 pl-8 text-xs font-semibold text-[var(--admin-foreground)] outline-none focus:border-[var(--admin-primary)] cursor-pointer"
             >
               <option value="ALL">جميع الحالات</option>
               <option value={BookingStatus.PENDING}>قيد الانتظار</option>
@@ -167,17 +167,17 @@ export function BookingsClient({ initialBookings, branches, defaultBranchId }: B
               <option value={BookingStatus.COMPLETED}>مكتمل</option>
               <option value={BookingStatus.CANCELLED}>ملغي</option>
             </select>
-            <ChevronDown size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+            <ChevronDown size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 admin-muted" />
           </div>
         </div>
       </div>
 
       {/* Bookings List */}
       {filteredBookings.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-zinc-300 bg-white p-12 text-center">
-          <CalendarDays size={40} className="mx-auto text-zinc-300 mb-3" />
-          <h3 className="text-sm font-bold text-zinc-800">لا توجد طلبات حجز مطابقة</h3>
-          <p className="mt-1 text-xs text-zinc-400">ستظهر هنا أي طلبات حجز بوفيهات أو فعاليات من الموقع العام فور تسجيلها.</p>
+        <div className="rounded-3xl border border-dashed border-[var(--admin-border)] bg-[var(--admin-surface)] p-12 text-center">
+          <CalendarDays size={40} className="mx-auto admin-muted mb-3" />
+          <h3 className="text-sm font-bold text-[var(--admin-foreground)]">لا توجد طلبات حجز مطابقة</h3>
+          <p className="mt-1 text-xs admin-muted">ستظهر هنا أي طلبات حجز بوفيهات أو فعاليات من الموقع العام فور تسجيلها.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4">
@@ -199,52 +199,52 @@ export function BookingsClient({ initialBookings, branches, defaultBranchId }: B
             return (
               <article
                 key={booking.id}
-                className="overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-xs transition hover:shadow-sm"
+                className="overflow-hidden admin-card admin-card-hover transition"
               >
                 <div className="p-5 sm:p-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                   {/* Left: Customer & Details */}
                   <div className="space-y-2.5 min-w-0">
                     <div className="flex flex-wrap items-center gap-2.5">
-                      <span className="text-base font-bold text-zinc-950">
+                      <span className="text-base font-bold text-[var(--admin-foreground)]">
                         {booking.customerName}
                       </span>
                       <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-2xs font-semibold ${statusConf.color}`}>
                         {statusConf.labelAr}
                       </span>
-                      <span className="rounded-lg bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-700">
+                      <span className="rounded-lg bg-[var(--admin-background)] px-2.5 py-0.5 text-xs font-medium text-[var(--admin-foreground)]">
                         {booking.branch.nameAr}
                       </span>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-600">
-                      <span className="flex items-center gap-1.5 text-zinc-900 font-mono font-semibold" dir="ltr">
-                        <Phone size={13} className="text-amber-600" />
+                    <div className="flex flex-wrap items-center gap-4 text-xs admin-muted">
+                      <span className="flex items-center gap-1.5 text-[var(--admin-foreground)] font-mono font-semibold" dir="ltr">
+                        <Phone size={13} className="text-[var(--admin-warning)]" />
                         {booking.customerPhone}
                       </span>
-                      <span className="flex items-center gap-1.5 text-zinc-700 font-medium">
-                        <CalendarDays size={13} className="text-amber-600" />
+                      <span className="flex items-center gap-1.5 text-[var(--admin-foreground)] font-medium">
+                        <CalendarDays size={13} className="text-[var(--admin-warning)]" />
                         {eventDateStr}
                       </span>
-                      <span className="flex items-center gap-1.5 text-zinc-700 font-medium">
-                        <Users size={13} className="text-amber-600" />
+                      <span className="flex items-center gap-1.5 text-[var(--admin-foreground)] font-medium">
+                        <Users size={13} className="text-[var(--admin-warning)]" />
                         {booking.guestsCount} فرد
                       </span>
                     </div>
 
                     {booking.notes && (
-                      <p className="text-xs text-zinc-600 bg-zinc-50 rounded-xl p-2.5 border border-zinc-100 max-w-2xl leading-relaxed">
-                        <span className="font-semibold text-zinc-800 ml-1">ملاحظات:</span>
+                      <p className="text-xs admin-muted bg-[var(--admin-background)] rounded-xl p-2.5 border border-[var(--admin-border)] max-w-2xl leading-relaxed">
+                        <span className="font-semibold text-[var(--admin-foreground)] ml-1">ملاحظات:</span>
                         {booking.notes}
                       </p>
                     )}
                   </div>
 
                   {/* Right: Quick Action Controls */}
-                  <div className="flex flex-wrap items-center gap-2 shrink-0 border-t border-zinc-100 pt-3 lg:border-none lg:pt-0">
+                  <div className="flex flex-wrap items-center gap-2 shrink-0 border-t border-[var(--admin-border)] pt-3 lg:border-none lg:pt-0">
                     {/* Call Direct */}
                     <a
                       href={`tel:${booking.customerPhone}`}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50"
+                      className="inline-flex items-center gap-1.5 rounded-xl border admin-control px-3 py-2 text-xs font-semibold"
                       title="اتصال هاتفي"
                     >
                       <Phone size={13} />
@@ -256,7 +256,7 @@ export function BookingsClient({ initialBookings, branches, defaultBranchId }: B
                       href={waLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100"
+                      className="inline-flex items-center gap-1.5 rounded-xl border admin-soft-accent px-3 py-2 text-xs font-semibold"
                       title="مراسلة واتساب"
                     >
                       <MessageSquare size={13} />
@@ -268,7 +268,7 @@ export function BookingsClient({ initialBookings, branches, defaultBranchId }: B
                       <button
                         disabled={updatingId === booking.id}
                         onClick={() => handleUpdateStatus(booking.id, BookingStatus.CONFIRMED)}
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-zinc-900 px-3.5 py-2 text-xs font-semibold text-white shadow-xs hover:bg-zinc-800 disabled:opacity-50"
+                        className="inline-flex items-center gap-1.5 rounded-xl admin-primary-action px-3.5 py-2 text-xs font-semibold shadow-xs disabled:opacity-50"
                       >
                         <CheckCircle2 size={13} />
                         <span>تأكيد الحجز</span>
@@ -279,7 +279,7 @@ export function BookingsClient({ initialBookings, branches, defaultBranchId }: B
                       <button
                         disabled={updatingId === booking.id}
                         onClick={() => handleUpdateStatus(booking.id, BookingStatus.COMPLETED)}
-                        className="inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white shadow-xs hover:bg-blue-700 disabled:opacity-50"
+                        className="inline-flex items-center gap-1.5 rounded-xl admin-primary-action px-3.5 py-2 text-xs font-semibold shadow-xs disabled:opacity-50"
                       >
                         <CheckCircle2 size={13} />
                         <span>اكتمال الفعالية</span>
@@ -290,7 +290,7 @@ export function BookingsClient({ initialBookings, branches, defaultBranchId }: B
                       <button
                         disabled={updatingId === booking.id}
                         onClick={() => handleUpdateStatus(booking.id, BookingStatus.CANCELLED)}
-                        className="inline-flex items-center gap-1 rounded-xl border border-zinc-200 px-2.5 py-2 text-xs font-medium text-zinc-500 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-200 disabled:opacity-50"
+                        className="inline-flex items-center gap-1 rounded-xl border border-[var(--admin-border)] px-2.5 py-2 text-xs font-medium admin-muted hover:bg-[var(--admin-danger-soft)] hover:text-[var(--admin-danger)] hover:border-[var(--admin-danger)] disabled:opacity-50"
                         title="إلغاء الحجز"
                       >
                         <XCircle size={13} />

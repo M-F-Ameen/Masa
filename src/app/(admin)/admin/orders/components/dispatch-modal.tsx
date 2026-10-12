@@ -67,12 +67,12 @@ export function DispatchModal({
   const getVehicleIcon = (vehicle: VehicleType) => {
     switch (vehicle) {
       case VehicleType.CAR:
-        return <Car className="size-4 text-zinc-600" />;
+        return <Car className="size-4 admin-muted" />;
       case VehicleType.BICYCLE:
-        return <Bike className="size-4 text-zinc-600" />;
+        return <Bike className="size-4 admin-muted" />;
       case VehicleType.MOTORCYCLE:
       default:
-        return <Bike className="size-4 text-zinc-600" />;
+        return <Bike className="size-4 admin-muted" />;
     }
   };
 
@@ -100,21 +100,21 @@ export function DispatchModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-3 sm:p-4 animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--admin-foreground)]/60 backdrop-blur-xs p-3 sm:p-4 animate-in fade-in"
       dir="rtl"
     >
-      <div className="bg-white rounded-2xl shadow-2xl border border-zinc-200 w-full max-w-lg overflow-hidden animate-in zoom-in-95">
+      <div className="admin-card w-full max-w-lg overflow-hidden animate-in zoom-in-95">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-100 px-5 py-4 bg-zinc-50/70">
+        <div className="flex items-center justify-between border-b border-[var(--admin-border)] px-5 py-4 bg-[var(--admin-background)]">
           <div className="flex items-center gap-2.5">
-            <div className="grid size-9 place-items-center rounded-xl bg-purple-100 text-purple-700">
+            <div className="admin-status-info grid size-9 place-items-center rounded-xl border">
               <Truck className="size-5" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-zinc-900">
+              <h3 className="font-bold text-sm text-[var(--admin-foreground)]">
                 إسناد وخروج الطلب مع طيار
               </h3>
-              <p className="text-[11px] text-zinc-500 font-mono">
+              <p className="text-[11px] admin-muted font-mono">
                 {order.orderNumber} · {order.customerName}
               </p>
             </div>
@@ -122,7 +122,7 @@ export function DispatchModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700"
+            className="rounded-lg p-1 admin-muted hover:bg-[var(--admin-background)] hover:text-[var(--admin-foreground)]"
           >
             <X className="size-4" />
           </button>
@@ -131,25 +131,25 @@ export function DispatchModal({
         {/* Content */}
         <div className="p-5 space-y-4 text-xs">
           {errorMsg && (
-            <div className="flex items-center gap-2 rounded-xl bg-rose-50 p-2.5 text-xs text-rose-700 font-medium">
-              <AlertCircle className="size-4 shrink-0 text-rose-600" />
+            <div className="flex items-center gap-2 rounded-xl bg-[var(--admin-danger-soft)] p-2.5 text-xs text-[var(--admin-danger)] font-medium">
+              <AlertCircle className="size-4 shrink-0 text-[var(--admin-danger)]" />
               <span>{errorMsg}</span>
             </div>
           )}
 
           {/* Order Brief */}
-          <div className="rounded-xl border border-zinc-200 bg-zinc-50/50 p-3 flex items-center justify-between">
+          <div className="rounded-xl border border-[var(--admin-border)] bg-[var(--admin-background)] p-3 flex items-center justify-between">
             <div>
-              <span className="text-[11px] text-zinc-500 block">العنوان والتسليم:</span>
-              <p className="font-medium text-zinc-800 line-clamp-1">
+              <span className="text-[11px] admin-muted block">العنوان والتسليم:</span>
+              <p className="font-medium text-[var(--admin-foreground)] line-clamp-1">
                 {order.deliveryAddress || 'عنوان محدد بالتفاصيل'}
               </p>
             </div>
             <div className="text-left font-mono" dir="ltr">
-              <span className="text-xs font-bold text-zinc-950">
+              <span className="text-xs font-bold text-[var(--admin-foreground)]">
                 {(order.totalMinor / 100).toFixed(2)} {currencySymbol}
               </span>
-              <span className="block text-[10px] text-zinc-500">
+              <span className="block text-[10px] admin-muted">
                 {order.paymentMethod === 'CASH' ? 'دفع عند الاستلام' : 'مدفوع إلكترونياً'}
               </span>
             </div>
@@ -157,20 +157,20 @@ export function DispatchModal({
 
           {/* Drivers List */}
           <div>
-            <label className="block font-bold text-zinc-800 mb-2">
+            <label className="block font-bold text-[var(--admin-foreground)] mb-2">
               اختر كابتن التوصيل بالفرع ({drivers.length} طيار):
             </label>
 
             {isLoading ? (
-              <div className="py-8 text-center text-zinc-400">
-                <Clock className="size-5 mx-auto mb-1 animate-spin text-zinc-400" />
+              <div className="py-8 text-center admin-muted">
+                <Clock className="size-5 mx-auto mb-1 animate-spin text-[var(--admin-muted)]" />
                 <p>جارٍ تحميل طياري الفرع...</p>
               </div>
             ) : drivers.length === 0 ? (
-              <div className="py-8 text-center text-zinc-400 rounded-xl border border-dashed border-zinc-200">
-                <User className="size-6 mx-auto mb-1 text-zinc-300" />
-                <p className="font-semibold text-zinc-700">لا يوجد طيارين مسجلين بهذا الفرع</p>
-                <p className="text-[11px] mt-0.5 text-zinc-400">
+              <div className="py-8 text-center admin-muted rounded-xl border border-dashed border-[var(--admin-border)]">
+                <User className="size-6 mx-auto mb-1 text-[var(--admin-muted)]" />
+                <p className="font-semibold text-[var(--admin-foreground)]">لا يوجد طيارين مسجلين بهذا الفرع</p>
+                <p className="text-[11px] mt-0.5 admin-muted">
                   يرجى إضافة طيارين للفرع من زر إدارة الأسطول أولاً.
                 </p>
               </div>
@@ -189,32 +189,32 @@ export function DispatchModal({
                       }}
                       className={`flex items-center justify-between p-3 rounded-xl border transition cursor-pointer select-none ${
                         isSelected
-                          ? 'border-purple-600 bg-purple-50/50 ring-2 ring-purple-600/20'
-                          : 'border-zinc-200 bg-white hover:border-zinc-300'
+                          ? 'border-[var(--admin-primary)] bg-[var(--admin-primary-soft)] ring-2 ring-[var(--admin-primary-soft)]'
+                          : 'border-[var(--admin-border)] bg-[var(--admin-surface)] hover:border-[var(--admin-primary)]'
                       } ${!d.isActive ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="grid size-9 place-items-center rounded-xl bg-zinc-100">
+                        <div className="grid size-9 place-items-center rounded-xl bg-[var(--admin-background)]">
                           {getVehicleIcon(d.vehicleType)}
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-bold text-zinc-900 text-xs">
+                            <span className="font-bold text-[var(--admin-foreground)] text-xs">
                               {d.fullName}
                             </span>
                             {d.licensePlate && (
-                              <span className="text-[10px] bg-zinc-100 text-zinc-600 px-1.5 py-0.5 rounded font-mono">
+                              <span className="text-[10px] bg-[var(--admin-background)] admin-muted px-1.5 py-0.5 rounded font-mono">
                                 {d.licensePlate}
                               </span>
                             )}
                           </div>
-                          <div className="flex items-center gap-2 mt-0.5 text-[11px] text-zinc-500">
+                          <div className="flex items-center gap-2 mt-0.5 text-[11px] admin-muted">
                             <span className="flex items-center gap-1 font-mono" dir="ltr">
-                              <Phone className="size-3 text-zinc-400" />
+                              <Phone className="size-3 text-[var(--admin-muted)]" />
                               {d.phone}
                             </span>
                             {d.activeOrdersCount > 0 && (
-                              <span className="text-purple-700 font-semibold">
+                              <span className="text-[var(--admin-info)] font-semibold">
                                 · معه {d.activeOrdersCount} طلبات بالشارع
                               </span>
                             )}
@@ -224,18 +224,18 @@ export function DispatchModal({
 
                       <div className="flex items-center gap-2">
                         <span
-                          className={`rounded-md px-2 py-0.5 text-[10px] font-bold ${
+                          className={`admin-badge ${
                             isAvailable
-                              ? 'bg-emerald-100 text-emerald-800'
+                              ? 'admin-badge-success'
                               : isOnDelivery
-                              ? 'bg-purple-100 text-purple-800'
-                              : 'bg-zinc-100 text-zinc-600'
+                              ? 'admin-badge-info'
+                              : 'admin-badge-neutral'
                           }`}
                         >
                           {isAvailable ? 'متاح بالفرع' : isOnDelivery ? 'في مشوار' : 'غير متاح'}
                         </span>
                         {isSelected && (
-                          <CheckCircle2 className="size-4 text-purple-600" />
+                          <CheckCircle2 className="size-4 text-[var(--admin-primary)]" />
                         )}
                       </div>
                     </div>
@@ -247,11 +247,11 @@ export function DispatchModal({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-2 border-t border-zinc-100 px-5 py-3.5 bg-zinc-50/50 text-xs">
+        <div className="flex items-center justify-end gap-2 border-t border-[var(--admin-border)] px-5 py-3.5 bg-[var(--admin-background)] text-xs">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-zinc-200 px-4 py-2 font-medium text-zinc-600 hover:bg-zinc-100"
+            className="rounded-xl border admin-control px-4 py-2 font-medium"
           >
             إلغاء
           </button>
@@ -259,7 +259,7 @@ export function DispatchModal({
             type="button"
             onClick={handleConfirmDispatch}
             disabled={!selectedDriverId || isPending || drivers.length === 0}
-            className="flex items-center gap-1.5 rounded-xl bg-purple-700 hover:bg-purple-800 px-4 py-2 font-bold text-white shadow-xs transition disabled:opacity-50"
+            className="flex items-center gap-1.5 rounded-xl admin-primary-action px-4 py-2 font-bold shadow-xs transition disabled:opacity-50"
           >
             <Truck className="size-3.5" />
             <span>{isPending ? 'جارٍ الإسناد...' : 'تأكيد الخروج مع المندوب'}</span>

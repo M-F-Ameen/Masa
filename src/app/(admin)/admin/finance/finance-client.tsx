@@ -257,17 +257,17 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
   return (
     <div className="space-y-6 p-4 sm:p-6 lg:p-8" dir="rtl">
       {/* Top Header & Navigation Bar */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-[var(--admin-border)] pb-5">
         <div>
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900 text-white">
-              <Wallet className="h-5 w-5 text-zinc-100" strokeWidth={1.75} />
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[var(--admin-primary)] text-white">
+              <Wallet className="h-5 w-5" strokeWidth={1.75} />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-zinc-900 sm:text-2xl">
+              <h1 className="text-xl font-bold text-[var(--admin-foreground)] sm:text-2xl">
                 المالية والورديات والمصروفات
               </h1>
-              <p className="text-xs text-zinc-500 sm:text-sm">
+              <p className="text-xs admin-muted sm:text-sm">
                 متابعة حركة النقد بالأدراج، تسجيل المصروفات الميدانية، ومجمل أرباح التشغيل
               </p>
             </div>
@@ -277,12 +277,12 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Branch Selector */}
           {initialData.allowedBranches.length > 1 && (
-            <div className="flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-2 text-xs shadow-xs">
-              <Building2 className="h-4 w-4 text-zinc-500" strokeWidth={1.75} />
+            <div className="flex items-center gap-1.5 rounded-lg border border-[var(--admin-border)] bg-[var(--admin-surface)] px-3 py-2 text-xs shadow-xs">
+              <Building2 className="h-4 w-4 admin-muted" strokeWidth={1.75} />
               <select
                 value={initialData.branchId}
                 onChange={(e) => handleBranchChange(e.target.value)}
-                className="bg-transparent font-medium text-zinc-800 outline-hidden"
+                className="bg-transparent font-medium text-[var(--admin-foreground)] outline-hidden"
               >
                 {initialData.allowedBranches.map((b) => (
                   <option key={b.id} value={b.id}>
@@ -300,9 +300,9 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
               setFeedback(null);
               setShowMovementModal(true);
             }}
-            className="flex min-h-11 items-center gap-2 rounded-lg border border-zinc-300 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-700 shadow-xs transition-colors hover:bg-zinc-50 sm:text-sm"
+            className="admin-control flex min-h-11 items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-semibold shadow-xs transition-colors sm:text-sm"
           >
-            <ArrowDownUp className="h-4 w-4 text-zinc-600" strokeWidth={1.75} />
+            <ArrowDownUp className="h-4 w-4" strokeWidth={1.75} />
             <span>إيداع / سحب نقد</span>
           </button>
 
@@ -313,7 +313,7 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
               setFeedback(null);
               setShowExpenseModal(true);
             }}
-            className="flex min-h-11 items-center gap-2 rounded-lg bg-zinc-900 px-4 py-2 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-zinc-800 sm:text-sm"
+            className="admin-primary-action flex min-h-11 items-center gap-2 rounded-lg px-4 py-2 text-xs font-semibold shadow-xs transition-colors sm:text-sm"
           >
             <Plus className="h-4 w-4" strokeWidth={2} />
             <span>تسجيل مصروف</span>
@@ -326,22 +326,22 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
         <div
           className={`flex items-center justify-between rounded-lg p-3.5 text-xs sm:text-sm font-medium ${
             feedback.type === 'success'
-              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-              : 'bg-rose-50 text-rose-800 border border-rose-200'
+              ? 'bg-[var(--admin-success-soft)] text-[var(--admin-success)] border border-[var(--admin-success)]/30'
+              : 'bg-[var(--admin-danger-soft)] text-[var(--admin-danger)] border border-[var(--admin-danger)]/30'
           }`}
         >
           <div className="flex items-center gap-2">
             {feedback.type === 'success' ? (
-              <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+              <CheckCircle2 className="h-4 w-4 text-[var(--admin-success)] shrink-0" />
             ) : (
-              <AlertTriangle className="h-4 w-4 text-rose-600 shrink-0" />
+              <AlertTriangle className="h-4 w-4 text-[var(--admin-danger)] shrink-0" />
             )}
             <span>{feedback.message}</span>
           </div>
           <button
             type="button"
             onClick={() => setFeedback(null)}
-            className="p-1 text-zinc-400 hover:text-zinc-700"
+            className="p-1 admin-muted hover:text-[var(--admin-foreground)]"
           >
             <X className="h-4 w-4" />
           </button>
@@ -349,20 +349,20 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
       )}
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-zinc-200 overflow-x-auto">
+      <div className="flex border-b border-[var(--admin-border)] overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab('shifts')}
           className={`flex min-h-11 items-center gap-2 border-b-2 px-4 py-2.5 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
             activeTab === 'shifts'
-              ? 'border-zinc-900 text-zinc-900 font-semibold'
-              : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              ? 'border-[var(--admin-primary)] text-[var(--admin-primary)] font-semibold'
+              : 'border-transparent admin-muted hover:text-[var(--admin-foreground)]'
           }`}
         >
           <Wallet className="h-4 w-4" strokeWidth={1.75} />
           <span>ورديات الكاشير النقدية</span>
           {openShiftsCount > 0 && (
-            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800">
+            <span className="admin-badge admin-badge-success">
               {openShiftsCount} نشطة
             </span>
           )}
@@ -373,13 +373,13 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
           onClick={() => setActiveTab('expenses')}
           className={`flex min-h-11 items-center gap-2 border-b-2 px-4 py-2.5 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
             activeTab === 'expenses'
-              ? 'border-zinc-900 text-zinc-900 font-semibold'
-              : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              ? 'border-[var(--admin-foreground)] text-[var(--admin-foreground)] font-semibold'
+              : 'border-transparent admin-muted hover:text-[var(--admin-foreground)]'
           }`}
         >
           <Receipt className="h-4 w-4" strokeWidth={1.75} />
           <span>المصروفات والنثريات</span>
-          <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-[11px] font-medium text-zinc-600">
+          <span className="admin-badge admin-badge-neutral">
             {initialData.expenses.length}
           </span>
         </button>
@@ -389,8 +389,8 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
           onClick={() => setActiveTab('profitability')}
           className={`flex min-h-11 items-center gap-2 border-b-2 px-4 py-2.5 text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
             activeTab === 'profitability'
-              ? 'border-zinc-900 text-zinc-900 font-semibold'
-              : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              ? 'border-[var(--admin-foreground)] text-[var(--admin-foreground)] font-semibold'
+              : 'border-transparent admin-muted hover:text-[var(--admin-foreground)]'
           }`}
         >
           <TrendingUp className="h-4 w-4" strokeWidth={1.75} />
@@ -444,16 +444,16 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
       {/* MODAL 1: CREATE EXPENSE */}
       {showExpenseModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" dir="rtl">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-              <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
-                <Receipt className="h-5 w-5 text-zinc-700" />
+          <div className="w-full max-w-md rounded-xl bg-[var(--admin-surface)] p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
+              <h3 className="text-base font-bold text-[var(--admin-foreground)] flex items-center gap-2">
+                <Receipt className="h-5 w-5 text-[var(--admin-foreground)]" />
                 <span>تسجيل مصروف تشغيلي ميداني</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setShowExpenseModal(false)}
-                className="text-zinc-400 hover:text-zinc-600"
+                className="admin-muted hover:text-[var(--admin-foreground)]"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -461,11 +461,11 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
 
             <form onSubmit={handleCreateExpense} className="space-y-4 text-xs sm:text-sm">
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">تصنيف المصروف *</label>
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">تصنيف المصروف *</label>
                 <select
                   value={expenseForm.categoryId}
                   onChange={(e) => setExpenseForm({ ...expenseForm, categoryId: e.target.value })}
-                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900"
+                  className="w-full rounded-lg border border-[var(--admin-border)] px-3 py-2 text-[var(--admin-foreground)]"
                   required
                 >
                   {initialData.categories.map((c) => (
@@ -477,15 +477,15 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">مصدر الصرف المالي *</label>
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">مصدر الصرف المالي *</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setExpenseForm({ ...expenseForm, source: ExpenseSource.REGISTER_CASH })}
                     className={`rounded-lg border p-2 text-center font-medium transition-colors ${
                       expenseForm.source === ExpenseSource.REGISTER_CASH
-                        ? 'border-zinc-900 bg-zinc-900 text-white'
-                        : 'border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100'
+                        ? 'border-[var(--admin-primary)] bg-[var(--admin-primary)] text-white'
+                        : 'border-[var(--admin-border)] bg-[var(--admin-background)] text-[var(--admin-foreground)] hover:bg-[var(--admin-primary-soft)]'
                     }`}
                   >
                     درج الكاشير (الوردية)
@@ -495,14 +495,14 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
                     onClick={() => setExpenseForm({ ...expenseForm, source: ExpenseSource.SAFE_PETTY_CASH })}
                     className={`rounded-lg border p-2 text-center font-medium transition-colors ${
                       expenseForm.source === ExpenseSource.SAFE_PETTY_CASH
-                        ? 'border-zinc-900 bg-zinc-900 text-white'
-                        : 'border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100'
+                        ? 'border-[var(--admin-primary)] bg-[var(--admin-primary)] text-white'
+                        : 'border-[var(--admin-border)] bg-[var(--admin-background)] text-[var(--admin-foreground)] hover:bg-[var(--admin-primary-soft)]'
                     }`}
                   >
                     الخزينة / العهدة
                   </button>
                 </div>
-                <p className="mt-1 text-[11px] text-zinc-500">
+                <p className="mt-1 text-[11px] admin-muted">
                   {expenseForm.source === ExpenseSource.REGISTER_CASH
                     ? 'يُخصم حتمياً من نقدية الدرج ويؤثر على رصيد إغلاق الوردية الحالية'
                     : 'يُصرف من الخزينة المركزية ولا يمس درج كاشير نقطة البيع'}
@@ -510,7 +510,7 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">
                   المبلغ ({initialData.currencySymbol}) *
                 </label>
                 <input
@@ -520,25 +520,25 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
                   value={expenseForm.amount}
                   onChange={(e) => setExpenseForm({ ...expenseForm, amount: e.target.value })}
                   placeholder="مثال: 50.00"
-                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 font-mono"
+                  className="w-full rounded-lg border border-[var(--admin-border)] px-3 py-2 text-[var(--admin-foreground)] font-mono"
                   required
                 />
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">البيان والتفاصيل *</label>
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">البيان والتفاصيل *</label>
                 <input
                   type="text"
                   value={expenseForm.description}
                   onChange={(e) => setExpenseForm({ ...expenseForm, description: e.target.value })}
                   placeholder="سبب الصرف بوضوح..."
-                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900"
+                  className="w-full rounded-lg border border-[var(--admin-border)] px-3 py-2 text-[var(--admin-foreground)]"
                   required
                 />
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">
                   رقم السند أو الفاتورة (اختياري)
                 </label>
                 <input
@@ -546,22 +546,22 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
                   value={expenseForm.receiptNumber}
                   onChange={(e) => setExpenseForm({ ...expenseForm, receiptNumber: e.target.value })}
                   placeholder="مثال: INV-1049"
-                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 font-mono"
+                  className="w-full rounded-lg border border-[var(--admin-border)] px-3 py-2 text-[var(--admin-foreground)] font-mono"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 border-t border-zinc-100 pt-3">
+              <div className="flex items-center justify-end gap-2 border-t border-[var(--admin-border)] pt-3">
                 <button
                   type="button"
                   onClick={() => setShowExpenseModal(false)}
-                  className="rounded-lg border border-zinc-200 px-4 py-2 font-medium text-zinc-600 hover:bg-zinc-50"
+                  className="rounded-lg border admin-control px-4 py-2 font-medium"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-lg bg-zinc-900 px-4 py-2 font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+                  className="rounded-lg admin-primary-action px-4 py-2 font-medium disabled:opacity-50"
                 >
                   {isPending ? 'جاري الحفظ...' : 'حفظ المصروف'}
                 </button>
@@ -574,16 +574,16 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
       {/* MODAL 2: CASH MOVEMENT (IN / DROP) */}
       {showMovementModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" dir="rtl">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-              <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
-                <ArrowDownUp className="h-5 w-5 text-zinc-700" />
+          <div className="w-full max-w-md rounded-xl bg-[var(--admin-surface)] p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
+              <h3 className="text-base font-bold text-[var(--admin-foreground)] flex items-center gap-2">
+                <ArrowDownUp className="h-5 w-5 text-[var(--admin-foreground)]" />
                 <span>تسجيل حركة نقدية في الوردية</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setShowMovementModal(false)}
-                className="text-zinc-400 hover:text-zinc-600"
+                className="admin-muted hover:text-[var(--admin-foreground)]"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -591,11 +591,11 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
 
             <form onSubmit={handleRecordMovement} className="space-y-4 text-xs sm:text-sm">
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">الوردية المفتوحة *</label>
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">الوردية المفتوحة *</label>
                 <select
                   value={movementForm.shiftId}
                   onChange={(e) => setMovementForm({ ...movementForm, shiftId: e.target.value })}
-                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900"
+                  className="w-full rounded-lg border border-[var(--admin-border)] px-3 py-2 text-[var(--admin-foreground)]"
                   required
                 >
                   <option value="">اختر وردية مفتوحة...</option>
@@ -610,15 +610,15 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">نوع الحركة *</label>
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">نوع الحركة *</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
                     onClick={() => setMovementForm({ ...movementForm, type: CashMovementType.CASH_IN })}
                     className={`rounded-lg border p-2 text-center font-medium transition-colors ${
                       movementForm.type === CashMovementType.CASH_IN
-                        ? 'border-emerald-600 bg-emerald-600 text-white'
-                        : 'border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100'
+                        ? 'border-[var(--admin-success)] bg-[var(--admin-success)] text-white'
+                        : 'border-[var(--admin-border)] bg-[var(--admin-background)] text-[var(--admin-foreground)] hover:bg-[var(--admin-primary-soft)]'
                     }`}
                   >
                     إيداع نقد / تغذية فكة
@@ -628,8 +628,8 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
                     onClick={() => setMovementForm({ ...movementForm, type: CashMovementType.CASH_DROP })}
                     className={`rounded-lg border p-2 text-center font-medium transition-colors ${
                       movementForm.type === CashMovementType.CASH_DROP
-                        ? 'border-rose-600 bg-rose-600 text-white'
-                        : 'border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100'
+                        ? 'border-[var(--admin-danger)] bg-[var(--admin-danger)] text-white'
+                        : 'border-[var(--admin-border)] bg-[var(--admin-background)] text-[var(--admin-foreground)] hover:bg-[var(--admin-primary-soft)]'
                     }`}
                   >
                     سحب / توريد للخزينة
@@ -638,7 +638,7 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">
                   المبلغ ({initialData.currencySymbol}) *
                 </label>
                 <input
@@ -648,35 +648,35 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
                   value={movementForm.amount}
                   onChange={(e) => setMovementForm({ ...movementForm, amount: e.target.value })}
                   placeholder="مثال: 200.00"
-                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 font-mono"
+                  className="w-full rounded-lg border border-[var(--admin-border)] px-3 py-2 text-[var(--admin-foreground)] font-mono"
                   required
                 />
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">سبب وتفاصيل الحركة *</label>
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">سبب وتفاصيل الحركة *</label>
                 <input
                   type="text"
                   value={movementForm.reason}
                   onChange={(e) => setMovementForm({ ...movementForm, reason: e.target.value })}
                   placeholder="سبب تزويد الفكة أو سحب التوريد..."
-                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900"
+                  className="w-full rounded-lg border border-[var(--admin-border)] px-3 py-2 text-[var(--admin-foreground)]"
                   required
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 border-t border-zinc-100 pt-3">
+              <div className="flex items-center justify-end gap-2 border-t border-[var(--admin-border)] pt-3">
                 <button
                   type="button"
                   onClick={() => setShowMovementModal(false)}
-                  className="rounded-lg border border-zinc-200 px-4 py-2 font-medium text-zinc-600 hover:bg-zinc-50"
+                  className="rounded-lg border admin-control px-4 py-2 font-medium"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-lg bg-zinc-900 px-4 py-2 font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+                  className="rounded-lg admin-primary-action px-4 py-2 font-medium disabled:opacity-50"
                 >
                   {isPending ? 'جاري المعالجة...' : 'تسجيل الحركة'}
                 </button>
@@ -689,29 +689,29 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
       {/* MODAL 3: BLIND CLOSE SHIFT */}
       {showBlindCloseModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" dir="rtl">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-              <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
-                <Lock className="h-5 w-5 text-amber-600" />
+          <div className="w-full max-w-md rounded-xl bg-[var(--admin-surface)] p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
+              <h3 className="text-base font-bold text-[var(--admin-foreground)] flex items-center gap-2">
+                <Lock className="h-5 w-5 text-[var(--admin-warning)]" />
                 <span>الإغلاق الأعمى للوردية النقدية</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setShowBlindCloseModal(false)}
-                className="text-zinc-400 hover:text-zinc-600"
+                className="admin-muted hover:text-[var(--admin-foreground)]"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             <form onSubmit={handleBlindClose} className="space-y-4 text-xs sm:text-sm">
-              <div className="rounded-lg bg-amber-50 p-3 border border-amber-200 text-amber-800 text-xs">
+              <div className="rounded-lg admin-status-warning border p-3 text-xs">
                 قم بعد النقدية الفعلية الموجودة في الدرج وإدخالها هنا. سيقوم النظام بحساب ومقارنة
                 الرصيد الدفتري آلياً لمنع أي تلاعب وتوثيق العجز أو الزيادة.
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">
                   إجمالي النقد الفعلي المعدود بالدرج ({initialData.currencySymbol}) *
                 </label>
                 <input
@@ -721,13 +721,13 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
                   value={blindCloseForm.countedCash}
                   onChange={(e) => setBlindCloseForm({ ...blindCloseForm, countedCash: e.target.value })}
                   placeholder="0.00"
-                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 font-mono text-lg font-bold"
+                  className="w-full rounded-lg border border-[var(--admin-border)] px-3 py-2 text-[var(--admin-foreground)] font-mono text-lg font-bold"
                   required
                 />
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">
                   ملاحظات أو تبرير الفارق (اختياري)
                 </label>
                 <textarea
@@ -735,22 +735,22 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
                   value={blindCloseForm.varianceReason}
                   onChange={(e) => setBlindCloseForm({ ...blindCloseForm, varianceReason: e.target.value })}
                   placeholder="أي ملاحظات حول عد النقد أو الفروقات..."
-                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900"
+                  className="w-full rounded-lg border border-[var(--admin-border)] px-3 py-2 text-[var(--admin-foreground)]"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 border-t border-zinc-100 pt-3">
+              <div className="flex items-center justify-end gap-2 border-t border-[var(--admin-border)] pt-3">
                 <button
                   type="button"
                   onClick={() => setShowBlindCloseModal(false)}
-                  className="rounded-lg border border-zinc-200 px-4 py-2 font-medium text-zinc-600 hover:bg-zinc-50"
+                  className="rounded-lg border admin-control px-4 py-2 font-medium"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-lg bg-amber-600 px-4 py-2 font-medium text-white hover:bg-amber-700 disabled:opacity-50"
+                  className="rounded-lg admin-action-warning px-4 py-2 font-medium disabled:opacity-50"
                 >
                   {isPending ? 'جاري الإغلاق...' : 'تأكيد إغلاق الوردية'}
                 </button>
@@ -763,50 +763,50 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
       {/* MODAL 4: AUDIT SHIFT */}
       {showAuditModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" dir="rtl">
-          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-              <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
-                <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+          <div className="w-full max-w-md rounded-xl bg-[var(--admin-surface)] p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
+              <h3 className="text-base font-bold text-[var(--admin-foreground)] flex items-center gap-2">
+                <CheckCircle2 className="h-5 w-5 text-[var(--admin-success)]" />
                 <span>اعتماد وتدقيق الوردية والفروقات</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setShowAuditModal(false)}
-                className="text-zinc-400 hover:text-zinc-600"
+                className="admin-muted hover:text-[var(--admin-foreground)]"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             <form onSubmit={handleAuditShift} className="space-y-4 text-xs sm:text-sm">
-              <div className="rounded-lg bg-zinc-50 p-3 border border-zinc-200 text-zinc-700 text-xs">
+              <div className="rounded-lg bg-[var(--admin-background)] p-3 border border-[var(--admin-border)] text-[var(--admin-foreground)] text-xs">
                 باعتماد هذه الوردية، يتم إقفالها نهائياً كـ (معتمدة ومطابقة إدارياً) وتثبيت فروقات
                 العجز أو الزيادة في السجلات المحاسبية الرسمية للفرع.
               </div>
 
               <div>
-                <label className="block font-medium text-zinc-700 mb-1">ملاحظات المدير والاعتماد</label>
+                <label className="block font-medium text-[var(--admin-foreground)] mb-1">ملاحظات المدير والاعتماد</label>
                 <textarea
                   rows={3}
                   value={auditForm.notes}
                   onChange={(e) => setAuditForm({ notes: e.target.value })}
                   placeholder="ملاحظات التحقق من الفروقات إن وُجدت..."
-                  className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900"
+                  className="w-full rounded-lg border border-[var(--admin-border)] px-3 py-2 text-[var(--admin-foreground)]"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 border-t border-zinc-100 pt-3">
+              <div className="flex items-center justify-end gap-2 border-t border-[var(--admin-border)] pt-3">
                 <button
                   type="button"
                   onClick={() => setShowAuditModal(false)}
-                  className="rounded-lg border border-zinc-200 px-4 py-2 font-medium text-zinc-600 hover:bg-zinc-50"
+                  className="rounded-lg border admin-control px-4 py-2 font-medium"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="rounded-lg bg-zinc-900 px-4 py-2 font-medium text-white hover:bg-zinc-800 disabled:opacity-50"
+                  className="rounded-lg admin-primary-action px-4 py-2 font-medium disabled:opacity-50"
                 >
                   {isPending ? 'جاري الاعتماد...' : 'اعتماد الوردية رسمياً'}
                 </button>
@@ -819,14 +819,14 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
       {/* MODAL 5: DETAILED SHIFT BREAKDOWN */}
       {showDetailsModal && shiftDetail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" dir="rtl">
-          <div className="w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
+          <div className="w-full max-w-2xl rounded-xl bg-[var(--admin-surface)] p-6 shadow-xl space-y-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
               <div>
-                <h3 className="text-base font-bold text-zinc-900 flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-zinc-700" />
+                <h3 className="text-base font-bold text-[var(--admin-foreground)] flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-[var(--admin-foreground)]" />
                   <span>تفاصيل جلسة الوردية — {shiftDetail.cashierName}</span>
                 </h3>
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs admin-muted">
                   افتتحت: {new Date(shiftDetail.openedAt).toLocaleString('ar-EG')}
                   {shiftDetail.closedAt && ` | أغلقت: ${new Date(shiftDetail.closedAt).toLocaleString('ar-EG')}`}
                 </span>
@@ -834,7 +834,7 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
               <button
                 type="button"
                 onClick={() => setShowDetailsModal(false)}
-                className="text-zinc-400 hover:text-zinc-600"
+                className="admin-muted hover:text-[var(--admin-foreground)]"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -842,75 +842,75 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
 
             {/* Shift Financial Overview Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
-              <div className="rounded-lg bg-zinc-50 p-3 border border-zinc-200">
-                <span className="text-zinc-500 block">رصيد الافتتاح</span>
-                <span className="font-mono font-bold text-zinc-900 text-sm">
+              <div className="rounded-lg bg-[var(--admin-background)] p-3 border border-[var(--admin-border)]">
+                <span className="admin-muted block">رصيد الافتتاح</span>
+                <span className="font-mono font-bold text-[var(--admin-foreground)] text-sm">
                   {formatMoney(shiftDetail.openingCashMinor)}
                 </span>
               </div>
 
-              <div className="rounded-lg bg-emerald-50 p-3 border border-emerald-200">
-                <span className="text-emerald-700 block">مبيعات نقدية (كاش)</span>
-                <span className="font-mono font-bold text-emerald-800 text-sm">
+              <div className="rounded-lg admin-status-success border p-3">
+                <span className="admin-status-success-text block">مبيعات نقدية (كاش)</span>
+                <span className="font-mono font-bold admin-status-success-text text-sm">
                   {formatMoney(shiftDetail.cashSalesMinor)}
                 </span>
               </div>
 
-              <div className="rounded-lg bg-indigo-50 p-3 border border-indigo-200">
-                <span className="text-indigo-700 block">مبيعات شبكة (بطاقة)</span>
-                <span className="font-mono font-bold text-indigo-800 text-sm">
+              <div className="rounded-lg admin-status-info border p-3">
+                <span className="admin-status-info-text block">مبيعات شبكة (بطاقة)</span>
+                <span className="font-mono font-bold admin-status-info-text text-sm">
                   {formatMoney(shiftDetail.cardSalesMinor)}
                 </span>
               </div>
 
-              <div className="rounded-lg bg-zinc-50 p-3 border border-zinc-200">
-                <span className="text-zinc-500 block">إجمالي مبيعات الوردية</span>
-                <span className="font-mono font-bold text-zinc-900 text-sm">
+              <div className="rounded-lg bg-[var(--admin-background)] p-3 border border-[var(--admin-border)]">
+                <span className="admin-muted block">إجمالي مبيعات الوردية</span>
+                <span className="font-mono font-bold text-[var(--admin-foreground)] text-sm">
                   {formatMoney(shiftDetail.totalSalesMinor)}
                 </span>
               </div>
             </div>
 
             {/* Reconciliation Box */}
-            <div className="rounded-xl border border-zinc-200 bg-zinc-50/50 p-4 space-y-2 text-xs sm:text-sm">
-              <h4 className="font-semibold text-zinc-900 mb-2">معادلة مطابقة النقدية بالدرج:</h4>
-              <div className="flex justify-between py-1 border-b border-zinc-200 text-zinc-700">
+            <div className="rounded-xl border border-[var(--admin-border)] bg-[var(--admin-background)]/50 p-4 space-y-2 text-xs sm:text-sm">
+              <h4 className="font-semibold text-[var(--admin-foreground)] mb-2">معادلة مطابقة النقدية بالدرج:</h4>
+              <div className="flex justify-between py-1 border-b border-[var(--admin-border)] text-[var(--admin-foreground)]">
                 <span>+ رصيد الافتتاح:</span>
                 <span className="font-mono">{formatMoney(shiftDetail.openingCashMinor)}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-zinc-200 text-emerald-700">
+              <div className="flex justify-between py-1 border-b border-[var(--admin-border)] text-[var(--admin-accent-hover)]">
                 <span>+ مبيعات كاش محصلة:</span>
                 <span className="font-mono">{formatMoney(shiftDetail.cashSalesMinor)}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-zinc-200 text-sky-700">
+              <div className="flex justify-between py-1 border-b border-[var(--admin-border)] text-[var(--admin-info)]">
                 <span>+ إيداعات فكة (Cash In):</span>
                 <span className="font-mono">{formatMoney(shiftDetail.cashInMinor)}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-zinc-200 text-rose-700">
+              <div className="flex justify-between py-1 border-b border-[var(--admin-border)] text-[var(--admin-danger)]">
                 <span>- سحوبات وتوريدات (Cash Drop):</span>
                 <span className="font-mono">{formatMoney(shiftDetail.cashDropMinor)}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-zinc-200 text-amber-700">
+              <div className="flex justify-between py-1 border-b border-[var(--admin-border)] text-[var(--admin-warning)]">
                 <span>- مصروفات سُحبت من الدرج:</span>
                 <span className="font-mono">{formatMoney(shiftDetail.registerExpensesMinor)}</span>
               </div>
-              <div className="flex justify-between py-1.5 font-bold text-zinc-900 border-t-2 border-zinc-300">
+              <div className="flex justify-between py-1.5 font-bold text-[var(--admin-foreground)] border-t-2 border-[var(--admin-border)]">
                 <span>= النقد المتوقع بالدرج:</span>
                 <span className="font-mono">{formatMoney(shiftDetail.expectedCashMinor)}</span>
               </div>
-              <div className="flex justify-between py-1.5 font-bold text-zinc-900">
+              <div className="flex justify-between py-1.5 font-bold text-[var(--admin-foreground)]">
                 <span>= النقد الفعلي المعدود:</span>
                 <span className="font-mono">{formatMoney(shiftDetail.closingCashMinor)}</span>
               </div>
-              <div className="flex justify-between py-1.5 font-bold border-t border-zinc-200">
+              <div className="flex justify-between py-1.5 font-bold border-t border-[var(--admin-border)]">
                 <span>الفارق (عجز / زيادة):</span>
                 <span
                   className={`font-mono text-base ${
                     (shiftDetail.varianceMinor ?? 0) < 0
-                      ? 'text-rose-600'
+                      ? 'text-[var(--admin-danger)]'
                       : (shiftDetail.varianceMinor ?? 0) > 0
-                      ? 'text-sky-600'
-                      : 'text-emerald-600'
+                      ? 'text-[var(--admin-info)]'
+                      : 'text-[var(--admin-success)]'
                   }`}
                 >
                   {(shiftDetail.varianceMinor ?? 0) === 0
@@ -919,7 +919,7 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
                 </span>
               </div>
               {shiftDetail.varianceReason && (
-                <div className="mt-2 rounded-lg bg-amber-50 p-2.5 text-xs text-amber-900 border border-amber-200">
+                <div className="mt-2 rounded-lg admin-status-warning p-2.5 text-xs border">
                   <span className="font-bold">تبرير الفارق وملاحظات الإدارة: </span>
                   {shiftDetail.varianceReason}
                 </div>
@@ -929,27 +929,27 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
             {/* Cash Movements List */}
             {shiftDetail.movements.length > 0 && (
               <div className="space-y-2">
-                <h4 className="font-semibold text-zinc-900 text-xs sm:text-sm">
+                <h4 className="font-semibold text-[var(--admin-foreground)] text-xs sm:text-sm">
                   الحركات النقدية أثناء الوردية ({shiftDetail.movements.length}):
                 </h4>
-                <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 overflow-hidden text-xs">
+                <div className="divide-y divide-[var(--admin-border)] rounded-lg border border-[var(--admin-border)] overflow-hidden text-xs">
                   {shiftDetail.movements.map((m) => (
-                    <div key={m.id} className="flex items-center justify-between p-2.5 bg-white">
+                    <div key={m.id} className="flex items-center justify-between p-2.5 bg-[var(--admin-surface)]">
                       <div className="flex items-center gap-2">
                         {m.type === CashMovementType.CASH_IN ? (
-                          <span className="rounded-full bg-emerald-100 px-2 py-0.5 font-semibold text-emerald-800">
+                          <span className="admin-badge admin-badge-success">
                             إيداع فكة
                           </span>
                         ) : (
-                          <span className="rounded-full bg-rose-100 px-2 py-0.5 font-semibold text-rose-800">
+                          <span className="admin-badge admin-badge-danger">
                             سحب توريد
                           </span>
                         )}
-                        <span className="text-zinc-700">{m.reason}</span>
+                        <span className="text-[var(--admin-foreground)]">{m.reason}</span>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="font-mono font-bold text-zinc-900">{formatMoney(m.amountMinor)}</span>
-                        <span className="text-zinc-400 text-[11px]">{m.performedByName}</span>
+                        <span className="font-mono font-bold text-[var(--admin-foreground)]">{formatMoney(m.amountMinor)}</span>
+                        <span className="admin-muted text-[11px]">{m.performedByName}</span>
                       </div>
                     </div>
                   ))}
@@ -960,28 +960,28 @@ export function FinanceClient({ initialData }: FinanceClientProps) {
             {/* Drawer Expenses List */}
             {shiftDetail.drawerExpenses.length > 0 && (
               <div className="space-y-2">
-                <h4 className="font-semibold text-zinc-900 text-xs sm:text-sm">
+                <h4 className="font-semibold text-[var(--admin-foreground)] text-xs sm:text-sm">
                   مصروفات صُرفت من الدرج ({shiftDetail.drawerExpenses.length}):
                 </h4>
-                <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 overflow-hidden text-xs">
+                <div className="divide-y divide-[var(--admin-border)] rounded-lg border border-[var(--admin-border)] overflow-hidden text-xs">
                   {shiftDetail.drawerExpenses.map((e) => (
-                    <div key={e.id} className="flex items-center justify-between p-2.5 bg-white">
+                    <div key={e.id} className="flex items-center justify-between p-2.5 bg-[var(--admin-surface)]">
                       <div>
-                        <span className="font-semibold text-zinc-800">{e.categoryNameAr}: </span>
-                        <span className="text-zinc-600">{e.description}</span>
+                        <span className="font-semibold text-[var(--admin-foreground)]">{e.categoryNameAr}: </span>
+                        <span className="admin-muted">{e.description}</span>
                       </div>
-                      <span className="font-mono font-bold text-amber-700">{formatMoney(e.amountMinor)}</span>
+                      <span className="font-mono font-bold text-[var(--admin-warning)]">{formatMoney(e.amountMinor)}</span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            <div className="flex justify-end pt-3 border-t border-zinc-100">
+            <div className="flex justify-end pt-3 border-t border-[var(--admin-border)]">
               <button
                 type="button"
                 onClick={() => setShowDetailsModal(false)}
-                className="rounded-lg bg-zinc-900 px-4 py-2 font-medium text-white hover:bg-zinc-800 text-xs sm:text-sm"
+                className="rounded-lg admin-primary-action px-4 py-2 font-medium text-xs sm:text-sm"
               >
                 إغلاق النافذة
               </button>

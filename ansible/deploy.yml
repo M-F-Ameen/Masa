@@ -1,0 +1,102 @@
+---
+- name: Deploy MASA development application
+  hosts: dev
+  become: false
+  gather_facts: false
+
+  vars:
+    app_dir: "/opt/apps/{{ app_name }}"
+    app_port: "{{ deploy_port | default('1234') }}"
+    container_port: "3000"
+    image_name: "{{ docker_image }}"
+
+  pre_tasks:
+    - name: Validate required deployment variables
+      ansible.builtin.assert:
+        that:
+          - app_name is defined
+          - docker_image is defined
+          - registry_url is defined
+          - registry_user is defined
+          - registry_password is defined
+          - runtime_env_file is defined
+        fail_msg: "The deployment requires an image, registry credentials, and a runtime environment file."
+
+  tasks:
+    - name: Create application directory
+      ansible.builtin.file:
+        path: "{{ app_dir }}"
+        state: directory
+        owner: deploy
+        group: deploy
+        mode: "0755"
+
+    - name: Install runtime environment file
+      ansible.builtin.copy:
+        src: "{{ runtime_env_file }}"
+        dest: "{{ app_dir }}/.env"
+        owner: deploy
+        group: deploy
+        mode: "0600"
+
+    - name: Install production Compose file
+      ansible.builtin.copy:
+        dest: "{{ app_dir }}/docker-compose.yml"
+        owner: deploy
+        group: deploy
+        mode: "0644"
+        content: |
+          services:
+            app:
+              image: {{ image_name }}
+              container_name: {{ app_name }}-dev
+              env_file:
+                - .env
+              environment:
+                NODE_ENV: production
+                HOSTNAME: 0.0.0.0
+                PORT: {{ container_port }}
+              ports:
+                - "{{ app_port }}:{{ container_port }}"
+              restart: unless-stopped
+
+    - name: Log in to GitLab Container Registry
+      ansible.builtin.shell: >-
+        echo "{{ registry_password }}" |
+        docker login "{{ registry_url }}"
+        --username "{{ registry_user }}"
+        --password-stdin
+      no_log: true
+
+    - name: Validate Compose configuration
+      ansible.builtin.command: docker compose config
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Pull application image
+      ansible.builtin.command: docker compose pull
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Start application
+      ansible.builtin.command: docker compose up -d --remove-orphans
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Wait for the published application port
+      ansible.builtin.wait_for:
+        host: 127.0.0.1
+        port: "{{ app_port }}"
+        delay: 3
+        timeout: 60
+
+    - name: Show application status
+      ansible.builtin.command: docker compose ps
+      args:
+        chdir: "{{ app_dir }}"
+      register: compose_status
+      changed_when: false
+
+    - name: Print application status
+      ansible.builtin.debug:
+        var: compose_status.stdout_lines

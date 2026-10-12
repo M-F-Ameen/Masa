@@ -145,14 +145,14 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
   return (
     <div className="space-y-5" dir="rtl">
       {/* Header with Title and Branch indicator */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--admin-border)] pb-4">
         <div>
-          <h1 className="text-xl font-bold text-zinc-900 flex items-center gap-2">
-            <Package className="w-6 h-6 text-zinc-800" strokeWidth={1.75} />
+          <h1 className="text-xl font-bold text-[var(--admin-foreground)] flex items-center gap-2">
+            <Package className="w-6 h-6 text-[var(--admin-muted)]" strokeWidth={1.75} />
             <span>المخزون والوصفات والمشتريات</span>
           </h1>
-          <p className="text-xs text-zinc-500 mt-1">
-            الفرع النشط: <span className="font-semibold text-zinc-800">{initialData.branchName}</span> • إدارة بطاقات المواد الخام، وصفات الأطباق (BOM)، وأوامر التوريد
+          <p className="text-xs admin-muted mt-1">
+            الفرع النشط: <span className="font-semibold text-[var(--admin-foreground)]">{initialData.branchName}</span> • إدارة بطاقات المواد الخام، وصفات الأطباق (BOM)، وأوامر التوريد
           </p>
         </div>
 
@@ -165,9 +165,9 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
               setAdjustmentDefaultType(InventoryMovementType.OPERATIONAL_CONSUMPTION);
               setIsAdjustmentModalOpen(true);
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-zinc-800 bg-zinc-100 hover:bg-zinc-200 rounded-lg border border-zinc-300 transition-colors"
+            className="admin-control inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg border"
           >
-            <CookingPot className="w-4 h-4 text-zinc-700" strokeWidth={1.75} />
+            <CookingPot className="w-4 h-4 text-[var(--admin-muted)]" strokeWidth={1.75} />
             <span>صرف تشغيل للمطبخ</span>
           </button>
 
@@ -177,7 +177,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
               setItemToEdit(null);
               setIsItemModalOpen(true);
             }}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-white bg-zinc-900 hover:bg-zinc-800 rounded-lg transition-colors"
+            className="admin-primary-action inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-lg"
           >
             <Plus className="w-4 h-4" />
             <span>إضافة مكون خام</span>
@@ -186,26 +186,26 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
       </div>
 
       {actionError && (
-        <div className="p-3 text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg flex items-center gap-2">
+        <div className="p-3 text-xs border admin-status-danger rounded-lg flex items-center gap-2">
           <AlertOctagon className="w-4 h-4 shrink-0" />
           <span>{actionError}</span>
         </div>
       )}
 
       {/* Tabs Bar */}
-      <div className="flex border-b border-zinc-200 gap-2 overflow-x-auto">
+      <div className="flex border-b border-[var(--admin-border)] gap-2 overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab('stock')}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === 'stock'
-              ? 'border-zinc-900 text-zinc-900'
-              : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              ? 'border-[var(--admin-primary)] text-[var(--admin-primary)]'
+              : 'border-transparent admin-muted hover:text-[var(--admin-foreground)]'
           }`}
         >
           <Boxes className="w-4 h-4" strokeWidth={1.75} />
           <span>المخزون والأرصدة</span>
-          <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-zinc-100 text-zinc-700 font-mono">
+          <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-[var(--admin-background)] text-[var(--admin-foreground)] font-mono">
             {initialData.stock.length}
           </span>
         </button>
@@ -215,13 +215,13 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
           onClick={() => setActiveTab('recipes')}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === 'recipes'
-              ? 'border-zinc-900 text-zinc-900'
-              : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              ? 'border-[var(--admin-primary)] text-[var(--admin-primary)]'
+              : 'border-transparent admin-muted hover:text-[var(--admin-foreground)]'
           }`}
         >
           <BookOpen className="w-4 h-4" strokeWidth={1.75} />
           <span>وصفات الأطباق (BOM)</span>
-          <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-zinc-100 text-zinc-700 font-mono">
+          <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-[var(--admin-background)] text-[var(--admin-foreground)] font-mono">
             {initialData.catalogProducts.length}
           </span>
         </button>
@@ -231,13 +231,13 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
           onClick={() => setActiveTab('purchases')}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === 'purchases'
-              ? 'border-zinc-900 text-zinc-900'
-              : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              ? 'border-[var(--admin-primary)] text-[var(--admin-primary)]'
+              : 'border-transparent admin-muted hover:text-[var(--admin-foreground)]'
           }`}
         >
           <Truck className="w-4 h-4" strokeWidth={1.75} />
           <span>الموردين وأوامر الشراء</span>
-          <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-zinc-100 text-zinc-700 font-mono">
+          <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-[var(--admin-background)] text-[var(--admin-foreground)] font-mono">
             {initialData.purchaseOrders.length}
           </span>
         </button>
@@ -247,13 +247,13 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
           onClick={() => setActiveTab('movements')}
           className={`flex items-center gap-2 px-4 py-2.5 text-xs font-semibold border-b-2 transition-colors whitespace-nowrap ${
             activeTab === 'movements'
-              ? 'border-zinc-900 text-zinc-900'
-              : 'border-transparent text-zinc-500 hover:text-zinc-700'
+              ? 'border-[var(--admin-primary)] text-[var(--admin-primary)]'
+              : 'border-transparent admin-muted hover:text-[var(--admin-foreground)]'
           }`}
         >
           <ArrowUpDown className="w-4 h-4" strokeWidth={1.75} />
           <span>سجل حركات المخزون</span>
-          <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-zinc-100 text-zinc-700 font-mono">
+          <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-[var(--admin-background)] text-[var(--admin-foreground)] font-mono">
             {initialData.movements.length}
           </span>
         </button>
@@ -264,30 +264,30 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
         <div className="space-y-4">
           {/* KPI Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div className="p-3 bg-white border border-zinc-200 rounded-xl">
-              <span className="text-xs text-zinc-500">إجمالي المكونات المسجلة</span>
-              <p className="text-xl font-bold font-mono text-zinc-900 mt-1">{totalItemsCount}</p>
+            <div className="admin-card p-3">
+              <span className="text-xs admin-muted">إجمالي المكونات المسجلة</span>
+              <p className="text-xl font-bold font-mono text-[var(--admin-foreground)] mt-1">{totalItemsCount}</p>
             </div>
-            <div className="p-3 bg-white border border-zinc-200 rounded-xl">
-              <span className="text-xs text-amber-700">مواد قاربت على النفاد</span>
-              <p className="text-xl font-bold font-mono text-amber-700 mt-1">{lowStockCount}</p>
+            <div className="admin-card p-3">
+              <span className="text-xs admin-status-warning-text">مواد قاربت على النفاد</span>
+              <p className="text-xl font-bold font-mono admin-status-warning-text mt-1">{lowStockCount}</p>
             </div>
-            <div className="p-3 bg-white border border-zinc-200 rounded-xl">
-              <span className="text-xs text-rose-700">رصيد سالب (عجز تشغيلي)</span>
-              <p className="text-xl font-bold font-mono text-rose-700 mt-1">{negativeStockCount}</p>
+            <div className="admin-card p-3">
+              <span className="text-xs admin-status-danger-text">رصيد سالب (عجز تشغيلي)</span>
+              <p className="text-xl font-bold font-mono admin-status-danger-text mt-1">{negativeStockCount}</p>
             </div>
-            <div className="p-3 bg-white border border-zinc-200 rounded-xl">
-              <span className="text-xs text-zinc-500">قيمة المخزون التقديرية</span>
-              <p className="text-xl font-bold font-mono text-zinc-900 mt-1">
+            <div className="admin-card p-3">
+              <span className="text-xs admin-muted">قيمة المخزون التقديرية</span>
+              <p className="text-xl font-bold font-mono text-[var(--admin-foreground)] mt-1">
                 {(totalInventoryValueMinor / 100).toFixed(2)} {initialData.currency}
               </p>
             </div>
           </div>
 
           {/* Filters & Search */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-3 border border-zinc-200 rounded-xl">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 admin-card p-3">
             <div className="relative w-full sm:w-72">
-              <Search className="w-4 h-4 absolute right-3 top-2.5 text-zinc-400" />
+              <Search className="w-4 h-4 absolute right-3 top-2.5 text-[var(--admin-muted)]" />
               <input
                 type="text"
                 value={stockSearch}
@@ -296,7 +296,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                   setStockPage(1);
                 }}
                 placeholder="بحث باسم المكون أو الكود..."
-                className="w-full text-xs pr-9 pl-3 py-2 border border-zinc-300 rounded-lg text-zinc-900 focus:outline-hidden focus:border-zinc-800"
+                className="w-full text-xs pr-9 pl-3 py-2 border border-[var(--admin-border)] rounded-lg text-[var(--admin-foreground)] focus:outline-hidden focus:border-[var(--admin-primary)]"
               />
             </div>
 
@@ -309,8 +309,8 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                 }}
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
                   stockFilter === 'ALL'
-                    ? 'bg-zinc-900 text-white border-zinc-900'
-                    : 'bg-white text-zinc-600 border-zinc-200 hover:bg-zinc-50'
+                    ? 'admin-primary-action border-transparent'
+                    : 'admin-control'
                 }`}
               >
                 الكل ({initialData.stock.length})
@@ -323,8 +323,8 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                 }}
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
                   stockFilter === 'LOW'
-                    ? 'bg-amber-700 text-white border-amber-700'
-                    : 'bg-white text-amber-800 border-amber-200 hover:bg-amber-50'
+                    ? 'admin-action-warning border-transparent'
+                    : 'bg-[var(--admin-surface)] admin-status-warning-text border-[var(--admin-border)] hover:bg-[var(--admin-warning-soft)]'
                 }`}
               >
                 النواقص ({lowStockCount})
@@ -337,8 +337,8 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                 }}
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
                   stockFilter === 'NEGATIVE'
-                    ? 'bg-rose-700 text-white border-rose-700'
-                    : 'bg-white text-rose-800 border-rose-200 hover:bg-rose-50'
+                    ? 'admin-action-danger border-transparent'
+                    : 'bg-[var(--admin-surface)] admin-status-danger-text border-[var(--admin-border)] hover:bg-[var(--admin-danger-soft)]'
                 }`}
               >
                 الرصيد السالب ({negativeStockCount})
@@ -347,10 +347,10 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
           </div>
 
           {/* Stock Table */}
-          <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-xs">
+          <div className="admin-card rounded-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-right text-xs">
-                <thead className="bg-zinc-50 border-b border-zinc-200 text-zinc-600 font-semibold">
+                <thead className="bg-[var(--admin-background)] border-b border-[var(--admin-border)] text-[var(--admin-muted)] font-semibold">
                   <tr>
                     <th className="p-3">الكود</th>
                     <th className="p-3">المكون الخام</th>
@@ -362,55 +362,55 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                     <th className="p-3 text-center">الإجراءات</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-100">
+                <tbody className="divide-y divide-[var(--admin-border)]">
                   {filteredStock.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="text-center py-8 text-zinc-400">
+                      <td colSpan={8} className="text-center py-8 text-[var(--admin-muted)]">
                         لا توجد مكونات تطابق معايير البحث.
                       </td>
                     </tr>
                   ) : (
                     paginatedStock.map((item) => (
-                      <tr key={item.id} className="hover:bg-zinc-50/60 transition-colors">
-                        <td className="p-3 font-mono text-zinc-500">{item.sku || '—'}</td>
-                        <td className="p-3 font-semibold text-zinc-900">
+                      <tr key={item.id} className="admin-row-hover">
+                        <td className="p-3 font-mono admin-muted">{item.sku || '—'}</td>
+                        <td className="p-3 font-semibold text-[var(--admin-foreground)]">
                           <div>{item.nameAr}</div>
-                          <div className="text-[10px] text-zinc-400 font-mono">{item.nameEn}</div>
+                          <div className="text-[10px] text-[var(--admin-muted)] font-mono">{item.nameEn}</div>
                         </td>
-                        <td className="p-3 text-zinc-600">{item.unit}</td>
+                        <td className="p-3 text-[var(--admin-muted)]">{item.unit}</td>
                         <td className="p-3 font-mono text-sm font-bold">
                           <span
                             className={
                               item.isNegative
-                                ? 'text-rose-600'
+                                ? 'admin-status-danger-text'
                                 : item.isLowStock
-                                ? 'text-amber-700'
-                                : 'text-zinc-900'
+                                ? 'admin-status-warning-text'
+                                : 'text-[var(--admin-foreground)]'
                             }
                           >
                             {item.quantity.toFixed(3)}
                           </span>
                         </td>
-                        <td className="p-3 font-mono text-zinc-500">{item.minThreshold.toFixed(3)}</td>
+                        <td className="p-3 font-mono admin-muted">{item.minThreshold.toFixed(3)}</td>
                         <td className="p-3">
                           {item.isNegative ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-rose-50 text-rose-700 border border-rose-200">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium admin-status-danger border">
                               <AlertOctagon className="w-3 h-3" />
                               <span>رصيد سالب (عجز)</span>
                             </span>
                           ) : item.isLowStock ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium admin-status-warning border">
                               <AlertTriangle className="w-3 h-3" />
                               <span>قارب على النفاد</span>
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium admin-status-success border">
                               <CheckCircle2 className="w-3 h-3" />
                               <span>رصيد كافٍ</span>
                             </span>
                           )}
                         </td>
-                        <td className="p-3 font-mono text-zinc-700">
+                        <td className="p-3 font-mono text-[var(--admin-foreground)]">
                           {(item.defaultCostMinor / 100).toFixed(2)} {initialData.currency}
                         </td>
                         <td className="p-3 text-center">
@@ -422,7 +422,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                                 setAdjustmentDefaultType(InventoryMovementType.OPERATIONAL_CONSUMPTION);
                                 setIsAdjustmentModalOpen(true);
                               }}
-                              className="px-2 py-1 text-[11px] font-medium text-zinc-700 bg-zinc-100 hover:bg-zinc-200 rounded-md transition-colors"
+                              className="px-2 py-1 text-[11px] font-medium text-[var(--admin-foreground)] bg-[var(--admin-background)] hover:bg-[var(--admin-primary-soft)] rounded-md transition-colors"
                               title="صرف تشغيل للمطبخ"
                             >
                               صرف
@@ -434,7 +434,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                                 setAdjustmentDefaultType(InventoryMovementType.ADJUSTMENT);
                                 setIsAdjustmentModalOpen(true);
                               }}
-                              className="px-2 py-1 text-[11px] font-medium text-zinc-700 bg-zinc-100 hover:bg-zinc-200 rounded-md transition-colors"
+                              className="px-2 py-1 text-[11px] font-medium text-[var(--admin-foreground)] bg-[var(--admin-background)] hover:bg-[var(--admin-primary-soft)] rounded-md transition-colors"
                               title="تسوية جردية أو توالف"
                             >
                               تسوية
@@ -445,7 +445,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                                 setItemToEdit(item);
                                 setIsItemModalOpen(true);
                               }}
-                              className="p-1 text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 rounded-md transition-colors"
+                              className="p-1 text-[var(--admin-muted)] hover:text-[var(--admin-foreground)] hover:bg-[var(--admin-background)] rounded-md transition-colors"
                               title="تعديل المكون"
                             >
                               <Edit2 className="w-3.5 h-3.5" />
@@ -461,14 +461,14 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
 
             {/* Stock Pagination Footer */}
             {totalStockFiltered > 0 && (
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-zinc-100 bg-zinc-50/50 px-4 py-3 text-xs text-zinc-600">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-[var(--admin-border)] bg-[var(--admin-background)] px-4 py-3 text-xs admin-muted">
                 <div className="flex items-center gap-2">
                   <span>
                     عرض {Math.min((validStockPage - 1) * stockPageSize + 1, totalStockFiltered)} إلى{' '}
                     {Math.min(validStockPage * stockPageSize, totalStockFiltered)} من أصل {totalStockFiltered} مكوّن
                   </span>
-                  <span className="text-zinc-300">|</span>
-                  <label className="flex items-center gap-1.5 text-zinc-500">
+                  <span className="text-[var(--admin-border)]">|</span>
+                  <label className="flex items-center gap-1.5 admin-muted">
                     <span>لكل صفحة:</span>
                     <select
                       value={stockPageSize}
@@ -476,7 +476,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                         setStockPageSize(Number(e.target.value));
                         setStockPage(1);
                       }}
-                      className="rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs text-zinc-800"
+                      className="rounded-md border border-[var(--admin-border)] bg-[var(--admin-surface)] px-2 py-1 text-xs text-[var(--admin-foreground)]"
                     >
                       <option value={10}>10</option>
                       <option value={20}>20</option>
@@ -490,7 +490,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                     type="button"
                     onClick={() => setStockPage((p) => Math.max(1, p - 1))}
                     disabled={validStockPage <= 1}
-                    className="rounded-md border border-zinc-200 bg-white px-2.5 py-1 font-medium hover:bg-zinc-100 disabled:opacity-40 transition"
+                    className="rounded-md border border-[var(--admin-border)] bg-[var(--admin-surface)] px-2.5 py-1 font-medium hover:bg-[var(--admin-background)] disabled:opacity-40 transition"
                   >
                     السابق
                   </button>
@@ -501,7 +501,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                     type="button"
                     onClick={() => setStockPage((p) => Math.min(totalStockPages, p + 1))}
                     disabled={validStockPage >= totalStockPages}
-                    className="rounded-md border border-zinc-200 bg-white px-2.5 py-1 font-medium hover:bg-zinc-100 disabled:opacity-40 transition"
+                    className="rounded-md border border-[var(--admin-border)] bg-[var(--admin-surface)] px-2.5 py-1 font-medium hover:bg-[var(--admin-background)] disabled:opacity-40 transition"
                   >
                     التالي
                   </button>
@@ -515,18 +515,18 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
       {/* TAB 2: BOM Recipes */}
       {activeTab === 'recipes' && (
         <div className="space-y-4">
-          <div className="bg-white p-3 border border-zinc-200 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="admin-card p-3 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 absolute right-3 top-2.5 text-zinc-400" />
+              <Search className="w-4 h-4 absolute right-3 top-2.5 text-[var(--admin-muted)]" />
               <input
                 type="text"
                 value={recipeSearch}
                 onChange={(e) => setRecipeSearch(e.target.value)}
                 placeholder="بحث في الأصناف أو التصنيفات..."
-                className="w-full text-xs pr-9 pl-3 py-2 border border-zinc-300 rounded-lg text-zinc-900 focus:outline-hidden focus:border-zinc-800"
+                className="w-full text-xs pr-9 pl-3 py-2 border border-[var(--admin-border)] rounded-lg text-[var(--admin-foreground)] focus:outline-hidden focus:border-[var(--admin-primary)]"
               />
             </div>
-            <div className="text-xs text-zinc-500">
+            <div className="text-xs admin-muted">
               الوصفات اختيارية بالكامل. الأصناف بدون وصفة تُباع مباشرة بالـ POS دون خصم للمكونات.
             </div>
           </div>
@@ -539,15 +539,15 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
               return (
                 <div
                   key={prod.id}
-                  className="bg-white border border-zinc-200 rounded-xl p-4 flex flex-col justify-between hover:shadow-xs transition-shadow"
+                  className="admin-card p-4 flex flex-col justify-between hover:shadow-xs transition-shadow"
                 >
                   <div className="space-y-2">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <h4 className="font-semibold text-zinc-900 text-sm">{prod.nameAr}</h4>
-                        <span className="text-[11px] text-zinc-400 font-mono">{prod.nameEn}</span>
+                        <h4 className="font-semibold text-[var(--admin-foreground)] text-sm">{prod.nameAr}</h4>
+                        <span className="text-[11px] text-[var(--admin-muted)] font-mono">{prod.nameEn}</span>
                       </div>
-                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-600 font-medium">
+                      <span className="text-[10px] px-2 py-0.5 rounded-md bg-[var(--admin-background)] text-[var(--admin-muted)] font-medium">
                         {prod.categoryNameAr}
                       </span>
                     </div>
@@ -555,20 +555,20 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                     <div className="pt-2">
                       {hasRecipe ? (
                         <div className="space-y-1">
-                          <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block">
+                          <span className="text-[10px] font-semibold admin-status-success px-2 py-0.5 rounded-full inline-block">
                             مرتبط بوصفة ({productRecipes.length} مكون)
                           </span>
-                          <ul className="text-xs text-zinc-600 divide-y divide-zinc-100 pt-1">
+                          <ul className="text-xs text-[var(--admin-muted)] divide-y divide-[var(--admin-border)] pt-1">
                             {productRecipes.slice(0, 3).map((r) => (
                               <li key={r.id} className="py-1 flex justify-between">
                                 <span>{r.inventoryItemNameAr}</span>
-                                <span className="font-mono text-zinc-500">
+                                <span className="font-mono admin-muted">
                                   {r.quantity} {r.unit}
                                 </span>
                               </li>
                             ))}
                             {productRecipes.length > 3 && (
-                              <li className="text-[10px] text-zinc-400 pt-1">
+                              <li className="text-[10px] text-[var(--admin-muted)] pt-1">
                                 + {productRecipes.length - 3} مكونات أخرى
                               </li>
                             )}
@@ -576,7 +576,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                         </div>
                       ) : (
                         <div className="py-2">
-                          <span className="text-[10px] font-medium text-zinc-500 bg-zinc-100 px-2 py-0.5 rounded-full inline-block">
+                          <span className="text-[10px] font-medium text-[var(--admin-muted)] bg-[var(--admin-background)] px-2 py-0.5 rounded-full inline-block">
                             تشغيل مباشر بلا وصفة (اختياري)
                           </span>
                         </div>
@@ -584,14 +584,14 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-zinc-100 mt-3 flex justify-end">
+                  <div className="pt-3 border-t border-[var(--admin-border)] mt-3 flex justify-end">
                     <button
                       type="button"
                       onClick={() => {
                         setSelectedProductForRecipe(prod);
                         setIsRecipeModalOpen(true);
                       }}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-zinc-800 bg-zinc-100 hover:bg-zinc-200 rounded-lg transition-colors border border-zinc-200"
+                      className="admin-control inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg border"
                     >
                       <BookOpen className="w-3.5 h-3.5" />
                       <span>{hasRecipe ? 'تعديل الوصفة' : 'إنشاء وصفة للطبق'}</span>
@@ -608,10 +608,10 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
       {activeTab === 'purchases' && (
         <div className="space-y-6">
           {/* Top Bar for Purchases */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-white p-3 border border-zinc-200 rounded-xl">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 admin-card p-3">
             <div>
-              <h3 className="font-bold text-sm text-zinc-900">أوامر الشراء والتوريد للمخزن</h3>
-              <p className="text-xs text-zinc-500">
+              <h3 className="font-bold text-sm text-[var(--admin-foreground)]">أوامر الشراء والتوريد للمخزن</h3>
+              <p className="text-xs admin-muted">
                 تسجيل ومتابعة فواتير الشراء واعتماد استلامها لإيداع الكميات في مخزن الفرع
               </p>
             </div>
@@ -622,7 +622,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                   setSupplierToEdit(null);
                   setIsSupplierModalOpen(true);
                 }}
-                className="inline-flex items-center gap-1 px-3 py-2 text-xs font-semibold text-zinc-700 bg-zinc-100 hover:bg-zinc-200 rounded-lg border border-zinc-300"
+                className="admin-control inline-flex items-center gap-1 px-3 py-2 text-xs font-semibold rounded-lg border"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>إضافة مورد</span>
@@ -631,7 +631,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
               <button
                 type="button"
                 onClick={() => setIsPurchaseOrderModalOpen(true)}
-                className="inline-flex items-center gap-1 px-3 py-2 text-xs font-semibold text-white bg-zinc-900 hover:bg-zinc-800 rounded-lg"
+                className="admin-primary-action inline-flex items-center gap-1 px-3 py-2 text-xs font-semibold rounded-lg"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>أمر توريد وشراء جديد</span>
@@ -640,10 +640,10 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
           </div>
 
           {/* Purchase Orders Table */}
-          <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-xs">
+          <div className="admin-card rounded-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-right text-xs">
-                <thead className="bg-zinc-50 border-b border-zinc-200 text-zinc-600 font-semibold">
+                <thead className="bg-[var(--admin-background)] border-b border-[var(--admin-border)] text-[var(--admin-muted)] font-semibold">
                   <tr>
                     <th className="p-3">رقم الأمر</th>
                     <th className="p-3">المورد</th>
@@ -655,36 +655,36 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                     <th className="p-3 text-center">الإجراء</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-100">
+                <tbody className="divide-y divide-[var(--admin-border)]">
                   {initialData.purchaseOrders.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="text-center py-8 text-zinc-400">
+                      <td colSpan={8} className="text-center py-8 text-[var(--admin-muted)]">
                         لا توجد أوامر شراء مسجلة بعد.
                       </td>
                     </tr>
                   ) : (
                     initialData.purchaseOrders.map((order) => (
-                      <tr key={order.id} className="hover:bg-zinc-50/60 transition-colors">
-                        <td className="p-3 font-mono font-bold text-zinc-900">{order.orderNumber}</td>
-                        <td className="p-3 font-semibold text-zinc-800">{order.supplierName}</td>
-                        <td className="p-3 font-mono text-zinc-500">{order.invoiceNumber || '—'}</td>
-                        <td className="p-3 font-mono text-zinc-600">{order.items.length} صنف</td>
-                        <td className="p-3 font-mono font-bold text-zinc-900">
+                      <tr key={order.id} className="admin-row-hover">
+                        <td className="p-3 font-mono font-bold text-[var(--admin-foreground)]">{order.orderNumber}</td>
+                        <td className="p-3 font-semibold text-[var(--admin-foreground)]">{order.supplierName}</td>
+                        <td className="p-3 font-mono admin-muted">{order.invoiceNumber || '—'}</td>
+                        <td className="p-3 font-mono text-[var(--admin-muted)]">{order.items.length} صنف</td>
+                        <td className="p-3 font-mono font-bold text-[var(--admin-foreground)]">
                           {(order.totalMinor / 100).toFixed(2)} {initialData.currency}
                         </td>
                         <td className="p-3">
                           {order.status === PurchaseOrderStatus.RECEIVED ? (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium admin-status-success border">
                               <CheckCircle2 className="w-3 h-3" />
                               <span>تم التوريد للمخزن</span>
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-zinc-100 text-zinc-700 border border-zinc-200">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-[var(--admin-background)] text-[var(--admin-foreground)] border border-[var(--admin-border)]">
                               <span>مسودة معلقة</span>
                             </span>
                           )}
                         </td>
-                        <td className="p-3 text-zinc-500 font-mono">
+                        <td className="p-3 admin-muted font-mono">
                           {new Date(order.createdAt).toLocaleDateString('ar-EG')}
                         </td>
                         <td className="p-3 text-center">
@@ -693,7 +693,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                               type="button"
                               disabled={receivingOrderId === order.id}
                               onClick={() => handleReceiveOrder(order.id)}
-                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-white bg-emerald-700 hover:bg-emerald-800 rounded-md transition-colors disabled:opacity-50"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-white bg-[var(--admin-accent)] hover:bg-[var(--admin-accent-hover)] rounded-md transition-colors disabled:opacity-50"
                             >
                               {receivingOrderId === order.id ? (
                                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -703,7 +703,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                               <span>اعتماد واستلام التوريد</span>
                             </button>
                           ) : (
-                            <span className="text-[11px] text-zinc-400">مكتمل</span>
+                            <span className="text-[11px] text-[var(--admin-muted)]">مكتمل</span>
                           )}
                         </td>
                       </tr>
@@ -715,30 +715,30 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
           </div>
 
           {/* Suppliers Sub-section */}
-          <div className="bg-white border border-zinc-200 rounded-xl p-4 space-y-3">
-            <h4 className="font-bold text-sm text-zinc-900 flex items-center gap-2">
-              <Truck className="w-4 h-4 text-zinc-700" />
+          <div className="admin-card p-4 space-y-3">
+            <h4 className="font-bold text-sm text-[var(--admin-foreground)] flex items-center gap-2">
+              <Truck className="w-4 h-4 text-[var(--admin-muted)]" />
               <span>دليل الموردين المعتمدين ({initialData.suppliers.length})</span>
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
               {initialData.suppliers.map((sup) => (
-                <div key={sup.id} className="p-3 rounded-lg border border-zinc-200 bg-zinc-50/50 space-y-1">
+                <div key={sup.id} className="p-3 rounded-lg border border-[var(--admin-border)] bg-[var(--admin-background)] space-y-1">
                   <div className="flex justify-between items-start">
-                    <span className="font-semibold text-xs text-zinc-900">{sup.name}</span>
+                    <span className="font-semibold text-xs text-[var(--admin-foreground)]">{sup.name}</span>
                     <button
                       type="button"
                       onClick={() => {
                         setSupplierToEdit(sup);
                         setIsSupplierModalOpen(true);
                       }}
-                      className="text-zinc-400 hover:text-zinc-700"
+                      className="text-[var(--admin-muted)] hover:text-[var(--admin-foreground)]"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                   </div>
-                  {sup.contactName && <p className="text-[11px] text-zinc-600">المسؤول: {sup.contactName}</p>}
-                  {sup.phone && <p className="text-[11px] text-zinc-600 font-mono">الهاتف: {sup.phone}</p>}
-                  {sup.address && <p className="text-[11px] text-zinc-500">العنوان: {sup.address}</p>}
+                  {sup.contactName && <p className="text-[11px] text-[var(--admin-muted)]">المسؤول: {sup.contactName}</p>}
+                  {sup.phone && <p className="text-[11px] text-[var(--admin-muted)] font-mono">الهاتف: {sup.phone}</p>}
+                  {sup.address && <p className="text-[11px] admin-muted">العنوان: {sup.address}</p>}
                 </div>
               ))}
             </div>
@@ -749,23 +749,23 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
       {/* TAB 4: Movement Ledger */}
       {activeTab === 'movements' && (
         <div className="space-y-4">
-          <div className="bg-white p-3 border border-zinc-200 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="admin-card p-3 flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <ArrowUpDown className="w-4 h-4 text-zinc-700" />
-              <span className="text-xs font-semibold text-zinc-800">
+              <ArrowUpDown className="w-4 h-4 text-[var(--admin-muted)]" />
+              <span className="text-xs font-semibold text-[var(--admin-foreground)]">
                 سجل تدقيق حركات المخزون غير القابل للتعديل (Immutable Movement Ledger)
               </span>
             </div>
 
             <div className="flex items-center gap-2">
-              <label className="text-xs text-zinc-500">نوع الحركة:</label>
+              <label className="text-xs admin-muted">نوع الحركة:</label>
               <select
                 value={movementTypeFilter}
                 onChange={(e) => {
                   setMovementTypeFilter(e.target.value);
                   setMovementsPage(1);
                 }}
-                className="text-xs border border-zinc-300 rounded-lg px-2.5 py-1.5 bg-white text-zinc-900 focus:outline-hidden focus:border-zinc-800"
+                className="text-xs border border-[var(--admin-border)] rounded-lg px-2.5 py-1.5 bg-[var(--admin-surface)] text-[var(--admin-foreground)] focus:outline-hidden focus:border-[var(--admin-primary)]"
               >
                 <option value="ALL">كافة أنواع الحركات</option>
                 {Object.values(InventoryMovementType).map((t) => (
@@ -777,10 +777,10 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
             </div>
           </div>
 
-          <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden shadow-xs">
+          <div className="admin-card rounded-xl overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-right text-xs">
-                <thead className="bg-zinc-50 border-b border-zinc-200 text-zinc-600 font-semibold">
+                <thead className="bg-[var(--admin-background)] border-b border-[var(--admin-border)] text-[var(--admin-muted)] font-semibold">
                   <tr>
                     <th className="p-3">التاريخ والوقت</th>
                     <th className="p-3">نوع الحركة</th>
@@ -792,46 +792,46 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                     <th className="p-3">الموظف</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-100">
+                <tbody className="divide-y divide-[var(--admin-border)]">
                   {filteredMovements.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="text-center py-8 text-zinc-400">
+                      <td colSpan={8} className="text-center py-8 text-[var(--admin-muted)]">
                         لا توجد حركات مسجلة بعد في هذا الفرع.
                       </td>
                     </tr>
                   ) : (
                     paginatedMovements.map((m) => (
-                      <tr key={m.id} className="hover:bg-zinc-50/60 transition-colors">
-                        <td className="p-3 font-mono text-zinc-500 whitespace-nowrap">
+                      <tr key={m.id} className="admin-row-hover">
+                        <td className="p-3 font-mono admin-muted whitespace-nowrap">
                           {new Date(m.createdAt).toLocaleString('ar-EG')}
                         </td>
                         <td className="p-3">
                           <span
                             className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium border ${
                               m.type === InventoryMovementType.PURCHASE
-                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                ? 'admin-status-success'
                                 : m.type === InventoryMovementType.SALE_POS
-                                ? 'bg-zinc-100 text-zinc-700 border-zinc-200'
+                                ? 'bg-[var(--admin-background)] text-[var(--admin-foreground)] border-[var(--admin-border)]'
                                 : m.type === InventoryMovementType.OPERATIONAL_CONSUMPTION
-                                ? 'bg-amber-50 text-amber-800 border-amber-200'
-                                : 'bg-rose-50 text-rose-700 border-rose-200'
+                                ? 'admin-status-warning'
+                                : 'admin-status-danger'
                             }`}
                           >
                             {MOVEMENT_TYPE_LABELS[m.type]?.ar ?? m.type}
                           </span>
                         </td>
-                        <td className="p-3 font-semibold text-zinc-900">
+                        <td className="p-3 font-semibold text-[var(--admin-foreground)]">
                           {m.inventoryItemNameAr} ({m.unit})
                         </td>
-                        <td className="p-3 font-mono text-zinc-500">{m.quantityBefore.toFixed(3)}</td>
+                        <td className="p-3 font-mono admin-muted">{m.quantityBefore.toFixed(3)}</td>
                         <td className="p-3 font-mono font-bold">
-                          <span className={m.quantityDelta >= 0 ? 'text-emerald-700' : 'text-rose-600'}>
+                          <span className={m.quantityDelta >= 0 ? 'admin-status-success-text' : 'admin-status-danger-text'}>
                             {m.quantityDelta >= 0 ? `+${m.quantityDelta.toFixed(3)}` : m.quantityDelta.toFixed(3)}
                           </span>
                         </td>
-                        <td className="p-3 font-mono font-bold text-zinc-900">{m.quantityAfter.toFixed(3)}</td>
-                        <td className="p-3 text-zinc-600 max-w-xs truncate">{m.notes || m.referenceId || '—'}</td>
-                        <td className="p-3 text-zinc-500">{m.createdByName || '—'}</td>
+                        <td className="p-3 font-mono font-bold text-[var(--admin-foreground)]">{m.quantityAfter.toFixed(3)}</td>
+                        <td className="p-3 text-[var(--admin-muted)] max-w-xs truncate">{m.notes || m.referenceId || '—'}</td>
+                        <td className="p-3 text-[var(--admin-muted)]">{m.createdByName || '—'}</td>
                       </tr>
                     ))
                   )}
@@ -841,14 +841,14 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
 
             {/* Movements Pagination Footer */}
             {totalMovementsFiltered > 0 && (
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-zinc-100 bg-zinc-50/50 px-4 py-3 text-xs text-zinc-600">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-[var(--admin-border)] bg-[var(--admin-background)] px-4 py-3 text-xs admin-muted">
                 <div className="flex items-center gap-2">
                   <span>
                     عرض {Math.min((validMovementsPage - 1) * movementsPageSize + 1, totalMovementsFiltered)} إلى{' '}
                     {Math.min(validMovementsPage * movementsPageSize, totalMovementsFiltered)} من أصل {totalMovementsFiltered} حركة
                   </span>
-                  <span className="text-zinc-300">|</span>
-                  <label className="flex items-center gap-1.5 text-zinc-500">
+                  <span className="text-[var(--admin-border)]">|</span>
+                  <label className="flex items-center gap-1.5 admin-muted">
                     <span>لكل صفحة:</span>
                     <select
                       value={movementsPageSize}
@@ -856,7 +856,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                         setMovementsPageSize(Number(e.target.value));
                         setMovementsPage(1);
                       }}
-                      className="rounded-md border border-zinc-200 bg-white px-2 py-1 text-xs text-zinc-800"
+                      className="rounded-md border border-[var(--admin-border)] bg-[var(--admin-surface)] px-2 py-1 text-xs text-[var(--admin-foreground)]"
                     >
                       <option value={10}>10</option>
                       <option value={20}>20</option>
@@ -870,7 +870,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                     type="button"
                     onClick={() => setMovementsPage((p) => Math.max(1, p - 1))}
                     disabled={validMovementsPage <= 1}
-                    className="rounded-md border border-zinc-200 bg-white px-2.5 py-1 font-medium hover:bg-zinc-100 disabled:opacity-40 transition"
+                    className="rounded-md border border-[var(--admin-border)] bg-[var(--admin-surface)] px-2.5 py-1 font-medium hover:bg-[var(--admin-background)] disabled:opacity-40 transition"
                   >
                     السابق
                   </button>
@@ -881,7 +881,7 @@ export function InventoryClient({ initialData }: { initialData: InventoryPageDat
                     type="button"
                     onClick={() => setMovementsPage((p) => Math.min(totalMovementsPages, p + 1))}
                     disabled={validMovementsPage >= totalMovementsPages}
-                    className="rounded-md border border-zinc-200 bg-white px-2.5 py-1 font-medium hover:bg-zinc-100 disabled:opacity-40 transition"
+                    className="rounded-md border border-[var(--admin-border)] bg-[var(--admin-surface)] px-2.5 py-1 font-medium hover:bg-[var(--admin-background)] disabled:opacity-40 transition"
                   >
                     التالي
                   </button>

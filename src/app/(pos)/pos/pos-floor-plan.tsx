@@ -78,12 +78,12 @@ export function PosFloorPlan({
   const getShapeIcon = (shape: string) => {
     switch (shape) {
       case TableShape.ROUND:
-        return <Circle className="size-3 text-zinc-400" strokeWidth={1.8} />;
+        return <Circle className="size-3 text-[#8D9AB2]" strokeWidth={1.8} />;
       case TableShape.RECTANGLE:
-        return <RectangleHorizontal className="size-3 text-zinc-400" strokeWidth={1.8} />;
+        return <RectangleHorizontal className="size-3 text-[#8D9AB2]" strokeWidth={1.8} />;
       case TableShape.SQUARE:
       default:
-        return <Square className="size-3 text-zinc-400" strokeWidth={1.8} />;
+        return <Square className="size-3 text-[#8D9AB2]" strokeWidth={1.8} />;
     }
   };
 
@@ -99,9 +99,9 @@ export function PosFloorPlan({
   };
 
   return (
-    <div className="flex-1 flex flex-col min-h-0 bg-zinc-50 overflow-hidden" dir="rtl">
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-[#F7F9FD]" dir="rtl">
       {/* 1. Floor Plan Control Bar */}
-      <div className="shrink-0 border-b border-zinc-200 bg-white p-3 sm:px-6 sm:py-3 shadow-2xs space-y-2.5">
+      <div className="shrink-0 space-y-2.5 border-b border-[#e4e9f4] bg-white p-3 shadow-[0_4px_18px_rgba(55,77,132,0.04)] sm:px-6 sm:py-3">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
           {/* Section Pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
@@ -110,8 +110,8 @@ export function PosFloorPlan({
               onClick={() => setSelectedSectionId('ALL')}
               className={`shrink-0 rounded-xl px-3 py-1.5 font-bold transition ${
                 selectedSectionId === 'ALL'
-                  ? 'bg-zinc-900 text-white shadow-2xs'
-                  : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200/70'
+                ? 'bg-[#2D61C9] text-white shadow-[0_5px_12px_rgba(45,97,201,0.2)]'
+                  : 'bg-[#E9EEFC] text-[#526B90] hover:bg-[#F7F9FD]'
               }`}
             >
               كافة الصالة ({tables.length})
@@ -125,8 +125,8 @@ export function PosFloorPlan({
                   onClick={() => setSelectedSectionId(sec.id)}
                   className={`shrink-0 rounded-xl px-3 py-1.5 font-bold transition ${
                     selectedSectionId === sec.id
-                      ? 'bg-zinc-900 text-white shadow-2xs'
-                      : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200/70'
+                ? 'bg-[#2D61C9] text-white shadow-[0_5px_12px_rgba(45,97,201,0.2)]'
+                       : 'bg-[#E9EEFC] text-[#526B90] hover:bg-[#F7F9FD]'
                   }`}
                 >
                   {sec.nameAr} ({count})
@@ -142,7 +142,7 @@ export function PosFloorPlan({
               <span>متاحة: {stats.available}</span>
             </span>
 
-            <span className="flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-zinc-900 px-2 py-1 font-bold text-white">
+            <span className="flex items-center gap-1.5 rounded-lg border border-[#142644] bg-[#142644] px-2 py-1 font-bold text-white">
               <span className="size-2 rounded-full bg-rose-400" />
               <span>مشغولة: {stats.occupied}</span>
             </span>
@@ -160,7 +160,7 @@ export function PosFloorPlan({
               disabled={isRefreshing}
               title="تحديث حالات الصالة"
               aria-label="تحديث حالات الصالة"
-              className="grid size-8 place-items-center rounded-lg border border-zinc-200 text-zinc-600 hover:bg-zinc-100 disabled:opacity-50"
+              className="grid size-8 place-items-center rounded-lg border border-[#DCE3EF] text-[#526B90] hover:bg-[#E9EEFC] disabled:opacity-50"
             >
               <RefreshCw className={`size-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
             </button>
@@ -168,22 +168,22 @@ export function PosFloorPlan({
         </div>
 
         {/* Search & Filter */}
-        <div className="flex items-center gap-2 pt-1 border-t border-zinc-100 text-xs">
+        <div className="flex items-center gap-2 border-t border-[#E7ECF4] pt-1 text-xs">
           <div className="relative flex-1 max-w-xs">
-            <Search className="pointer-events-none absolute right-2.5 top-1/2 size-3.5 -translate-y-1/2 text-zinc-400" />
+            <Search className="pointer-events-none absolute right-2.5 top-1/2 size-3.5 -translate-y-1/2 text-[#8D9AB2]" />
             <input
               type="text"
               placeholder="بحث برقم الطاولة..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-zinc-200 bg-zinc-50/70 py-1 pr-8 pl-3 text-xs text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-zinc-900"
+            className="w-full rounded-lg border border-[#DCE3EF] bg-[#F7F9FD] py-1 pr-8 pl-3 text-xs text-[#142644] placeholder-[#8D9AB2] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2D61C9]/25"
             />
           </div>
 
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="h-7 rounded-lg border border-zinc-200 bg-white px-2 py-0.5 text-xs text-zinc-700"
+            className="h-7 rounded-lg border border-[#DCE3EF] bg-white px-2 py-0.5 text-xs text-[#526B90]"
           >
             <option value="ALL">جميع الحالات</option>
             <option value={TableStatus.AVAILABLE}>المتاحة</option>
@@ -194,7 +194,7 @@ export function PosFloorPlan({
           <button
             type="button"
             onClick={onSwitchToCatalog}
-            className="mr-auto rounded-lg bg-zinc-100 hover:bg-zinc-200 px-3 py-1 font-semibold text-zinc-800 text-xs"
+            className="mr-auto rounded-lg bg-[#E9EEFC] px-3 py-1 text-xs font-semibold text-[#2D61C9] hover:bg-[#DDE7FA]"
           >
             الذهاب للطلب السريع / المنيو
           </button>
@@ -205,11 +205,11 @@ export function PosFloorPlan({
       <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-6">
         {filteredTables.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="grid size-12 place-items-center rounded-2xl bg-zinc-100 text-zinc-400">
+          <div className="grid size-12 place-items-center rounded-2xl bg-[#E9EEFC] text-[#8D9AB2]">
               <Armchair className="size-6" strokeWidth={1.5} />
             </div>
-            <p className="mt-3 text-sm font-bold text-zinc-700">لا توجد طاولات مطابقة</p>
-            <p className="text-xs text-zinc-400 mt-1">تأكد من اختيار القسم الصحيح أو إلغاء فلتر البحث.</p>
+          <p className="mt-3 text-sm font-bold text-[#526B90]">لا توجد طاولات مطابقة</p>
+          <p className="mt-1 text-xs text-[#8D9AB2]">تأكد من اختيار القسم الصحيح أو إلغاء فلتر البحث.</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
@@ -228,37 +228,46 @@ export function PosFloorPlan({
                       onSelectOccupiedTable(table);
                     }
                   }}
-                  className={`group relative flex flex-col justify-between rounded-2xl border p-3.5 text-right transition cursor-pointer select-none active:scale-[0.98] ${
+                  className={`group relative flex min-h-[214px] flex-col justify-between rounded-[14px] border p-3 text-right shadow-[0_4px_12px_rgba(20,38,68,0.05)] transition cursor-pointer select-none active:scale-[0.98] hover:-translate-y-0.5 hover:shadow-[0_10px_20px_rgba(20,38,68,0.1)] ${
                     isAvailable
-                      ? 'border-emerald-200/90 bg-emerald-50/50 hover:bg-emerald-50 hover:border-emerald-300 shadow-2xs'
-                      : isBillPrinted
-                      ? 'border-amber-200/90 bg-amber-50/70 hover:bg-amber-50 shadow-2xs'
-                      : 'border-zinc-300 bg-white hover:border-zinc-400 shadow-2xs'
+                      ? 'border-emerald-200/90 bg-white hover:border-emerald-300'
+                    : isBillPrinted
+                      ? 'border-amber-200/90 bg-white hover:border-amber-300'
+                      : 'border-[#DCE3EF] bg-white hover:border-[#B9C9E2]'
                   }`}
                 >
-                  <div>
+                  <div className="flex min-h-0 flex-1 flex-col">
+                    <div
+                      className={`relative mb-3 flex min-h-[92px] items-center justify-center overflow-hidden rounded-[12px] bg-[radial-gradient(circle_at_50%_48%,#fff_0%,#f7f8fc_70%,#eef2f9_100%)] ${
+                        isAvailable
+                          ? 'ring-1 ring-inset ring-emerald-100'
+                          : isBillPrinted
+                          ? 'ring-1 ring-inset ring-amber-100'
+                          : 'ring-1 ring-inset ring-[#E8EDF6]'
+                      }`}
+                    >
                     {/* Top row: Table number & status */}
                     <div className="flex items-start justify-between gap-1">
                       <div className="flex items-center gap-1.5">
                         <div
-                          className={`grid size-9 place-items-center rounded-xl font-bold text-sm ${
+                          className={`grid size-12 place-items-center rounded-[14px] font-bold text-base shadow-[0_5px_10px_rgba(20,38,68,0.12)] ${
                             isAvailable
                               ? 'bg-emerald-600 text-white'
                               : isBillPrinted
                               ? 'bg-amber-600 text-white'
-                              : 'bg-zinc-900 text-white'
+                              : 'bg-[#142644] text-white'
                           }`}
                         >
                           {table.tableNumber}
                         </div>
                         <div>
                           <div className="flex items-center gap-1">
-                            <span className="font-bold text-xs text-zinc-900">
+                            <span className="text-xs font-bold text-[#142644]">
                               طاولة {table.tableNumber}
                             </span>
                             {getShapeIcon(table.shape)}
                           </div>
-                          <p className="text-[10px] text-zinc-500 truncate max-w-[80px]">
+                          <p className="max-w-[80px] truncate text-[10px] text-[#72819A]">
                             {table.sectionNameAr || 'عامة'}
                           </p>
                         </div>
@@ -270,17 +279,18 @@ export function PosFloorPlan({
                             ? 'bg-emerald-100 text-emerald-800'
                             : isBillPrinted
                             ? 'bg-amber-100 text-amber-800'
-                            : 'bg-zinc-900 text-white'
+                            : 'bg-[#142644] text-white'
                         }`}
                       >
                         {isAvailable ? 'متاحة' : isBillPrinted ? 'مطبوع الشيك' : 'مشغولة'}
                       </span>
                     </div>
+                    </div>
 
                     {/* Capacity */}
-                    <div className="mt-2.5 flex items-center justify-between text-[11px] text-zinc-600">
+                    <div className="mt-auto flex items-center justify-between border-t border-[#E7ECF4] pt-2 text-[11px] text-[#526B90]">
                       <span className="flex items-center gap-1">
-                        <Users className="size-3 text-zinc-400" />
+                        <Users className="size-3 text-[#8D9AB2]" />
                         <span>{table.capacity} مقاعد</span>
                       </span>
                       {isAvailable && (
@@ -291,16 +301,16 @@ export function PosFloorPlan({
 
                   {/* Active tab summary (if occupied) */}
                   {(isOccupied || isBillPrinted) && table.activeOrder && (
-                    <div className="mt-3 rounded-xl border border-zinc-200/80 bg-zinc-50/80 p-2 text-xs space-y-1">
-                      <div className="flex items-center justify-between text-[11px] text-zinc-600">
+                    <div className="mt-3 space-y-1 rounded-[12px] border border-[#DCE3EF] bg-[#F7F9FD] p-2 text-xs">
+                      <div className="flex items-center justify-between text-[11px] text-[#526B90]">
                         <span className="flex items-center gap-1">
-                          <Clock className="size-3 text-zinc-400" />
+                          <Clock className="size-3 text-[#8D9AB2]" />
                           <span>{table.activeOrder.minutesSeated} د</span>
                         </span>
                         <span>{table.activeOrder.itemsCount} صنف</span>
                       </div>
 
-                      <div className="flex items-center justify-between pt-1 border-t border-zinc-200/60 font-bold text-zinc-900 text-[11px]">
+                      <div className="flex items-center justify-between border-t border-[#DCE3EF] pt-1 text-[11px] font-bold text-[#142644]">
                         <span>المستحق:</span>
                         <span className="font-mono">
                           {(table.activeOrder.totalMinor / 100).toFixed(2)} {currencySymbol}
@@ -318,20 +328,20 @@ export function PosFloorPlan({
       {/* 3. Modal: Quick Open Table */}
       {openModalTable && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#10204a]/35 p-4 backdrop-blur-[2px] animate-in fade-in"
           dir="rtl"
         >
-          <div className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-2xl animate-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
+          <div className="w-full max-w-sm rounded-[24px] border border-[#e1e7f3] bg-white p-5 text-[#243663] shadow-[0_24px_80px_rgba(31,50,105,0.18)] animate-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-[#E7ECF4] pb-3">
               <div className="flex items-center gap-2">
-                <div className="grid size-8 place-items-center rounded-xl bg-emerald-600 text-white font-bold text-xs">
+              <div className="grid size-8 place-items-center rounded-xl bg-[#2D61C9] text-white font-bold text-xs shadow-[0_6px_14px_rgba(45,97,201,0.2)]">
                   {openModalTable.tableNumber}
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-zinc-900">
+                  <h3 className="text-sm font-bold text-[#142644]">
                     فتح طاولة {openModalTable.tableNumber}
                   </h3>
-                  <p className="text-[11px] text-zinc-500">
+                  <p className="text-[11px] text-[#72819A]">
                     {openModalTable.sectionNameAr || 'صالة عامة'} · السعة {openModalTable.capacity} أفراد
                   </p>
                 </div>
@@ -339,7 +349,7 @@ export function PosFloorPlan({
               <button
                 type="button"
                 onClick={() => setOpenModalTable(null)}
-                className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100"
+                className="rounded-[10px] p-1 text-[#8D9AB2] hover:bg-[#E9EEFC]"
               >
                 <X className="size-4" />
               </button>
@@ -347,23 +357,23 @@ export function PosFloorPlan({
 
             <div className="py-4 space-y-3 text-xs">
               <div>
-                <label className="block font-semibold text-zinc-700 mb-1">عدد الضيوف (الرواد):</label>
+                <label className="mb-1 block font-semibold text-[#526B90]">عدد الضيوف (الرواد):</label>
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 p-1 flex-1">
+                  <div className="flex flex-1 items-center gap-2 rounded-[12px] border border-[#DCE3EF] bg-[#F7F9FD] p-1">
                     <button
                       type="button"
                       onClick={() => setGuestCount((c) => Math.max(1, c - 1))}
-                      className="size-8 rounded-lg bg-white border border-zinc-200 font-bold text-zinc-700 hover:bg-zinc-100"
+                      className="size-8 rounded-lg border border-[#DCE3EF] bg-white font-bold text-[#526B90] hover:bg-[#E9EEFC]"
                     >
                       -
                     </button>
-                    <span className="flex-1 text-center font-bold text-sm text-zinc-900">
+                    <span className="flex-1 text-center text-sm font-bold text-[#142644]">
                       {guestCount} ضيوف
                     </span>
                     <button
                       type="button"
                       onClick={() => setGuestCount((c) => Math.min(20, c + 1))}
-                      className="size-8 rounded-lg bg-white border border-zinc-200 font-bold text-zinc-700 hover:bg-zinc-100"
+                      className="size-8 rounded-lg border border-[#DCE3EF] bg-white font-bold text-[#526B90] hover:bg-[#E9EEFC]"
                     >
                       +
                     </button>
@@ -372,18 +382,18 @@ export function PosFloorPlan({
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-zinc-100 text-xs">
+            <div className="flex items-center justify-end gap-2 border-t border-[#E7ECF4] pt-3 text-xs">
               <button
                 type="button"
                 onClick={() => setOpenModalTable(null)}
-                className="rounded-xl border border-zinc-200 px-4 py-2 font-medium text-zinc-600"
+                className="rounded-[12px] border border-[#DCE3EF] px-4 py-2 font-medium text-[#526B90] hover:bg-[#E9EEFC]"
               >
                 إلغاء
               </button>
               <button
                 type="button"
                 onClick={handleConfirmOpenTable}
-                className="flex items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2 font-bold text-white shadow-xs hover:bg-zinc-800"
+          className="flex items-center gap-1.5 rounded-xl bg-[#2D61C9] px-4 py-2 font-bold text-white shadow-[0_8px_18px_rgba(45,97,201,0.2)] hover:bg-[#2756B8]"
               >
                 <Plus className="size-3.5" />
                 <span>فتح الطاولة واختيار الأصناف</span>

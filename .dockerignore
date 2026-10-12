@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+coverage
+.git
+.gitlab
+.env
+.env.*
+!.env.example
+graphify-out
+custom-app-template
+*.log
+*.tsbuildinfo

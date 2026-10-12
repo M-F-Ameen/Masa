@@ -1,28 +1,77 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState, useSyncExternalStore } from 'react';
 import { PosOfflineQueue, QueuedPosSale } from '../../../infrastructure/pos/pos-offline-queue';
 import { createPosOrderAction } from '../../actions/pos.actions';
 
+const EMPTY_QUEUE: QueuedPosSale[] = [];
+
+function subscribeOnline(callback: () => void): () => void {
+  if (typeof window === 'undefined') {
+    return () => {};
+  }
+  window.addEventListener('online', callback);
+  window.addEventListener('offline', callback);
+  return () => {
+    window.removeEventListener('online', callback);
+    window.removeEventListener('offline', callback);
+  };
+}
+
+function getOnlineSnapshot(): boolean {
+  return typeof navigator !== 'undefined' && typeof navigator.onLine === 'boolean'
+    ? navigator.onLine
+    : true;
+}
+
+function getOnlineServerSnapshot(): boolean {
+  return true;
+}
+
+let cachedQueue: QueuedPosSale[] = PosOfflineQueue.getQueuedSales();
+const queueSubscribers = new Set<() => void>();
+
+function refreshQueueSnapshot(): void {
+  cachedQueue = PosOfflineQueue.getQueuedSales();
+  queueSubscribers.forEach((listener) => listener());
+}
+
+function subscribeQueue(callback: () => void): () => void {
+  queueSubscribers.add(callback);
+  return () => {
+    queueSubscribers.delete(callback);
+  };
+}
+
+function getQueueSnapshot(): QueuedPosSale[] {
+  return cachedQueue;
+}
+
+function getQueueServerSnapshot(): QueuedPosSale[] {
+  return EMPTY_QUEUE;
+}
+
 export function usePosOfflineSync() {
-  const [isOnline, setIsOnline] = useState<boolean>(() => {
-    return typeof navigator !== 'undefined' ? navigator.onLine : true;
-  });
+  const isOnline = useSyncExternalStore(
+    subscribeOnline,
+    getOnlineSnapshot,
+    getOnlineServerSnapshot
+  );
+  const queuedSales = useSyncExternalStore(
+    subscribeQueue,
+    getQueueSnapshot,
+    getQueueServerSnapshot
+  );
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
-  const [queuedSales, setQueuedSales] = useState<QueuedPosSale[]>([]);
   const [lastSyncResult, setLastSyncResult] = useState<{
     synced: number;
     failed: number;
     timestamp: number;
   } | null>(null);
 
-  const refreshQueue = useCallback(() => {
-    setQueuedSales(PosOfflineQueue.getQueuedSales());
-  }, []);
-
   // Process offline mutation sync queue
   const syncQueue = useCallback(async (): Promise<{ synced: number; failed: number }> => {
-    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+    if (!getOnlineSnapshot()) {
       return { synced: 0, failed: 0 };
     }
 
@@ -59,55 +108,41 @@ export function usePosOfflineSync() {
       }
     }
 
-    refreshQueue();
+    refreshQueueSnapshot();
     setIsSyncing(false);
     setLastSyncResult({ synced, failed, timestamp: Date.now() });
 
     return { synced, failed };
-  }, [refreshQueue]);
+  }, []);
 
-  // Setup online/offline event listeners
+  // Setup online event listeners and periodic sync while there are pending sales
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    refreshQueue();
-
     const handleOnline = () => {
-      setIsOnline(true);
-      // Auto-trigger sync when network reconnects
       syncQueue();
     };
 
-    const handleOffline = () => {
-      setIsOnline(false);
-    };
-
     window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
 
-    // Periodic sync interval if there are pending sales
     const interval = setInterval(() => {
-      if (typeof navigator !== 'undefined' && navigator.onLine) {
-        const count = PosOfflineQueue.getQueuedSales().length;
-        if (count > 0) {
-          syncQueue();
-        }
+      if (getOnlineSnapshot() && PosOfflineQueue.getQueuedSales().length > 0) {
+        syncQueue();
       }
     }, 45000);
 
     return () => {
       window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
       clearInterval(interval);
     };
-  }, [refreshQueue, syncQueue]);
+  }, [syncQueue]);
 
   return {
     isOnline,
     isSyncing,
     pendingCount: queuedSales.length,
     queuedSales,
-    refreshQueue,
+    refreshQueue: refreshQueueSnapshot,
     syncNow: syncQueue,
     lastSyncResult,
   };

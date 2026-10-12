@@ -184,17 +184,17 @@ export function BranchClient({ initialBranches }: { initialBranches: BranchItem[
       {/* Top Banner and Action Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-zinc-900 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-black text-[var(--admin-foreground)] tracking-tight">
             فروع المطعم
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-500 mt-1 font-medium">
+          <p className="text-xs sm:text-sm admin-muted mt-1 font-medium">
             إدارة كافة الفروع والمواقع الميدانية وتخصيص بيانات ونطاق تشغيل كل فرع
           </p>
         </div>
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-900 text-white text-xs font-bold hover:bg-zinc-800 transition shadow-2xs cursor-pointer shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl admin-primary-action text-xs font-bold transition shadow-2xs cursor-pointer shrink-0"
         >
           <Plus className="size-4" />
           <span>إضافة فرع جديد</span>
@@ -203,27 +203,27 @@ export function BranchClient({ initialBranches }: { initialBranches: BranchItem[
 
       {/* Success Alert */}
       {successMessage && (
-        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-bold flex items-center gap-2 animate-in fade-in">
-          <Check className="size-4 text-emerald-600" />
+        <div className="p-3 admin-status-success rounded-xl text-xs font-bold flex items-center gap-2 animate-in fade-in border">
+          <Check className="size-4 text-[var(--admin-accent-hover)]" />
           <span>{successMessage}</span>
         </div>
       )}
 
       {/* Search and Filter Bar */}
       <div className="relative">
-        <Search className="size-4 absolute right-3.5 top-3 text-zinc-400" />
+        <Search className="size-4 absolute right-3.5 top-3 admin-muted" />
         <input
           type="text"
           placeholder="بحث بكود الفرع، الاسم بالعربية أو الإنجليزية، الهاتف، أو العنوان..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pr-10 pl-8 py-2.5 text-xs border border-zinc-200 rounded-xl focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium placeholder:text-zinc-400 bg-white"
+          className="w-full pr-10 pl-8 py-2.5 text-xs border border-[var(--admin-border)] rounded-xl focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium placeholder:text-[var(--admin-muted)] bg-[var(--admin-surface)]"
         />
         {searchQuery && (
           <button
             type="button"
             onClick={() => setSearchQuery('')}
-            className="absolute left-3 top-3 text-zinc-400 hover:text-zinc-600"
+            className="absolute left-3 top-3 admin-muted hover:text-[var(--admin-foreground)]"
           >
             <X className="size-4" />
           </button>
@@ -233,32 +233,32 @@ export function BranchClient({ initialBranches }: { initialBranches: BranchItem[
       {/* Dual Responsive Engine: Mobile Cards View (block md:hidden) */}
       <div className="block md:hidden space-y-3">
         {filteredBranches.length === 0 ? (
-          <div className="bg-white p-8 text-center text-xs text-zinc-400 rounded-2xl border border-zinc-200">
+          <div className="bg-[var(--admin-surface)] p-8 text-center text-xs admin-muted rounded-2xl border border-[var(--admin-border)]">
             لا توجد فروع تطابق معايير البحث.
           </div>
         ) : (
           filteredBranches.map((branch) => (
             <div
               key={branch.id}
-              className="bg-white p-4 rounded-2xl border border-zinc-200 shadow-2xs space-y-3"
+              className="admin-card p-4 space-y-3"
             >
               {/* Card Header */}
-              <div className="flex items-start justify-between gap-2 border-b border-zinc-100 pb-3">
+              <div className="flex items-start justify-between gap-2 border-b border-[var(--admin-border)] pb-3">
                 <div className="flex items-center gap-2.5">
-                  <div className="size-9 rounded-xl bg-zinc-900 text-white font-mono font-bold text-xs grid place-items-center">
+                  <div className="size-9 rounded-xl bg-[var(--admin-primary)] text-[var(--admin-surface)] font-mono font-bold text-xs grid place-items-center">
                     {branch.code}
                   </div>
                   <div>
-                    <h3 className="font-bold text-sm text-zinc-900">{branch.nameAr}</h3>
-                    <span className="font-mono text-xs text-zinc-400 block">{branch.nameEn}</span>
+                    <h3 className="font-bold text-sm text-[var(--admin-foreground)]">{branch.nameAr}</h3>
+                    <span className="font-mono text-xs admin-muted block">{branch.nameEn}</span>
                   </div>
                 </div>
 
                 <span
                   className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                     branch.isActive
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                      : 'bg-zinc-100 text-zinc-500 border border-zinc-200'
+                      ? 'admin-badge admin-badge-success'
+                      : 'admin-badge admin-badge-neutral'
                   }`}
                 >
                   {branch.isActive ? (
@@ -276,28 +276,28 @@ export function BranchClient({ initialBranches }: { initialBranches: BranchItem[
               </div>
 
               {/* Card Body */}
-              <div className="space-y-1.5 text-xs text-zinc-600">
+              <div className="space-y-1.5 text-xs admin-muted">
                 <div className="flex items-center gap-2">
-                  <Phone className="size-3.5 text-zinc-400 shrink-0" />
+                  <Phone className="size-3.5 admin-muted shrink-0" />
                   <a href={`tel:${branch.phone}`} className="font-mono font-medium hover:underline">
                     {branch.phone}
                   </a>
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <MapPin className="size-3.5 text-zinc-400 shrink-0 mt-0.5" />
+                  <MapPin className="size-3.5 admin-muted shrink-0 mt-0.5" />
                   <span className="leading-relaxed">{branch.address}</span>
                 </div>
               </div>
 
               {/* Mobile Actions Toolbar */}
-              <div className="pt-2 border-t border-zinc-100 grid grid-cols-2 gap-2 text-xs">
+              <div className="pt-2 border-t border-[var(--admin-border)] grid grid-cols-2 gap-2 text-xs">
                 <button
                   type="button"
                   onClick={() => openEditModal(branch)}
-                  className="py-1.5 px-3 bg-zinc-50 hover:bg-zinc-100 text-zinc-700 rounded-lg font-bold flex items-center justify-center gap-1.5 border border-zinc-200"
+                  className="py-1.5 px-3 admin-control rounded-lg font-bold flex items-center justify-center gap-1.5 border"
                 >
-                  <Pencil className="size-3 text-zinc-500" />
+                  <Pencil className="size-3 admin-muted" />
                   <span>تعديل البيانات</span>
                 </button>
 
@@ -306,8 +306,8 @@ export function BranchClient({ initialBranches }: { initialBranches: BranchItem[
                   onClick={() => handleToggle(branch.id, branch.isActive)}
                   className={`py-1.5 px-3 rounded-lg font-bold flex items-center justify-center gap-1.5 border ${
                     branch.isActive
-                      ? 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
-                      : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                      ? 'admin-status-danger'
+                      : 'admin-status-success'
                   }`}
                 >
                   <Power className="size-3" />
@@ -320,9 +320,9 @@ export function BranchClient({ initialBranches }: { initialBranches: BranchItem[
       </div>
 
       {/* Desktop Table View (hidden md:block) */}
-      <div className="hidden md:block bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-2xs">
+      <div className="hidden md:block admin-card overflow-hidden">
         <table className="w-full text-right text-xs">
-          <thead className="bg-zinc-50/80 border-b border-zinc-200 text-zinc-500 font-bold">
+          <thead className="bg-[var(--admin-background)] border-b border-[var(--admin-border)] admin-muted font-bold">
             <tr>
               <th className="p-4">كود الفرع</th>
               <th className="p-4">اسم الفرع</th>
@@ -332,45 +332,45 @@ export function BranchClient({ initialBranches }: { initialBranches: BranchItem[
               <th className="p-4 text-left">الإجراءات</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-zinc-100">
+          <tbody className="divide-y divide-[var(--admin-border)]">
             {filteredBranches.length === 0 ? (
               <tr>
-                <td colSpan={6} className="p-8 text-center text-zinc-400">
+                <td colSpan={6} className="p-8 text-center admin-muted">
                   لا توجد فروع تطابق معايير البحث.
                 </td>
               </tr>
             ) : (
               filteredBranches.map((branch) => (
-                <tr key={branch.id} className="hover:bg-zinc-50/50 transition">
-                  <td className="p-4 font-mono font-bold text-zinc-900">
-                    <span className="px-2 py-1 bg-zinc-100 rounded-lg">
+                <tr key={branch.id} className="admin-row-hover transition">
+                  <td className="p-4 font-mono font-bold text-[var(--admin-foreground)]">
+                    <span className="px-2 py-1 admin-id-chip rounded-lg">
                       {branch.code}
                     </span>
                   </td>
                   <td className="p-4">
-                    <div className="font-bold text-zinc-900">{branch.nameAr}</div>
-                    <div className="text-[11px] text-zinc-400 font-mono">{branch.nameEn}</div>
+                    <div className="font-bold text-[var(--admin-foreground)]">{branch.nameAr}</div>
+                    <div className="text-[11px] admin-muted font-mono">{branch.nameEn}</div>
                   </td>
-                  <td className="p-4 text-zinc-600">
+                  <td className="p-4 admin-muted">
                     <div className="flex items-center gap-1.5 font-mono">
-                      <Phone className="size-3.5 text-zinc-400" />
+                      <Phone className="size-3.5 admin-muted" />
                       <span>{branch.phone}</span>
                     </div>
                   </td>
-                  <td className="p-4 text-zinc-600">
+                  <td className="p-4 admin-muted">
                     <div className="flex items-center gap-1.5">
-                      <MapPin className="size-3.5 text-zinc-400 shrink-0" />
+                      <MapPin className="size-3.5 admin-muted shrink-0" />
                       <span className="truncate max-w-xs">{branch.address}</span>
                     </div>
                   </td>
                   <td className="p-4">
                     {branch.isActive ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold admin-badge admin-badge-success">
                         <CheckCircle className="size-3" />
                         <span>يعمل</span>
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-zinc-100 text-zinc-500 border border-zinc-200">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold admin-badge admin-badge-neutral">
                         <XCircle className="size-3" />
                         <span>متوقف</span>
                       </span>
@@ -381,7 +381,7 @@ export function BranchClient({ initialBranches }: { initialBranches: BranchItem[
                       <button
                         type="button"
                         onClick={() => openEditModal(branch)}
-                        className="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold transition"
+                        className="p-1.5 rounded-lg bg-[var(--admin-background)] hover:bg-[var(--admin-border)] text-[var(--admin-foreground)] font-bold transition"
                         title="تعديل بيانات الفرع"
                       >
                         <Pencil className="size-3.5" />
@@ -390,10 +390,10 @@ export function BranchClient({ initialBranches }: { initialBranches: BranchItem[
                       <button
                         type="button"
                         onClick={() => handleToggle(branch.id, branch.isActive)}
-                        className={`p-1.5 rounded-lg font-bold transition ${
+                        className={`p-1.5 rounded-lg font-bold transition border ${
                           branch.isActive
-                            ? 'bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200'
-                            : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200'
+                            ? 'admin-status-danger'
+                            : 'admin-status-success'
                         }`}
                         title={branch.isActive ? 'إيقاف مؤقت' : 'تفعيل'}
                       >
@@ -411,100 +411,100 @@ export function BranchClient({ initialBranches }: { initialBranches: BranchItem[
       {/* Modal 1: Add Branch Modal */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-zinc-200 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
+          <div className="admin-card max-w-md w-full p-6 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
               <div className="flex items-center gap-2">
-                <Building2 className="size-5 text-zinc-800" strokeWidth={1.8} />
-                <h3 className="font-bold text-sm text-zinc-900">إضافة فرع جديد للمطعم</h3>
+                <Building2 className="size-5 text-[var(--admin-foreground)]" strokeWidth={1.8} />
+                <h3 className="font-bold text-sm text-[var(--admin-foreground)]">إضافة فرع جديد للمطعم</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-zinc-400 hover:text-zinc-600"
+                className="admin-muted hover:text-[var(--admin-foreground)]"
               >
                 <X className="size-4" />
               </button>
             </div>
 
             {error && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-bold">
+              <div className="p-3 rounded-xl admin-status-danger border text-xs font-bold">
                 {error}
               </div>
             )}
 
             <form onSubmit={handleCreateBranch} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">كود الفرع (فريد - مثال: CAIRO-01)</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">كود الفرع (فريد - مثال: CAIRO-01)</label>
                 <input
                   type="text"
                   required
                   placeholder="CAIRO-01"
                   value={code}
                   onChange={(e) => setCode(e.target.value.toUpperCase())}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden font-bold"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] font-mono text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-bold"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">اسم الفرع (بالعربية)</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">اسم الفرع (بالعربية)</label>
                 <input
                   type="text"
                   required
                   placeholder="فرع المعادي"
                   value={nameAr}
                   onChange={(e) => setNameAr(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">اسم الفرع (بالإنجليزية)</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">اسم الفرع (بالإنجليزية)</label>
                 <input
                   type="text"
                   required
                   placeholder="Maadi Branch"
                   value={nameEn}
                   onChange={(e) => setNameEn(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">رقم الهاتف للتواصل</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">رقم الهاتف للتواصل</label>
                 <input
                   type="tel"
                   required
                   placeholder="010xxxxxxxx"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] font-mono text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">العنوان التفصيلي</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">العنوان التفصيلي</label>
                 <textarea
                   required
                   rows={3}
                   placeholder="الشارع، المنطقة، المدينة..."
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-zinc-100">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--admin-border)]">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-zinc-200 text-zinc-700 hover:bg-zinc-50 font-bold"
+                  className="px-4 py-2 rounded-xl border admin-control font-bold"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 rounded-xl bg-zinc-900 text-white font-bold hover:bg-zinc-800 transition disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl admin-primary-action font-bold transition disabled:opacity-50"
                 >
                   {isSubmitting ? 'جارٍ الحفظ...' : 'إنشاء الفرع'}
                 </button>
@@ -517,84 +517,84 @@ export function BranchClient({ initialBranches }: { initialBranches: BranchItem[
       {/* Modal 2: Edit Branch Modal */}
       {editingBranch && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-zinc-200 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
+          <div className="admin-card max-w-md w-full p-6 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
               <div className="flex items-center gap-2">
-                <Pencil className="size-4 text-zinc-800" />
-                <h3 className="font-bold text-sm text-zinc-900">تعديل بيانات الفرع ({editingBranch.code})</h3>
+                <Pencil className="size-4 text-[var(--admin-foreground)]" />
+                <h3 className="font-bold text-sm text-[var(--admin-foreground)]">تعديل بيانات الفرع ({editingBranch.code})</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setEditingBranch(null)}
-                className="text-zinc-400 hover:text-zinc-600"
+                className="admin-muted hover:text-[var(--admin-foreground)]"
               >
                 <X className="size-4" />
               </button>
             </div>
 
             {error && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-bold">
+              <div className="p-3 rounded-xl admin-status-danger border text-xs font-bold">
                 {error}
               </div>
             )}
 
             <form onSubmit={handleUpdateBranch} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">اسم الفرع (بالعربية)</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">اسم الفرع (بالعربية)</label>
                 <input
                   type="text"
                   required
                   value={editNameAr}
                   onChange={(e) => setEditNameAr(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">اسم الفرع (بالإنجليزية)</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">اسم الفرع (بالإنجليزية)</label>
                 <input
                   type="text"
                   required
                   value={editNameEn}
                   onChange={(e) => setEditNameEn(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">رقم الهاتف للتواصل</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">رقم الهاتف للتواصل</label>
                 <input
                   type="tel"
                   required
                   value={editPhone}
                   onChange={(e) => setEditPhone(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] font-mono text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">العنوان التفصيلي</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">العنوان التفصيلي</label>
                 <textarea
                   required
                   rows={3}
                   value={editAddress}
                   onChange={(e) => setEditAddress(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-zinc-100">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--admin-border)]">
                 <button
                   type="button"
                   onClick={() => setEditingBranch(null)}
-                  className="px-4 py-2 rounded-xl border border-zinc-200 text-zinc-700 hover:bg-zinc-50 font-bold"
+                  className="px-4 py-2 rounded-xl border admin-control font-bold"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 rounded-xl bg-zinc-900 text-white font-bold hover:bg-zinc-800 transition disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl admin-primary-action font-bold transition disabled:opacity-50"
                 >
                   {isSubmitting ? 'جارٍ الحفظ...' : 'حفظ التعديلات'}
                 </button>

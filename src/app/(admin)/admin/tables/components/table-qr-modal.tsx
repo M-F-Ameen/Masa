@@ -24,37 +24,37 @@ export function TableQrModal({
   if (!table) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in">
-      <div className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-2xl animate-in zoom-in-95 text-center">
-        <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-          <h3 className="text-sm font-bold text-zinc-900">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[rgba(20,32,51,0.5)] backdrop-blur-xs animate-in fade-in">
+      <div className="w-full max-w-sm rounded-2xl bg-[var(--admin-surface)] p-5 shadow-2xl animate-in zoom-in-95 text-center">
+        <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
+          <h3 className="text-sm font-bold text-[var(--admin-foreground)]">
             بطاقة طاولة رقم {table.tableNumber}
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700"
+            className="rounded-lg p-1 admin-muted hover:bg-[var(--admin-background)] hover:text-[var(--admin-foreground)]"
           >
             <X className="size-4" />
           </button>
         </div>
 
         {/* Printable Standee Card */}
-        <div id="printable-table-card" className="mt-4 rounded-2xl border-2 border-zinc-900 bg-white p-5 shadow-sm space-y-3">
+        <div id="printable-table-card" className="mt-4 rounded-2xl border-2 border-[var(--admin-foreground)] bg-[var(--admin-surface)] p-5 shadow-sm space-y-3">
           <div className="space-y-0.5">
-            <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase">
+            <span className="text-[10px] font-mono tracking-widest admin-muted uppercase">
               {restaurantNameAr}
             </span>
-            <h4 className="text-lg font-black text-zinc-900">
+            <h4 className="text-lg font-black text-[var(--admin-foreground)]">
               طاولة {table.tableNumber}
             </h4>
             {table.sectionNameAr && (
-              <p className="text-xs text-zinc-600">{table.sectionNameAr}</p>
+              <p className="text-xs admin-muted">{table.sectionNameAr}</p>
             )}
           </div>
 
           {/* QR Code Container */}
-          <div className="mx-auto grid size-44 place-items-center rounded-xl border border-zinc-200 bg-zinc-50/50 p-2">
+          <div className="mx-auto grid size-44 place-items-center rounded-xl border border-[var(--admin-border)] bg-[var(--admin-background)] p-2">
             {/* Responsive crisp QR image from lightweight public endpoint */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -67,8 +67,8 @@ export function TableQrModal({
           </div>
 
           <div className="space-y-1">
-            <p className="text-xs font-bold text-zinc-800">امسح الرمز للاطلاع على المنيو والطلب</p>
-            <p className="font-mono text-[10px] text-zinc-400 truncate max-w-xs mx-auto">
+            <p className="text-xs font-bold text-[var(--admin-foreground)]">امسح الرمز للاطلاع على المنيو والطلب</p>
+            <p className="font-mono text-[10px] admin-muted truncate max-w-xs mx-auto">
               {getTableMenuUrl(table)}
             </p>
           </div>
@@ -79,11 +79,11 @@ export function TableQrModal({
           <button
             type="button"
             onClick={() => onCopyLink(table)}
-            className="flex items-center gap-1.5 rounded-xl border border-zinc-200 bg-white px-3.5 py-2 font-semibold text-zinc-700 hover:bg-zinc-50"
+            className="flex items-center gap-1.5 rounded-xl border px-3.5 py-2 font-semibold admin-control"
           >
             {copiedLink ? (
               <>
-                <Check className="size-3.5 text-emerald-600" />
+                <Check className="size-3.5 admin-status-success-text" />
                 <span>تم النسخ!</span>
               </>
             ) : (
@@ -97,7 +97,7 @@ export function TableQrModal({
           <button
             type="button"
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2 font-semibold text-white shadow-xs hover:bg-zinc-800"
+            className="flex items-center gap-1.5 rounded-xl px-4 py-2 font-semibold shadow-xs admin-primary-action"
           >
             <Printer className="size-3.5" />
             <span>طباعة البطاقة</span>

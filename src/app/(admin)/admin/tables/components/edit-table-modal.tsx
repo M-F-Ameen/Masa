@@ -56,16 +56,16 @@ export function EditTableModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in">
-      <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl animate-in zoom-in-95">
-        <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-          <h3 className="text-base font-bold text-zinc-900">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[rgba(20,32,51,0.5)] backdrop-blur-xs animate-in fade-in">
+      <div className="w-full max-w-md rounded-2xl bg-[var(--admin-surface)] p-5 shadow-2xl animate-in zoom-in-95">
+        <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
+          <h3 className="text-base font-bold text-[var(--admin-foreground)]">
             {editingTable ? `تعديل طاولة ${editingTable.tableNumber}` : 'إضافة طاولة جديدة'}
           </h3>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700"
+            className="rounded-lg p-1 admin-muted hover:bg-[var(--admin-background)] hover:text-[var(--admin-foreground)]"
           >
             <X className="size-4" />
           </button>
@@ -73,8 +73,8 @@ export function EditTableModal({
 
         <form onSubmit={onSave} className="mt-4 space-y-3.5 text-xs">
           <div>
-            <label className="block font-semibold text-zinc-700 mb-1">
-              رقم أو اسم الطاولة <span className="text-rose-600">*</span>
+            <label className="block font-semibold text-[var(--admin-foreground)] mb-1">
+              رقم أو اسم الطاولة <span className="text-[var(--admin-danger)]">*</span>
             </label>
             <input
               type="text"
@@ -82,16 +82,16 @@ export function EditTableModal({
               placeholder="مثال: 1 أو T-01 أو طاولة VIP"
               value={tableNumber}
               onChange={(e) => setTableNumber(e.target.value)}
-              className="w-full rounded-xl border border-zinc-200 px-3 py-2 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900"
+              className="w-full rounded-xl border px-3 py-2 admin-control focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
             />
           </div>
 
           <div>
-            <label className="block font-semibold text-zinc-700 mb-1">قسم الصالة / القاعة</label>
+            <label className="block font-semibold text-[var(--admin-foreground)] mb-1">قسم الصالة / القاعة</label>
             <select
               value={tableSectionId}
               onChange={(e) => setTableSectionId(e.target.value)}
-              className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900"
+              className="w-full rounded-xl border px-3 py-2 admin-control focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
             >
               <option value="">بدون قسم (صالة عامة)</option>
               {sections.map((sec) => (
@@ -104,8 +104,8 @@ export function EditTableModal({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block font-semibold text-zinc-700 mb-1">
-                سعة المقاعد (أفراد) <span className="text-rose-600">*</span>
+              <label className="block font-semibold text-[var(--admin-foreground)] mb-1">
+                سعة المقاعد (أفراد) <span className="text-[var(--admin-danger)]">*</span>
               </label>
               <input
                 type="number"
@@ -114,32 +114,32 @@ export function EditTableModal({
                 required
                 value={tableCapacity}
                 onChange={(e) => setTableCapacity(parseInt(e.target.value) || 1)}
-                className="w-full rounded-xl border border-zinc-200 px-3 py-2 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900"
+                className="w-full rounded-xl border px-3 py-2 admin-control focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
               />
             </div>
 
             <div>
-              <label className="block font-semibold text-zinc-700 mb-1">ترتيب العرض</label>
+              <label className="block font-semibold text-[var(--admin-foreground)] mb-1">ترتيب العرض</label>
               <input
                 type="number"
                 min="0"
                 value={tableSortOrder}
                 onChange={(e) => setTableSortOrder(parseInt(e.target.value) || 0)}
-                className="w-full rounded-xl border border-zinc-200 px-3 py-2 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900"
+                className="w-full rounded-xl border px-3 py-2 admin-control focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
               />
             </div>
           </div>
 
           <div>
-            <label className="block font-semibold text-zinc-700 mb-1.5">شكل الطاولة</label>
+            <label className="block font-semibold text-[var(--admin-foreground)] mb-1.5">شكل الطاولة</label>
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => setTableShape(TableShape.SQUARE)}
                 className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 font-medium transition ${
                   tableShape === TableShape.SQUARE
-                    ? 'border-zinc-900 bg-zinc-900 text-white shadow-2xs'
-                    : 'border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100'
+                    ? 'admin-primary-action shadow-2xs'
+                    : 'admin-control'
                 }`}
               >
                 <Square className="size-3.5" />
@@ -151,8 +151,8 @@ export function EditTableModal({
                 onClick={() => setTableShape(TableShape.ROUND)}
                 className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 font-medium transition ${
                   tableShape === TableShape.ROUND
-                    ? 'border-zinc-900 bg-zinc-900 text-white shadow-2xs'
-                    : 'border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100'
+                    ? 'admin-primary-action shadow-2xs'
+                    : 'admin-control'
                 }`}
               >
                 <Circle className="size-3.5" />
@@ -164,8 +164,8 @@ export function EditTableModal({
                 onClick={() => setTableShape(TableShape.RECTANGLE)}
                 className={`flex items-center justify-center gap-1.5 rounded-xl border py-2 font-medium transition ${
                   tableShape === TableShape.RECTANGLE
-                    ? 'border-zinc-900 bg-zinc-900 text-white shadow-2xs'
-                    : 'border-zinc-200 bg-zinc-50 text-zinc-700 hover:bg-zinc-100'
+                    ? 'admin-primary-action shadow-2xs'
+                    : 'admin-control'
                 }`}
               >
                 <RectangleHorizontal className="size-3.5" />
@@ -177,11 +177,11 @@ export function EditTableModal({
           {/* Status Selector (when editing, only allowed non-occupied transitions) */}
           {editingTable && (
             <div>
-              <label className="block font-semibold text-zinc-700 mb-1">حالة الطاولة</label>
+              <label className="block font-semibold text-[var(--admin-foreground)] mb-1">حالة الطاولة</label>
               <select
                 value={tableStatus}
                 onChange={(e) => setTableStatus(e.target.value as TableStatus)}
-                className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900"
+                className="w-full rounded-xl border px-3 py-2 admin-control focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
               >
                 <option value={TableStatus.AVAILABLE}>متاحة (AVAILABLE)</option>
                 <option value={TableStatus.RESERVED}>محجوزة (RESERVED)</option>
@@ -200,11 +200,11 @@ export function EditTableModal({
             </div>
           )}
 
-          <div className="flex items-center justify-end gap-2 pt-3 border-t border-zinc-100">
+          <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--admin-border)]">
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-zinc-200 px-4 py-2 font-semibold text-zinc-600 hover:bg-zinc-50"
+              className="rounded-xl border px-4 py-2 font-semibold admin-control"
             >
               إلغاء
             </button>
@@ -212,7 +212,7 @@ export function EditTableModal({
             <button
               type="submit"
               disabled={isPending}
-              className="rounded-xl bg-zinc-900 px-4 py-2 font-semibold text-white shadow-xs hover:bg-zinc-800 disabled:opacity-50"
+              className="rounded-xl px-4 py-2 font-semibold shadow-xs admin-primary-action disabled:opacity-50"
             >
               {isPending ? 'جاري الحفظ...' : editingTable ? 'تحديث الطاولة' : 'إنشاء الطاولة'}
             </button>

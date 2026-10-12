@@ -16,6 +16,9 @@ function createPrismaClient(): PrismaClient {
     user,
     password,
     database,
+    // MySQL 8+ / 9.x commonly uses caching_sha2_password. Allow the local
+    // connector to retrieve the server RSA key when TLS is not configured.
+    allowPublicKeyRetrieval: true,
   });
 
   return new PrismaClient({
@@ -40,6 +43,9 @@ if (globalForPrisma.prisma) {
         Order?: {
           fields?: Array<{ name: string }>;
         };
+        RestaurantSetting?: {
+          fields?: Array<{ name: string }>;
+        };
       };
     };
   };
@@ -53,8 +59,12 @@ if (globalForPrisma.prisma) {
 
   const orderFields = p._runtimeDataModel?.models?.Order?.fields?.map((f) => f.name) ?? [];
   const hasOrderDriver = orderFields.length === 0 || orderFields.includes('driver');
+  const restaurantSettingFields =
+    p._runtimeDataModel?.models?.RestaurantSetting?.fields?.map((f) => f.name) ?? [];
+  const hasRestaurantLogo =
+    restaurantSettingFields.length === 0 || restaurantSettingFields.includes('logoUrl');
 
-  if (!hasModels || !hasOrderDriver) {
+  if (!hasModels || !hasOrderDriver || !hasRestaurantLogo) {
     globalForPrisma.prisma = undefined;
   }
 }

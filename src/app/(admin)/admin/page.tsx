@@ -13,7 +13,6 @@ import {
   Clock,
   AlertTriangle,
   ChevronLeft,
-  ShieldCheck,
   Activity,
   Check,
 } from 'lucide-react';
@@ -46,18 +45,12 @@ export default async function AdminDashboardPage() {
   }
 
   // 1. Fetch Contextual Core Data
-  const [settings, userProfile, activeBranch] = await Promise.all([
+  const [settings, userProfile] = await Promise.all([
     prisma.restaurantSetting.findFirst(),
     prisma.user.findUnique({
       where: { id: session.userId },
       include: { role: { select: { name: true, description: true } } },
     }),
-    verifiedBranchId
-      ? prisma.branch.findUnique({
-          where: { id: verifiedBranchId },
-          select: { id: true, code: true, nameAr: true, nameEn: true, phone: true },
-        })
-      : null,
   ]);
 
   const currency = settings?.currency || 'EGP';
@@ -195,7 +188,6 @@ export default async function AdminDashboardPage() {
   ).length;
 
   const displayName = userProfile?.fullName ?? 'المستخدم';
-  const roleName = userProfile?.role?.name ?? session.role;
 
   // Format minor to major with currency
   const formatMoney = (minor: number) => {
@@ -205,38 +197,25 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-6 pb-8" dir="rtl">
       {/* 1. Contextual Executive Welcome Banner */}
-      <div className="bg-white rounded-2xl border border-zinc-200 p-5 sm:p-6 shadow-2xs relative overflow-hidden">
+      <div className="admin-card relative overflow-hidden p-5 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-zinc-100 text-zinc-700 text-xs font-bold font-mono">
-                <ShieldCheck className="size-3.5 text-zinc-500" />
-                <span>{roleName}</span>
-              </span>
-              {activeBranch && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold font-mono">
-                  <span className="size-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>{activeBranch.nameAr} ({activeBranch.code})</span>
-                </span>
-              )}
-            </div>
-
-            <h1 className="text-xl sm:text-2xl font-black text-zinc-900 tracking-tight">
+<div className="space-y-1.5">
+            <h1 className="text-xl sm:text-2xl font-black text-[var(--admin-foreground)] tracking-tight">
               مرحباً، {displayName}
             </h1>
-            <p className="text-xs sm:text-sm text-zinc-500 font-medium">
+            <p className="admin-muted text-xs sm:text-sm font-medium">
               قمرة القيادة التشغيلية للمطعم • نظرة حية على مبيعات اليوم، حالة الصالة، والورديات المفتوحة
             </p>
           </div>
 
           {/* Date & System Status */}
           <div className="flex flex-col sm:items-end gap-1.5 shrink-0">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-700 bg-zinc-50 px-3 py-1.5 rounded-xl border border-zinc-200/80">
-              <Clock className="size-3.5 text-zinc-400" />
+            <div className="admin-control flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-bold">
+              <Clock className="admin-muted size-3.5" />
               <span>{arabicDate}</span>
             </div>
-            <span className="text-[11px] font-medium text-emerald-700 flex items-center gap-1">
-              <Activity className="size-3 text-emerald-500" />
+            <span className="flex items-center gap-1 text-[11px] font-medium text-[var(--admin-accent-hover)]">
+              <Activity className="size-3 text-[var(--admin-accent)]" />
               <span>النظام متصل وقنوات التشغيل نشطة</span>
             </span>
           </div>
@@ -247,16 +226,16 @@ export default async function AdminDashboardPage() {
       {(pendingWebOrdersCount > 0 || lowStockCount > 0 || !openCashShift) && (
         <div className="space-y-2.5">
           {pendingWebOrdersCount > 0 && RbacGuard.hasPermission(session, PermissionCode.MANAGE_ORDERS) && (
-            <div className="flex items-center justify-between p-3.5 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-900 animate-in fade-in">
+            <div className="admin-status-danger flex items-center justify-between rounded-xl border p-3.5 text-xs animate-in fade-in">
               <div className="flex items-center gap-2.5">
-                <span className="size-2 rounded-full bg-rose-500 animate-ping" />
+                <span className="admin-status-dot-danger size-2 rounded-full animate-ping" />
                 <span className="font-bold">
                   تنبيه الطلبات: يوجد {pendingWebOrdersCount} طلب توصيل جديد وارد من الموقع بانتظار الاعتماد والإسناد!
                 </span>
               </div>
               <Link
                 href="/admin/orders"
-                className="px-3 py-1 bg-rose-600 text-white font-bold rounded-lg hover:bg-rose-700 transition flex items-center gap-1 shrink-0"
+                className="admin-action-danger flex shrink-0 items-center gap-1 rounded-lg px-3 py-1 font-bold transition"
               >
                 <span>مركز الطلبات</span>
                 <ChevronLeft className="size-3" />
@@ -265,16 +244,16 @@ export default async function AdminDashboardPage() {
           )}
 
           {lowStockCount > 0 && RbacGuard.hasPermission(session, PermissionCode.MANAGE_INVENTORY) && (
-            <div className="flex items-center justify-between p-3.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 animate-in fade-in">
+            <div className="admin-status-warning flex items-center justify-between rounded-xl border p-3.5 text-xs animate-in fade-in">
               <div className="flex items-center gap-2.5">
-                <AlertTriangle className="size-4 text-amber-600 shrink-0" />
+                <AlertTriangle className="size-4 shrink-0 text-[var(--admin-warning)]" />
                 <span className="font-bold">
                   تنبيه المخزون: يوجد {lowStockCount} من الخامات في هذا الفرع وصلت لحد إعادة الطلب أو أوشكت على النفاد.
                 </span>
               </div>
               <Link
                 href="/admin/inventory"
-                className="px-3 py-1 bg-amber-700 text-white font-bold rounded-lg hover:bg-amber-800 transition flex items-center gap-1 shrink-0"
+                className="admin-action-warning flex shrink-0 items-center gap-1 rounded-lg px-3 py-1 font-bold transition"
               >
                 <span>فحص النواقص</span>
                 <ChevronLeft className="size-3" />
@@ -283,16 +262,16 @@ export default async function AdminDashboardPage() {
           )}
 
           {!openCashShift && (RbacGuard.hasPermission(session, PermissionCode.POS_ACCESS) || RbacGuard.hasPermission(session, PermissionCode.MANAGE_FINANCE)) && (
-            <div className="flex items-center justify-between p-3.5 bg-zinc-100 border border-zinc-300/80 rounded-xl text-xs text-zinc-800">
+            <div className="admin-soft-primary flex items-center justify-between rounded-xl border p-3.5 text-xs">
               <div className="flex items-center gap-2.5">
-                <Wallet className="size-4 text-zinc-500 shrink-0" />
+                <Wallet className="size-4 shrink-0" />
                 <span>
                   لا توجد وردية مالية مفتوحة حالياً في هذا الفرع. يرجى فتح وردية جديدة قبل بدء تسجيل المبيعات.
                 </span>
               </div>
               <Link
                 href="/admin/finance"
-                className="px-3 py-1 bg-zinc-900 text-white font-bold rounded-lg hover:bg-zinc-800 transition flex items-center gap-1 shrink-0"
+                className="admin-primary-action flex shrink-0 items-center gap-1 rounded-lg px-3 py-1 font-bold transition"
               >
                 <span>فتح وردية</span>
                 <ChevronLeft className="size-3" />
@@ -303,23 +282,23 @@ export default async function AdminDashboardPage() {
       )}
 
       {/* 3. Live Operational Pulse (Today's Key Performance Indicators) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+      <div className="flex flex-wrap justify-center gap-3.5">
         {/* Metric 1: Today's Revenue (Role Protected) */}
         {(session.isSuperAdmin ||
           RbacGuard.hasPermission(session, PermissionCode.VIEW_REPORTS) ||
           RbacGuard.hasPermission(session, PermissionCode.MANAGE_ORDERS)) && (
-          <div className="bg-white p-4.5 rounded-2xl border border-zinc-200 shadow-2xs flex flex-col justify-between">
+          <div className="admin-card flex w-full flex-col justify-between p-5 sm:w-[calc(50%-0.4375rem)] lg:w-[calc(25%-0.65625rem)]">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-500">مبيعات اليوم المحصلة</span>
-              <div className="size-8 rounded-xl bg-emerald-50 text-emerald-700 grid place-items-center">
+              <span className="admin-muted text-xs font-bold">مبيعات اليوم المحصلة</span>
+              <div className="admin-status-success grid size-8 place-items-center rounded-xl border">
                 <Coins className="size-4" strokeWidth={2} />
               </div>
             </div>
             <div className="mt-3">
-              <div className="text-xl sm:text-2xl font-black text-zinc-900 font-mono tracking-tight">
+<div className="admin-number text-2xl sm:text-3xl font-black text-[var(--admin-foreground)] tracking-tight">
                 {formatMoney(todayRevenueMoney.amount)}
               </div>
-              <p className="text-[11px] text-zinc-400 mt-1 font-medium">
+              <p className="admin-muted mt-1 text-[11px] font-medium">
                 إجمالي {todayPaidOrders.length} فاتورة مسددة اليوم
               </p>
             </div>
@@ -328,18 +307,18 @@ export default async function AdminDashboardPage() {
 
         {/* Metric 2: In-Flight Orders */}
         {(session.isSuperAdmin || RbacGuard.hasPermission(session, PermissionCode.MANAGE_ORDERS)) && (
-          <div className="bg-white p-4.5 rounded-2xl border border-zinc-200 shadow-2xs flex flex-col justify-between">
+          <div className="admin-card flex w-full flex-col justify-between p-5 sm:w-[calc(50%-0.4375rem)] lg:w-[calc(25%-0.65625rem)]">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-500">الطلبات النشطة الآن</span>
-              <div className="size-8 rounded-xl bg-blue-50 text-blue-700 grid place-items-center">
+              <span className="admin-muted text-xs font-bold">الطلبات النشطة الآن</span>
+              <div className="admin-status-info grid size-8 place-items-center rounded-xl border">
                 <ShoppingBag className="size-4" strokeWidth={2} />
               </div>
             </div>
             <div className="mt-3">
-              <div className="text-xl sm:text-2xl font-black text-blue-700 font-mono tracking-tight">
+<div className="admin-number text-2xl sm:text-3xl font-black text-[var(--admin-info)] tracking-tight">
                 {activeInFlightOrdersCount}
               </div>
-              <p className="text-[11px] text-zinc-400 mt-1 font-medium">
+              <p className="admin-muted mt-1 text-[11px] font-medium">
                 من إجمالي {todayTotalOrdersCount} طلب سُجلت اليوم
               </p>
             </div>
@@ -348,25 +327,25 @@ export default async function AdminDashboardPage() {
 
         {/* Metric 3: Table Occupancy */}
         {(session.isSuperAdmin || RbacGuard.hasPermission(session, PermissionCode.MANAGE_BRANCHES)) && (
-          <div className="bg-white p-4.5 rounded-2xl border border-zinc-200 shadow-2xs flex flex-col justify-between">
+          <div className="admin-card flex w-full flex-col justify-between p-5 sm:w-[calc(50%-0.4375rem)] lg:w-[calc(25%-0.65625rem)]">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-500">إشغال الصالة والطاولات</span>
-              <div className="size-8 rounded-xl bg-amber-50 text-amber-700 grid place-items-center">
+              <span className="admin-muted text-xs font-bold">إشغال الصالة والطاولات</span>
+              <div className="admin-status-warning grid size-8 place-items-center rounded-xl border">
                 <Armchair className="size-4" strokeWidth={2} />
               </div>
             </div>
             <div className="mt-3">
               <div className="flex items-baseline gap-2">
-                <span className="text-xl sm:text-2xl font-black text-zinc-900 font-mono">
+<span className="admin-number text-2xl sm:text-3xl font-black text-[var(--admin-foreground)]">
                   {occupiedTablesCount}/{totalTablesCount}
                 </span>
-                <span className="text-xs font-bold text-amber-700 font-mono">
+                <span className="admin-number text-sm font-bold text-[var(--admin-warning)]">
                   ({occupancyPercentage}%)
                 </span>
               </div>
-              <div className="w-full bg-zinc-100 rounded-full h-1.5 mt-2 overflow-hidden">
+              <div className="admin-progress-track mt-2 h-1.5 w-full overflow-hidden rounded-full">
                 <div
-                  className="bg-amber-600 h-1.5 rounded-full transition-all"
+                  className="admin-progress-warning h-1.5 rounded-full transition-all"
                   style={{ width: `${Math.min(occupancyPercentage, 100)}%` }}
                 />
               </div>
@@ -378,10 +357,10 @@ export default async function AdminDashboardPage() {
         {(session.isSuperAdmin ||
           RbacGuard.hasPermission(session, PermissionCode.MANAGE_FINANCE) ||
           RbacGuard.hasPermission(session, PermissionCode.POS_ACCESS)) && (
-          <div className="bg-white p-4.5 rounded-2xl border border-zinc-200 shadow-2xs flex flex-col justify-between">
+          <div className="admin-card flex w-full flex-col justify-between p-5 sm:w-[calc(50%-0.4375rem)] lg:w-[calc(25%-0.65625rem)]">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-zinc-500">الوردية المالية الحالية</span>
-              <div className="size-8 rounded-xl bg-zinc-100 text-zinc-700 grid place-items-center">
+              <span className="admin-muted text-xs font-bold">الوردية المالية الحالية</span>
+              <div className="admin-status-info grid size-8 place-items-center rounded-xl border">
                 <Wallet className="size-4" strokeWidth={2} />
               </div>
             </div>
@@ -389,19 +368,19 @@ export default async function AdminDashboardPage() {
               {openCashShift ? (
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="size-2 rounded-full bg-emerald-500" />
-                    <span className="text-sm font-bold text-emerald-800">
+                    <span className="admin-status-dot-success size-2 rounded-full" />
+                    <span className="admin-status-success-text text-sm font-bold">
                       مفتوحة • {openCashShift.cashier?.fullName || 'الكاشير'}
                     </span>
                   </div>
-                  <p className="text-[11px] text-zinc-400 mt-1 font-mono">
+                  <p className="admin-muted mt-1 text-[11px] font-mono">
                     عهدة الافتتاح: {formatMoney(openCashShift.openingCashMinor)}
                   </p>
                 </div>
               ) : (
                 <div>
-                  <span className="text-sm font-bold text-zinc-500">لا توجد وردية مفتوحة</span>
-                  <p className="text-[11px] text-zinc-400 mt-1">الدرج مغلق حالياً</p>
+                  <span className="admin-muted text-sm font-bold">لا توجد وردية مفتوحة</span>
+                  <p className="admin-muted mt-1 text-[11px]">الدرج مغلق حالياً</p>
                 </div>
               )}
             </div>
@@ -411,26 +390,26 @@ export default async function AdminDashboardPage() {
 
       {/* 4. Tactical Launchpad (Immediate Touch Action Buttons) */}
       <div className="space-y-3">
-        <h2 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+        <h2 className="admin-muted text-xs font-bold uppercase tracking-wider">
           الإجراءات والعمليات السريعة
         </h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="flex flex-wrap justify-center gap-3">
           {/* Action 1: POS Screen */}
           {RbacGuard.hasPermission(session, PermissionCode.POS_ACCESS) && (
             <Link
               href="/pos"
-              className="group p-4 bg-zinc-900 text-white rounded-2xl shadow-xs hover:bg-zinc-800 transition flex flex-col justify-between min-h-[110px]"
+              className="admin-primary-action group flex min-h-[110px] w-full flex-col justify-between rounded-2xl p-4.5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
               <div className="flex items-center justify-between">
                 <div className="size-9 rounded-xl bg-white/10 grid place-items-center text-white">
                   <Store className="size-5" strokeWidth={1.8} />
                 </div>
-                <ChevronLeft className="size-4 text-zinc-400 group-hover:text-white group-hover:-translate-x-0.5 transition" />
+                <ChevronLeft className="size-4 text-white/65 group-hover:text-white group-hover:-translate-x-0.5 transition" />
               </div>
               <div>
                 <p className="text-sm font-bold">شاشة الكاشير (POS)</p>
-                <span className="text-[11px] text-zinc-400">مبيعات الصالة والسفري</span>
+                <span className="text-[11px] text-white/65">مبيعات الصالة والسفري</span>
               </div>
             </Link>
           )}
@@ -439,23 +418,23 @@ export default async function AdminDashboardPage() {
           {RbacGuard.hasPermission(session, PermissionCode.MANAGE_ORDERS) && (
             <Link
               href="/admin/orders"
-              className="group p-4 bg-white border border-zinc-200 text-zinc-900 rounded-2xl shadow-2xs hover:border-zinc-300 transition flex flex-col justify-between min-h-[110px]"
+              className="admin-card admin-card-hover group flex min-h-[110px] w-full flex-col justify-between p-4.5 text-[var(--admin-foreground)] sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
               <div className="flex items-center justify-between">
-                <div className="size-9 rounded-xl bg-rose-50 text-rose-700 grid place-items-center">
+                <div className="admin-status-danger grid size-9 place-items-center rounded-xl border">
                   <ShoppingBag className="size-5" strokeWidth={1.8} />
                 </div>
                 {pendingWebOrdersCount > 0 ? (
-                  <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold font-mono">
+                  <span className="admin-badge admin-badge-danger font-mono">
                     {pendingWebOrdersCount} جديد
                   </span>
                 ) : (
-                  <ChevronLeft className="size-4 text-zinc-400 group-hover:text-zinc-900 group-hover:-translate-x-0.5 transition" />
+                  <ChevronLeft className="admin-muted size-4 group-hover:text-[var(--admin-primary)] group-hover:-translate-x-0.5 transition" />
                 )}
               </div>
               <div>
                 <p className="text-sm font-bold">مركز الطلبات</p>
-                <span className="text-[11px] text-zinc-500">إدارة طلبات التوصيل</span>
+                <span className="admin-muted text-[11px]">إدارة طلبات التوصيل</span>
               </div>
             </Link>
           )}
@@ -464,14 +443,17 @@ export default async function AdminDashboardPage() {
           {RbacGuard.hasPermission(session, PermissionCode.KITCHEN_VIEW) && (
             <Link
               href="/admin/kitchen"
-              className="group p-4 bg-white border border-zinc-200 text-zinc-900 rounded-2xl shadow-2xs hover:border-zinc-300 transition flex flex-col justify-between min-h-[110px]"
+              className="admin-card admin-card-hover group flex min-h-[110px] w-full flex-col justify-between p-4.5 text-[var(--admin-foreground)] sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
-              <div className="size-9 rounded-xl bg-zinc-100 text-zinc-700 grid place-items-center">
-                <ChefHat className="size-5" strokeWidth={1.8} />
+              <div className="flex items-center justify-between">
+                <div className="admin-status-info grid size-9 place-items-center rounded-xl border">
+                  <ChefHat className="size-5" strokeWidth={1.8} />
+                </div>
+                <ChevronLeft className="admin-muted size-4 group-hover:text-[var(--admin-primary)] group-hover:-translate-x-0.5 transition" />
               </div>
               <div>
                 <p className="text-sm font-bold">شاشة المطبخ (KDS)</p>
-                <span className="text-[11px] text-zinc-500">متابعة تذاكر الطهي الحية</span>
+                <span className="admin-muted text-[11px]">متابعة تذاكر الطهي الحية</span>
               </div>
             </Link>
           )}
@@ -481,17 +463,17 @@ export default async function AdminDashboardPage() {
             RbacGuard.hasPermission(session, PermissionCode.VIEW_REPORTS)) && (
             <Link
               href="/admin/invoices"
-              className="group p-4 bg-white border border-zinc-200 text-zinc-900 rounded-2xl shadow-2xs hover:border-zinc-300 transition flex flex-col justify-between min-h-[110px]"
+              className="admin-card admin-card-hover group flex min-h-[110px] w-full flex-col justify-between p-4.5 text-[var(--admin-foreground)] sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
               <div className="flex items-center justify-between">
-                <div className="size-9 rounded-xl bg-zinc-100 text-zinc-700 grid place-items-center">
+                <div className="admin-status-info grid size-9 place-items-center rounded-xl border">
                   <Receipt className="size-5" strokeWidth={1.8} />
                 </div>
-                <ChevronLeft className="size-4 text-zinc-400 group-hover:text-zinc-900 group-hover:-translate-x-0.5 transition" />
+                <ChevronLeft className="admin-muted size-4 group-hover:text-[var(--admin-primary)] group-hover:-translate-x-0.5 transition" />
               </div>
               <div>
                 <p className="text-sm font-bold">سجل الفواتير</p>
-                <span className="text-[11px] text-zinc-500">طباعة ومراجعة البونات</span>
+                <span className="admin-muted text-[11px]">طباعة ومراجعة البونات</span>
               </div>
             </Link>
           )}
@@ -500,17 +482,17 @@ export default async function AdminDashboardPage() {
           {RbacGuard.hasPermission(session, PermissionCode.MANAGE_FINANCE) && (
             <Link
               href="/admin/finance"
-              className="group p-4 bg-white border border-zinc-200 text-zinc-900 rounded-2xl shadow-2xs hover:border-zinc-300 transition flex flex-col justify-between min-h-[110px]"
+              className="admin-card admin-card-hover group flex min-h-[110px] w-full flex-col justify-between p-4.5 text-[var(--admin-foreground)] sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
               <div className="flex items-center justify-between">
-                <div className="size-9 rounded-xl bg-zinc-100 text-zinc-700 grid place-items-center">
+                <div className="admin-status-info grid size-9 place-items-center rounded-xl border">
                   <Wallet className="size-5" strokeWidth={1.8} />
                 </div>
-                <ChevronLeft className="size-4 text-zinc-400 group-hover:text-zinc-900 group-hover:-translate-x-0.5 transition" />
+                <ChevronLeft className="admin-muted size-4 group-hover:text-[var(--admin-primary)] group-hover:-translate-x-0.5 transition" />
               </div>
               <div>
                 <p className="text-sm font-bold">المالية والورديات</p>
-                <span className="text-[11px] text-zinc-500">إغلاق وردية ومصروفات</span>
+                <span className="admin-muted text-[11px]">إغلاق وردية ومصروفات</span>
               </div>
             </Link>
           )}
@@ -519,17 +501,17 @@ export default async function AdminDashboardPage() {
           {RbacGuard.hasPermission(session, PermissionCode.MANAGE_INVENTORY) && (
             <Link
               href="/admin/inventory"
-              className="group p-4 bg-white border border-zinc-200 text-zinc-900 rounded-2xl shadow-2xs hover:border-zinc-300 transition flex flex-col justify-between min-h-[110px]"
+              className="admin-card admin-card-hover group flex min-h-[110px] w-full flex-col justify-between p-4.5 text-[var(--admin-foreground)] sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
               <div className="flex items-center justify-between">
-                <div className="size-9 rounded-xl bg-zinc-100 text-zinc-700 grid place-items-center">
+                <div className="admin-status-warning grid size-9 place-items-center rounded-xl border">
                   <Package className="size-5" strokeWidth={1.8} />
                 </div>
-                <ChevronLeft className="size-4 text-zinc-400 group-hover:text-zinc-900 group-hover:-translate-x-0.5 transition" />
+                <ChevronLeft className="admin-muted size-4 group-hover:text-[var(--admin-primary)] group-hover:-translate-x-0.5 transition" />
               </div>
               <div>
                 <p className="text-sm font-bold">المخزون والوصفات</p>
-                <span className="text-[11px] text-zinc-500">أرصدة الخامات والـ BOM</span>
+                <span className="admin-muted text-[11px]">أرصدة الخامات والـ BOM</span>
               </div>
             </Link>
           )}
@@ -537,21 +519,21 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* 5. Recent Branch Operations Feed (Live Activity) */}
-      <div className="bg-white rounded-2xl border border-zinc-200 shadow-2xs overflow-hidden">
-        <div className="p-4 sm:p-5 border-b border-zinc-100 flex items-center justify-between">
+      <div className="admin-card overflow-hidden">
+        <div className="flex items-center justify-between border-b border-[var(--admin-border)] p-4 sm:p-5">
           <div className="flex items-center gap-2.5">
-            <div className="size-8 rounded-xl bg-zinc-100 text-zinc-800 grid place-items-center">
+            <div className="admin-soft-primary grid size-8 place-items-center rounded-xl border">
               <Activity className="size-4" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-zinc-900">آخر العمليات والطلبات</h3>
-              <p className="text-[11px] text-zinc-500">أحدث 5 طلبات تم تسجيلها في هذا الفرع</p>
+              <h3 className="font-bold text-sm text-[var(--admin-foreground)]">آخر العمليات والطلبات</h3>
+              <p className="admin-muted text-[11px]">أحدث 5 طلبات تم تسجيلها في هذا الفرع</p>
             </div>
           </div>
 
           <Link
             href="/admin/invoices"
-            className="text-xs font-bold text-zinc-600 hover:text-zinc-900 flex items-center gap-1 transition"
+            className="admin-muted flex items-center gap-1 text-xs font-bold transition hover:text-[var(--admin-primary)]"
           >
             <span>عرض سجل الفواتير كاملاً</span>
             <ChevronLeft className="size-3.5" />
@@ -559,11 +541,11 @@ export default async function AdminDashboardPage() {
         </div>
 
         {recentOrders.length === 0 ? (
-          <div className="p-8 text-center text-xs text-zinc-400 font-medium">
+          <div className="admin-muted p-8 text-center text-xs font-medium">
             لا توجد أي طلبات مسجلة في هذا الفرع حتى الآن.
           </div>
         ) : (
-          <div className="divide-y divide-zinc-100">
+          <div className="divide-y divide-[var(--admin-border)]">
             {recentOrders.map((order) => {
               const typeLabel =
                 order.type === 'DINE_IN'
@@ -577,26 +559,26 @@ export default async function AdminDashboardPage() {
               return (
                 <div
                   key={order.id}
-                  className="p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-zinc-50/60 transition"
+                  className="admin-row-hover flex flex-col justify-between gap-3 p-3.5 transition sm:flex-row sm:items-center"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="font-mono text-xs font-black text-zinc-900 bg-zinc-100 px-2 py-1 rounded-lg">
+                    <span className="admin-id-chip rounded-lg px-2 py-1 font-mono text-xs font-black">
                       {order.orderNumber}
                     </span>
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-zinc-800">{typeLabel}</span>
+                        <span className="text-xs font-bold text-[var(--admin-foreground)]">{typeLabel}</span>
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                             isPaid
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                              : 'bg-rose-50 text-rose-700 border border-rose-200'
+                              ? 'admin-badge admin-badge-success'
+                              : 'admin-badge admin-badge-danger'
                           }`}
                         >
                           {isPaid ? 'مدفوعة' : 'شيك مفتوح'}
                         </span>
                       </div>
-                      <span className="text-[10px] text-zinc-400 font-mono mt-0.5 block">
+                      <span className="admin-muted mt-0.5 block text-[10px] font-mono">
                         {new Intl.DateTimeFormat('ar-EG', {
                           hour: '2-digit',
                           minute: '2-digit',
@@ -608,12 +590,12 @@ export default async function AdminDashboardPage() {
                   </div>
 
                   <div className="flex items-center justify-between sm:justify-end gap-4">
-                    <span className="font-mono text-sm font-black text-zinc-900">
+                    <span className="font-mono text-sm font-black text-[var(--admin-foreground)]">
                       {formatMoney(order.totalMinor)}
                     </span>
                     <Link
                       href={`/admin/invoices`}
-                      className="px-2.5 py-1 text-xs font-bold text-zinc-600 hover:text-zinc-900 bg-zinc-100 hover:bg-zinc-200 rounded-lg transition"
+                      className="admin-control rounded-lg border px-2.5 py-1 text-xs font-bold transition"
                     >
                       معاينة
                     </Link>
@@ -628,20 +610,20 @@ export default async function AdminDashboardPage() {
       {/* 6. Organization & Strategic Foundation (Visible to Super Admin) */}
       {session.isSuperAdmin && orgStats && (
         <div className="space-y-3 pt-2">
-          <h2 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+          <h2 className="admin-muted text-xs font-bold uppercase tracking-wider">
             نظرة المنظومة المركزية (Super Admin)
           </h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/admin/branches"
-              className="p-4 bg-white border border-zinc-200 rounded-2xl shadow-2xs hover:border-zinc-300 transition"
+              className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
-              <span className="text-[11px] font-medium text-zinc-400 block">الفروع النشطة</span>
-              <span className="text-2xl font-black text-zinc-900 font-mono mt-1 block">
+              <span className="admin-muted block text-[11px] font-medium">الفروع النشطة</span>
+              <span className="admin-number mt-1 block text-3xl font-black text-[var(--admin-foreground)]">
                 {orgStats[0]}
               </span>
-              <span className="text-[10px] text-emerald-700 font-bold mt-1 flex items-center gap-1">
+              <span className="admin-status-success-text mt-1 flex items-center gap-1 text-[10px] font-bold">
                 <Check className="size-3" />
                 <span>نطاق فروع موحد</span>
               </span>
@@ -649,39 +631,39 @@ export default async function AdminDashboardPage() {
 
             <Link
               href="/admin/staff"
-              className="p-4 bg-white border border-zinc-200 rounded-2xl shadow-2xs hover:border-zinc-300 transition"
+              className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
-              <span className="text-[11px] font-medium text-zinc-400 block">فريق العمل (RBAC)</span>
-              <span className="text-2xl font-black text-zinc-900 font-mono mt-1 block">
+              <span className="admin-muted block text-[11px] font-medium">فريق العمل (RBAC)</span>
+              <span className="admin-number mt-1 block text-3xl font-black text-[var(--admin-foreground)]">
                 {orgStats[1]}
               </span>
-              <span className="text-[10px] text-zinc-500 font-medium mt-1 block">
+              <span className="admin-muted mt-1 block text-[10px] font-medium">
                 موظفين وصلاحيات
               </span>
             </Link>
 
             <Link
               href="/admin/menu"
-              className="p-4 bg-white border border-zinc-200 rounded-2xl shadow-2xs hover:border-zinc-300 transition"
+              className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
-              <span className="text-[11px] font-medium text-zinc-400 block">أصناف الكتالوج</span>
-              <span className="text-2xl font-black text-zinc-900 font-mono mt-1 block">
+              <span className="admin-muted block text-[11px] font-medium">أصناف الكتالوج</span>
+              <span className="admin-number mt-1 block text-3xl font-black text-[var(--admin-foreground)]">
                 {orgStats[2]}
               </span>
-              <span className="text-[10px] text-zinc-500 font-medium mt-1 block">
+              <span className="admin-muted mt-1 block text-[10px] font-medium">
                 منيو وإضافات جاهزة
               </span>
             </Link>
 
             <Link
               href="/admin/customers"
-              className="p-4 bg-white border border-zinc-200 rounded-2xl shadow-2xs hover:border-zinc-300 transition"
+              className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
-              <span className="text-[11px] font-medium text-zinc-400 block">عملاء الـ CRM</span>
-              <span className="text-2xl font-black text-zinc-900 font-mono mt-1 block">
+              <span className="admin-muted block text-[11px] font-medium">عملاء الـ CRM</span>
+              <span className="admin-number mt-1 block text-3xl font-black text-[var(--admin-foreground)]">
                 {orgStats[3]}
               </span>
-              <span className="text-[10px] text-zinc-500 font-medium mt-1 block">
+              <span className="admin-muted mt-1 block text-[10px] font-medium">
                 سجل موحد للعملاء
               </span>
             </Link>

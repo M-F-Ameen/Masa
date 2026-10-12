@@ -6,8 +6,8 @@ import { ProductImagePicker } from '../product-image-picker';
 import { Category, Group, Product, DraftSize } from './menu-types';
 
 const inputClass =
-  'min-h-12 w-full rounded-xl border border-zinc-300 bg-white px-3.5 text-base text-zinc-900 outline-none placeholder:text-zinc-400 focus:border-zinc-900 focus:ring-2 focus:ring-zinc-900/10';
-const labelClass = 'block space-y-1.5 text-sm font-medium text-zinc-700';
+  'min-h-12 w-full rounded-xl border border-[var(--admin-border)] bg-[var(--admin-surface)] px-3.5 text-base text-[var(--admin-foreground)] outline-none placeholder:text-[var(--admin-muted)] focus:border-[var(--admin-primary)] focus:ring-2 focus:ring-[var(--admin-primary-soft)]';
+const labelClass = 'block space-y-1.5 text-sm font-medium text-[var(--admin-foreground)]';
 
 function toMajor(value: number) {
   return (value / 100).toFixed(2);
@@ -113,18 +113,18 @@ export function MenuProductModal({
 
       <ProductImagePicker initialUrl={product?.imageUrl} name="imageUrl" />
 
-      <label className="flex items-center gap-3 rounded-xl border border-amber-200 bg-amber-50/50 p-3.5 cursor-pointer">
+      <label className="flex items-center gap-3 rounded-xl border admin-status-warning p-3.5 cursor-pointer">
         <input
           type="checkbox"
           name="isFeatured"
           defaultChecked={product?.isFeatured ?? false}
-          className="size-4 accent-amber-600 rounded"
+          className="size-4 accent-[var(--admin-warning)] rounded"
         />
         <div>
-          <span className="text-sm font-semibold text-zinc-900 block">
+          <span className="text-sm font-semibold text-[var(--admin-foreground)] block">
             عرض في السلايدر الرئيسي للموقع (طبق مميز / عروض)
           </span>
-          <span className="text-xs text-zinc-500 block">
+          <span className="text-xs admin-muted block">
             سيتم عرض هذا الصنف في السلايدر المتحرك في أعلى الصفحة الرئيسية
           </span>
         </div>
@@ -140,13 +140,13 @@ export function MenuProductModal({
         />
       </label>
 
-      <div className="space-y-3 rounded-2xl bg-zinc-50 p-3 sm:p-4">
+      <div className="space-y-3 rounded-2xl bg-[var(--admin-background)] p-3 sm:p-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-zinc-800">المقاسات والأسعار</h3>
+          <h3 className="text-sm font-semibold text-[var(--admin-foreground)]">المقاسات والأسعار</h3>
           <button
             type="button"
             onClick={() => setSizes((items) => [...items, { nameAr: '', nameEn: '', price: '' }])}
-            className="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 text-xs font-medium text-zinc-700 hover:bg-zinc-50"
+            className="admin-control inline-flex min-h-10 items-center gap-1.5 rounded-lg border px-3 text-xs font-medium"
           >
             <CirclePlus size={15} />
             إضافة مقاس
@@ -155,7 +155,7 @@ export function MenuProductModal({
         {sizes.map((size, index) => (
           <div
             key={index}
-            className="grid grid-cols-1 gap-2 rounded-xl border border-zinc-200 bg-white p-3 sm:grid-cols-[1fr_1fr_0.8fr_auto] sm:items-end"
+            className="grid grid-cols-1 gap-2 rounded-xl border border-[var(--admin-border)] bg-[var(--admin-surface)] p-3 sm:grid-cols-[1fr_1fr_0.8fr_auto] sm:items-end"
           >
             <Field
               label="الاسم العربي"
@@ -184,7 +184,7 @@ export function MenuProductModal({
                 type="button"
                 aria-label="حذف المقاس"
                 onClick={() => setSizes((items) => items.filter((_, itemIndex) => itemIndex !== index))}
-                className="grid size-11 place-items-center rounded-lg text-zinc-500 hover:bg-zinc-100"
+                className="grid size-11 place-items-center rounded-lg text-[var(--admin-muted)] hover:bg-[var(--admin-background)]"
               >
                 <X size={16} />
               </button>
@@ -195,20 +195,20 @@ export function MenuProductModal({
 
       {groups.length > 0 && (
         <fieldset className="space-y-2">
-          <legend className="mb-2 text-sm font-semibold text-zinc-800">مجموعات الإضافات</legend>
+          <legend className="mb-2 text-sm font-semibold text-[var(--admin-foreground)]">مجموعات الإضافات</legend>
           {groups.map((group) => (
             <label
               key={group.id}
-              className="flex min-h-12 items-center gap-3 rounded-xl border border-zinc-200 px-3 cursor-pointer hover:bg-zinc-50"
+              className="flex min-h-12 items-center gap-3 rounded-xl border border-[var(--admin-border)] px-3 cursor-pointer hover:bg-[var(--admin-background)]"
             >
               <input
                 type="checkbox"
                 name="modifierGroupIds"
                 value={group.id}
                 defaultChecked={product?.modifierGroups.some((item) => item.group.id === group.id)}
-                className="size-4 accent-zinc-900"
+                className="size-4 accent-[var(--admin-primary)]"
               />
-              <span className="text-sm text-zinc-700">{group.nameAr}</span>
+              <span className="text-sm text-[var(--admin-foreground)]">{group.nameAr}</span>
             </label>
           ))}
         </fieldset>
@@ -219,14 +219,14 @@ export function MenuProductModal({
           type="button"
           onClick={onCancel}
           disabled={pending}
-          className="min-h-12 rounded-xl border border-zinc-200 bg-white px-5 text-sm font-semibold text-zinc-700 hover:bg-zinc-50 transition disabled:opacity-50"
+          className="admin-control min-h-12 rounded-xl border px-5 text-sm font-semibold transition disabled:opacity-50"
         >
           إلغاء
         </button>
         <button
           disabled={pending}
           type="submit"
-          className="flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-zinc-900 px-4 text-sm font-semibold text-white disabled:opacity-60 hover:bg-zinc-800 transition"
+          className="admin-primary-action flex min-h-12 flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold disabled:opacity-60 transition"
         >
           {pending ? 'جارٍ الحفظ...' : <><Check size={17} />حفظ التغييرات</>}
         </button>

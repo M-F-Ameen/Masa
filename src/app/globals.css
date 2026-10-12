@@ -180,3 +180,712 @@ body {
 /* Scrollbar hide utility */
 .scrollbar-none::-webkit-scrollbar { display: none; }
 .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* =====================================================
+   MASA Admin Design System — Atlantic Blue
+   Scoped to .admin-app so storefront routes keep their own visual language.
+   ===================================================== */
+.admin-app {
+  --admin-primary: #2859D9;
+  --admin-primary-hover: #2149B5;
+  --admin-primary-soft: #E9EFFF;
+  --admin-accent: #0D9488;
+  --admin-accent-hover: #08766D;
+  --admin-accent-soft: #DDF5F1;
+  --admin-sidebar: #111C33;
+  --admin-sidebar-hover: #1B2D4B;
+  --admin-background: #F6F8FC;
+  --admin-surface: #FFFFFF;
+  --admin-foreground: #142033;
+  --admin-muted: #66758C;
+  --admin-border: #E1E7F0;
+  --admin-success: #0D9488;
+  --admin-success-soft: #DDF5F1;
+  --admin-warning: #B45309;
+  --admin-warning-soft: #FFF4E5;
+  --admin-danger: #BE123C;
+  --admin-danger-soft: #FFF1F3;
+  --admin-info: #2563EB;
+  --admin-info-soft: #EEF4FF;
+  background: var(--admin-background);
+  color: var(--admin-foreground);
+  color-scheme: light;
+}
+
+.admin-app .admin-card {
+  border: 1px solid var(--admin-border);
+  border-radius: 1rem;
+  background: var(--admin-surface);
+  box-shadow:
+    0 1px 2px rgba(20, 32, 51, 0.05),
+    0 14px 30px -20px rgba(20, 32, 51, 0.30);
+}
+
+.admin-app .admin-card-hover {
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.admin-app .admin-card-hover:hover {
+  border-color: color-mix(in srgb, var(--admin-primary) 28%, var(--admin-border));
+  box-shadow: 0 8px 22px rgba(20, 32, 51, 0.08);
+}
+
+.admin-app .admin-topbar {
+  position: sticky;
+  top: 0.375rem;
+  z-index: 40;
+  flex-shrink: 0;
+  border-color: color-mix(in srgb, var(--admin-border) 12%, transparent);
+  background-color: color-mix(in srgb, #FFFFFF 18%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px -14px rgba(20, 32, 51, 0.14);
+}
+
+.admin-app .admin-header-branch > div {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.admin-app .admin-header-branch button {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.admin-app .admin-header-branch button > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-app .admin-sidebar {
+  color: var(--admin-foreground);
+  border-color: color-mix(in srgb, var(--admin-border) 85%, transparent);
+  background: var(--admin-surface);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(20, 32, 51, 0.05),
+    0 1px 2px rgba(20, 32, 51, 0.08),
+    0 18px 36px -18px rgba(20, 32, 51, 0.34);
+}
+
+.admin-app .admin-sidebar-brand,
+.admin-app .admin-sidebar-brand-compact {
+  border-color: var(--admin-border);
+  background: transparent;
+}
+
+.admin-app .admin-sidebar-logo {
+  background: var(--admin-primary-soft);
+  color: var(--admin-primary);
+  box-shadow: 0 4px 12px rgba(40, 89, 217, 0.1);
+}
+
+.admin-app .admin-sidebar-header {
+  border-color: var(--admin-border);
+  background: var(--admin-surface);
+}
+
+.admin-app .admin-sidebar-profile {
+  border-color: var(--admin-border);
+  background: var(--admin-background);
+}
+
+.admin-app .admin-sidebar-footer {
+  border-color: var(--admin-border);
+  background: transparent;
+  color: var(--admin-muted);
+}
+
+.admin-app .admin-sidebar-user-chip {
+  border-color: color-mix(in srgb, var(--admin-primary) 12%, var(--admin-border));
+  background: color-mix(in srgb, var(--admin-primary-soft) 35%, var(--admin-surface));
+}
+
+.admin-app .admin-sidebar-status-dot {
+  background: var(--admin-accent);
+  box-shadow: 0 0 0 3px var(--admin-accent-soft);
+}
+
+.admin-app .admin-header-context-icon {
+  color: var(--admin-primary);
+}
+
+.admin-app .admin-control {
+  border-color: var(--admin-border);
+  background: var(--admin-surface);
+  color: var(--admin-foreground);
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.admin-app .admin-control:hover {
+  border-color: color-mix(in srgb, var(--admin-primary) 28%, var(--admin-border));
+  background: var(--admin-primary-soft);
+  color: var(--admin-primary-hover);
+}
+
+.admin-app .admin-control:focus-visible,
+.admin-app .admin-primary-action:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--admin-primary) 38%, transparent);
+  outline-offset: 2px;
+}
+
+.admin-app .admin-avatar {
+  background: var(--admin-primary);
+  color: #FFFFFF;
+  box-shadow: 0 5px 12px rgba(40, 89, 217, 0.2);
+}
+
+.admin-app .admin-primary-action {
+  background: var(--admin-primary);
+  color: #FFFFFF;
+  transition: background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.admin-app .admin-primary-action:hover {
+  background: var(--admin-primary-hover);
+  box-shadow: 0 7px 16px rgba(40, 89, 217, 0.2);
+}
+
+.admin-app .admin-soft-primary {
+  border-color: color-mix(in srgb, var(--admin-primary) 16%, var(--admin-border));
+  background: var(--admin-primary-soft);
+  color: var(--admin-primary-hover);
+}
+
+.admin-app .admin-soft-accent {
+  border-color: color-mix(in srgb, var(--admin-accent) 18%, var(--admin-border));
+  background: var(--admin-accent-soft);
+  color: var(--admin-accent-hover);
+}
+
+.admin-app .admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  line-height: 1rem;
+  font-weight: 700;
+}
+
+.admin-app .admin-badge-success,
+.admin-app .admin-status-success {
+  border-color: color-mix(in srgb, var(--admin-success) 22%, var(--admin-border));
+  background: var(--admin-success-soft);
+  color: var(--admin-accent-hover);
+}
+
+.admin-app .admin-badge-warning,
+.admin-app .admin-status-warning {
+  border-color: color-mix(in srgb, var(--admin-warning) 24%, var(--admin-border));
+  background: var(--admin-warning-soft);
+  color: #92400E;
+}
+
+.admin-app .admin-badge-danger,
+.admin-app .admin-status-danger {
+  border-color: color-mix(in srgb, var(--admin-danger) 20%, var(--admin-border));
+  background: var(--admin-danger-soft);
+  color: #9F1239;
+}
+
+.admin-app .admin-badge-info,
+.admin-app .admin-status-info {
+  border-color: color-mix(in srgb, var(--admin-info) 18%, var(--admin-border));
+  background: var(--admin-info-soft);
+  color: #1D4ED8;
+}
+
+.admin-app .admin-badge-neutral {
+  border-color: var(--admin-border);
+  background: var(--admin-background);
+  color: var(--admin-muted);
+}
+
+.admin-app .admin-badge-active {
+  border-color: color-mix(in srgb, var(--admin-primary) 18%, var(--admin-border));
+  background: var(--admin-surface);
+  color: var(--admin-primary-hover);
+}
+
+.admin-app .admin-nav-section-title {
+  color: var(--admin-muted);
+  letter-spacing: 0.08em;
+}
+
+.admin-app .admin-nav-link {
+  border-color: color-mix(in srgb, var(--admin-border) 40%, transparent);
+  background: color-mix(in srgb, var(--admin-primary) 1.5%, var(--admin-surface));
+  color: var(--admin-foreground);
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.admin-app .admin-nav-link:hover {
+  border-color: color-mix(in srgb, var(--admin-primary) 12%, var(--admin-border));
+  background: var(--admin-background);
+  color: var(--admin-primary-hover);
+}
+
+.admin-app .admin-nav-link:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--admin-primary) 46%, transparent);
+  outline-offset: 2px;
+}
+
+.admin-app .admin-nav-link-active {
+  position: relative;
+  border-color: var(--admin-primary);
+  background: var(--admin-primary);
+  color: #FFFFFF;
+  box-shadow: 0 7px 18px rgba(40, 89, 217, 0.2);
+}
+
+.admin-app .admin-nav-link-active::after {
+  display: none;
+}
+
+.admin-app .admin-nav-link-active:hover {
+  border-color: var(--admin-primary-hover);
+  background: var(--admin-primary-hover);
+  color: #FFFFFF;
+}
+
+.admin-app .admin-nav-icon {
+  color: var(--admin-primary);
+}
+
+.admin-app .admin-nav-link:hover .admin-nav-icon,
+.admin-app .admin-nav-link-active .admin-nav-icon {
+  color: var(--admin-primary);
+}
+
+.admin-app .admin-nav-link-active .admin-nav-icon {
+  color: #FFFFFF;
+}
+
+.admin-app .admin-sidebar-danger-action {
+  border-color: color-mix(in srgb, var(--admin-danger) 22%, var(--admin-border));
+  background: var(--admin-danger-soft);
+  color: #9F1239;
+}
+
+.admin-app .admin-sidebar-danger-action:hover {
+  border-color: color-mix(in srgb, var(--admin-danger) 34%, var(--admin-border));
+  background: color-mix(in srgb, var(--admin-danger-soft) 78%, var(--admin-surface));
+}
+
+.admin-app .admin-status-success-text { color: var(--admin-accent-hover); }
+.admin-app .admin-status-warning-text { color: #92400E; }
+.admin-app .admin-status-danger-text { color: #9F1239; }
+.admin-app .admin-status-info-text { color: #1D4ED8; }
+
+.admin-app .admin-status-dot-success { background: var(--admin-success); }
+.admin-app .admin-status-dot-warning { background: var(--admin-warning); }
+.admin-app .admin-status-dot-danger { background: var(--admin-danger); }
+.admin-app .admin-status-dot-info { background: var(--admin-info); }
+
+.admin-app .admin-progress-track { background: color-mix(in srgb, var(--admin-warning) 12%, var(--admin-background)); }
+.admin-app .admin-progress-warning { background: var(--admin-warning); }
+
+.admin-app .admin-row-hover { transition: background-color 160ms ease; }
+.admin-app .admin-row-hover:hover { background: color-mix(in srgb, var(--admin-primary-soft) 50%, transparent); }
+
+.admin-app .admin-id-chip {
+  background: var(--admin-primary-soft);
+  color: var(--admin-foreground);
+}
+
+.admin-app .admin-number {
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.admin-app .admin-action-danger {
+  background: var(--admin-danger);
+  color: #FFFFFF;
+}
+
+.admin-app .admin-action-danger:hover { background: #9F1239; }
+
+.admin-app .admin-action-warning {
+  background: var(--admin-warning);
+  color: #FFFFFF;
+}
+
+.admin-app .admin-action-warning:hover { background: #92400E; }
+
+.admin-app .admin-muted {
+  color: var(--admin-muted);
+}
+
+.admin-app .admin-branch-switcher button {
+  border-color: var(--admin-border);
+  background: var(--admin-surface);
+  color: var(--admin-foreground);
+}
+
+.admin-app .admin-branch-switcher button:hover {
+  background: var(--admin-primary-soft);
+  color: var(--admin-primary-hover);
+}
+
+.admin-app .admin-branch-switcher button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--admin-primary) 38%, transparent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+  .admin-app .admin-sidebar {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      -18px 0 42px rgba(20, 32, 51, 0.18);
+  }
+
+  .admin-app .admin-topbar {
+    top: 0;
+  }
+}
+
+/* Kitchen KDS: scoped light POS surface and touch-first primitives. */
+.kitchen-shell,
+.kitchen-app {
+  --kitchen-canvas: #F7F8FC;
+  --kitchen-surface: #FFFFFF;
+  --kitchen-primary: #2D61C9;
+  --kitchen-primary-hover: #2756B8;
+  --kitchen-deep: #142644;
+  --kitchen-muted: #72819A;
+  --kitchen-border: #DCE3EF;
+  --kitchen-soft-blue: #E9EEFC;
+  --kitchen-accent: #1D6C6B;
+  --kitchen-accent-soft: #E7F5F2;
+  --kitchen-warning: #B45309;
+  --kitchen-warning-soft: #FFF7E8;
+  --kitchen-danger: #BE123C;
+  --kitchen-danger-soft: #FFF1F3;
+  background: var(--kitchen-canvas);
+  color: var(--kitchen-deep);
+}
+
+.kitchen-app {
+  min-height: 100%;
+}
+
+.kitchen-app .kitchen-header {
+  border-color: var(--kitchen-border);
+  background: color-mix(in srgb, var(--kitchen-surface) 94%, transparent);
+  box-shadow: 0 4px 18px rgba(20, 38, 68, 0.06);
+  backdrop-filter: blur(14px);
+}
+
+.kitchen-app .kitchen-header-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.kitchen-app .kitchen-header-brand,
+.kitchen-app .kitchen-header-operations {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.kitchen-app .kitchen-header-brand {
+  gap: 12px;
+}
+
+.kitchen-app .kitchen-header-operations {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.kitchen-app .kitchen-header-filters {
+  justify-self: center;
+  max-width: 100%;
+}
+
+.kitchen-app .kitchen-header-branch {
+  flex: 1 1 168px;
+  width: min(100%, 220px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kitchen-app .kitchen-control {
+  box-sizing: border-box;
+  height: 44px;
+  min-height: 44px;
+  border: 1px solid var(--kitchen-border);
+  border-radius: 14px;
+  background: var(--kitchen-surface);
+  color: var(--kitchen-deep);
+  box-shadow: 0 3px 12px rgba(20, 38, 68, 0.04);
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.kitchen-app .kitchen-control:hover {
+  border-color: #C6D2E5;
+  background: #F7F9FD;
+}
+
+.kitchen-app .kitchen-control:focus-visible,
+.kitchen-app .kitchen-filter:focus-visible,
+.kitchen-app .kitchen-item:focus-visible,
+.kitchen-app .kitchen-check:focus-visible,
+.kitchen-app .kitchen-bump:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--kitchen-primary) 24%, transparent);
+  outline-offset: 2px;
+}
+
+.kitchen-app .kitchen-control-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  padding: 0;
+}
+
+.kitchen-app .kitchen-control-on {
+  border-color: color-mix(in srgb, var(--kitchen-accent) 34%, var(--kitchen-border));
+  background: var(--kitchen-accent-soft);
+  color: var(--kitchen-accent);
+}
+
+.kitchen-app .kitchen-control-off {
+  color: var(--kitchen-muted);
+}
+
+.kitchen-app .kitchen-filter-group {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding: 4px;
+  border: 1px solid var(--kitchen-border);
+  border-radius: 16px;
+  background: #F7F9FD;
+}
+
+.kitchen-app .kitchen-filter {
+  min-height: 44px;
+  border-radius: 12px;
+  padding: 0 12px;
+  color: var(--kitchen-muted);
+  white-space: nowrap;
+  transition: background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.kitchen-app .kitchen-filter:hover {
+  color: var(--kitchen-deep);
+  background: var(--kitchen-surface);
+}
+
+.kitchen-app .kitchen-filter-active {
+  background: var(--kitchen-primary);
+  color: #FFFFFF;
+  box-shadow: 0 5px 12px rgba(45, 97, 201, 0.18);
+}
+
+.kitchen-app .kitchen-filter-type-dine.kitchen-filter-active { background: var(--kitchen-primary); }
+.kitchen-app .kitchen-filter-type-takeaway.kitchen-filter-active { background: #D97706; }
+.kitchen-app .kitchen-filter-type-delivery.kitchen-filter-active { background: var(--kitchen-accent); }
+
+.kitchen-app .kitchen-empty {
+  border-color: var(--kitchen-border);
+  background: color-mix(in srgb, var(--kitchen-surface) 78%, var(--kitchen-soft-blue));
+}
+
+.kitchen-app .kitchen-empty-icon {
+  background: var(--kitchen-soft-blue);
+  border: 1px solid color-mix(in srgb, var(--kitchen-primary) 18%, var(--kitchen-border));
+  color: var(--kitchen-primary);
+}
+
+.kitchen-app .kitchen-ticket {
+  border: 1px solid var(--kitchen-border);
+  border-radius: 18px;
+  background: var(--kitchen-surface);
+  box-shadow: 0 5px 18px rgba(20, 38, 68, 0.07);
+}
+
+.kitchen-app .kitchen-ticket-urgent {
+  border-color: color-mix(in srgb, var(--kitchen-danger) 44%, var(--kitchen-border));
+  box-shadow: 0 7px 20px rgba(190, 18, 60, 0.10);
+}
+
+.kitchen-app .kitchen-ticket-ready {
+  border-color: color-mix(in srgb, var(--kitchen-accent) 40%, var(--kitchen-border));
+  box-shadow: 0 7px 20px rgba(29, 108, 107, 0.10);
+}
+
+.kitchen-app .kitchen-ticket-header {
+  border-color: var(--kitchen-border);
+  background: #FBFCFE;
+}
+
+.kitchen-app .kitchen-ticket-meta {
+  border-color: var(--kitchen-border);
+  color: var(--kitchen-muted);
+}
+
+.kitchen-app .kitchen-type-badge,
+.kitchen-app .kitchen-timer,
+.kitchen-app .kitchen-quantity,
+.kitchen-app .kitchen-order-chip {
+  border: 1px solid var(--kitchen-border);
+  border-radius: 12px;
+}
+
+.kitchen-app .kitchen-type-badge {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.kitchen-app .kitchen-type-dine { border-color: #C8D7FA; background: var(--kitchen-soft-blue); color: #2149B5; }
+.kitchen-app .kitchen-type-takeaway { border-color: #F3D29C; background: #FFF7E8; color: #92400E; }
+.kitchen-app .kitchen-type-delivery { border-color: #B9E3DC; background: var(--kitchen-accent-soft); color: #08766D; }
+
+.kitchen-app .kitchen-timer {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  font-size: 0.75rem;
+}
+
+.kitchen-app .kitchen-timer-normal { border-color: #B9E3DC; background: var(--kitchen-accent-soft); color: #08766D; }
+.kitchen-app .kitchen-timer-warning { border-color: #F3D29C; background: var(--kitchen-warning-soft); color: #92400E; font-weight: 700; }
+.kitchen-app .kitchen-timer-urgent { border-color: #F6B5C4; background: var(--kitchen-danger-soft); color: #9F1239; font-weight: 800; }
+
+.kitchen-app .kitchen-order-chip { background: var(--kitchen-soft-blue); color: var(--kitchen-deep); }
+.kitchen-app .kitchen-note { border: 1px solid #F3D29C; background: var(--kitchen-warning-soft); color: #78350F; }
+.kitchen-app .kitchen-note-icon { color: #B45309; }
+
+.kitchen-app .kitchen-print {
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 12px;
+  color: var(--kitchen-muted);
+}
+
+.kitchen-app .kitchen-print:hover { background: var(--kitchen-soft-blue); color: var(--kitchen-primary); }
+
+.kitchen-app .kitchen-items {
+  background: var(--kitchen-surface);
+  border-color: var(--kitchen-border);
+}
+
+.kitchen-app .kitchen-item {
+  min-height: 58px;
+  border-radius: 12px;
+  transition: background-color 160ms ease, opacity 160ms ease;
+}
+
+.kitchen-app .kitchen-item:hover { background: #F7F9FD; }
+.kitchen-app .kitchen-item-prepared { background: #F4F7FA; opacity: 0.68; }
+.kitchen-app .kitchen-quantity { background: var(--kitchen-soft-blue); color: var(--kitchen-primary-hover); }
+.kitchen-app .kitchen-quantity-prepared { background: #EFF2F6; color: var(--kitchen-muted); }
+.kitchen-app .kitchen-product { color: var(--kitchen-deep); }
+.kitchen-app .kitchen-product-prepared { color: var(--kitchen-muted); }
+.kitchen-app .kitchen-modifier { color: var(--kitchen-muted); }
+.kitchen-app .kitchen-modifier-dot { background: #AAB7C9; }
+
+.kitchen-app .kitchen-check {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid #C6D2E5;
+  border-radius: 12px;
+  color: transparent;
+  background: var(--kitchen-surface);
+}
+
+.kitchen-app .kitchen-check:hover { border-color: var(--kitchen-primary); background: var(--kitchen-soft-blue); }
+.kitchen-app .kitchen-check-prepared { border-color: var(--kitchen-accent); background: var(--kitchen-accent); color: #FFFFFF; }
+
+.kitchen-app .kitchen-ticket-footer {
+  border-color: var(--kitchen-border);
+  background: #FBFCFE;
+}
+
+.kitchen-app .kitchen-progress-label { color: var(--kitchen-muted); }
+.kitchen-app .kitchen-progress-value { color: var(--kitchen-deep); }
+.kitchen-app .kitchen-progress-track { background: #E8EDF5; }
+.kitchen-app .kitchen-progress-fill { background: var(--kitchen-accent); }
+
+.kitchen-app .kitchen-bump {
+  min-height: 48px;
+  border: 1px solid var(--kitchen-primary);
+  border-radius: 14px;
+  background: var(--kitchen-primary);
+  color: #FFFFFF;
+  box-shadow: 0 7px 16px rgba(45, 97, 201, 0.18);
+}
+
+.kitchen-app .kitchen-bump:hover { background: var(--kitchen-primary-hover); }
+.kitchen-app .kitchen-bump-ready { border-color: var(--kitchen-accent); background: var(--kitchen-accent); box-shadow: 0 7px 16px rgba(29, 108, 107, 0.18); }
+.kitchen-app .kitchen-bump-ready:hover { background: #17605F; }
+
+@media (max-width: 767px) {
+  .kitchen-app .kitchen-header { padding-inline: 12px; }
+  .kitchen-app .kitchen-control { min-height: 48px; }
+  .kitchen-app .kitchen-filter { min-height: 48px; }
+  .kitchen-app .kitchen-ticket { border-radius: 16px; }
+}
+
+@media (max-width: 1100px) {
+  .kitchen-app .kitchen-header-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .kitchen-app .kitchen-header-brand,
+  .kitchen-app .kitchen-header-filters,
+  .kitchen-app .kitchen-header-operations {
+    width: 100%;
+  }
+
+  .kitchen-app .kitchen-header-filters {
+    justify-self: stretch;
+  }
+
+  .kitchen-app .kitchen-header-operations {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 767px) {
+  .kitchen-app .kitchen-header-layout {
+    gap: 10px;
+  }
+
+  .kitchen-app .kitchen-header-brand {
+    align-items: flex-start;
+  }
+
+  .kitchen-app .kitchen-header-back {
+    padding-inline: 10px;
+  }
+
+  .kitchen-app .kitchen-header-operations {
+    gap: 8px;
+  }
+
+  .kitchen-app .kitchen-header-branch {
+    flex-basis: 100%;
+    width: 100%;
+  }
+}

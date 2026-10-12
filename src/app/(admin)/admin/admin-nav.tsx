@@ -59,9 +59,10 @@ interface AdminNavProps {
   items?: AdminNavItem[];
   onItemClick?: () => void;
   className?: string;
+  searchQuery?: string;
 }
 
-export function AdminNav({ sections, items, onItemClick, className }: AdminNavProps) {
+export function AdminNav({ sections, items, onItemClick, className, searchQuery }: AdminNavProps) {
   const pathname = usePathname();
 
   // Normalize sections (backwards-compatible with flat items)
@@ -71,43 +72,56 @@ export function AdminNav({ sections, items, onItemClick, className }: AdminNavPr
     ? [{ items }]
     : [];
 
+  const query = (searchQuery ?? '').trim().toLowerCase();
+  const visibleSections = query
+    ? effectiveSections
+        .map((section) => ({
+          ...section,
+          items: section.items.filter((item) => item.label.toLowerCase().includes(query)),
+        }))
+        .filter((section) => section.items.length > 0)
+    : effectiveSections;
+
   return (
     <nav className={className || 'space-y-4'}>
-      {effectiveSections.map((section, sIdx) => (
-        <div key={section.title || `section-${sIdx}`} className="space-y-1">
-          {section.title && (
-            <div className="px-3 pt-2 pb-1 text-[10px] font-bold text-zinc-400 select-none tracking-wider">
-              {section.title}
-            </div>
-          )}
-
-          <div className="space-y-0.5">
+      {query && visibleSections.length === 0 && (
+        <p className="admin-muted px-4 py-3 text-xs">لا توجد نتائج مطابقة.</p>
+      )}
+      {visibleSections.map((section, sIdx) => (
+        <div key={section.title || `section-${sIdx}`} className="space-y-2">
+          <div className="space-y-2">
             {section.items.map((item) => {
               const Icon = ICON_MAP[item.iconName] || LayoutDashboard;
               const isActive =
                 item.href === '/admin'
                   ? pathname === '/admin'
                   : pathname === item.href || pathname.startsWith(item.href + '/');
+              const badgeTone =
+                item.badgeColor === 'rose'
+                  ? 'admin-badge-danger'
+                  : item.badgeColor === 'emerald'
+                  ? 'admin-badge-success'
+                  : item.badgeColor === 'amber'
+                  ? 'admin-badge-warning'
+                  : item.badgeColor === 'blue'
+                  ? 'admin-badge-info'
+                  : 'admin-badge-neutral';
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={onItemClick}
-                  className={`group flex min-h-10 shrink-0 items-center justify-between rounded-xl px-3 py-2 text-xs md:w-full transition-all ${
+                    className={`group flex min-h-12 shrink-0 items-center justify-between rounded-lg border border-transparent px-4 py-2.5 text-sm md:w-full ${
                     isActive
-                      ? 'bg-zinc-900 text-white font-bold shadow-2xs'
-                      : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 font-medium'
+                      ? 'admin-nav-link-active font-bold'
+                      : 'admin-nav-link font-medium'
                   }`}
                 >
-                  <div className="flex items-center gap-2.5 truncate">
+                  <div className="flex min-w-0 items-center gap-3 truncate">
                     <Icon
-                      className={`size-4 shrink-0 transition-colors ${
-                        isActive
-                          ? 'text-white'
-                          : 'text-zinc-400 group-hover:text-zinc-700'
-                      }`}
-                      strokeWidth={isActive ? 2 : 1.75}
+                      className="admin-nav-icon size-6 shrink-0 transition-colors"
+                      strokeWidth={isActive ? 2.1 : 1.8}
                     />
                     <span className="truncate">{item.label}</span>
                   </div>
@@ -115,14 +129,10 @@ export function AdminNav({ sections, items, onItemClick, className }: AdminNavPr
                   <div className="flex items-center gap-1.5 shrink-0">
                     {item.badge !== undefined && item.badge !== null && (
                       <span
-                        className={`px-1.5 py-0.5 rounded-full text-[10px] font-bold font-mono ${
-                          item.badgeColor === 'rose'
-                            ? isActive
-                              ? 'bg-rose-500 text-white'
-                              : 'bg-rose-50 border border-rose-200 text-rose-700 font-black animate-pulse'
-                            : isActive
-                            ? 'bg-white/20 text-white'
-                            : 'bg-zinc-100 text-zinc-600'
+                        className={`admin-badge font-mono ${
+                          isActive
+                            ? 'admin-badge-active'
+                            : `${badgeTone}${item.badgeColor === 'rose' ? ' animate-pulse' : ''}`
                         }`}
                       >
                         {item.badge}
@@ -130,7 +140,7 @@ export function AdminNav({ sections, items, onItemClick, className }: AdminNavPr
                     )}
 
                     {isActive && (
-                      <span className="size-1.5 rounded-full bg-emerald-400 md:hidden" />
+                       <span className="size-1.5 rounded-full bg-[var(--admin-accent)] md:hidden" />
                     )}
                   </div>
                 </Link>

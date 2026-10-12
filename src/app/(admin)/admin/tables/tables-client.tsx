@@ -320,38 +320,38 @@ export function TablesClient({
       case TableStatus.AVAILABLE:
         return {
           label: 'متاحة',
-          bg: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-          dot: 'bg-emerald-500',
+          bg: 'admin-status-success',
+          dot: 'admin-status-dot-success',
         };
       case TableStatus.OCCUPIED:
         return {
           label: 'مشغولة',
-          bg: 'bg-zinc-900 text-white border-zinc-900',
-          dot: 'bg-rose-400',
+          bg: 'admin-primary-action',
+          dot: 'admin-status-dot-danger',
         };
       case TableStatus.BILL_PRINTED:
         return {
           label: 'مطبوع الشيك',
-          bg: 'bg-amber-50 text-amber-800 border-amber-200',
-          dot: 'bg-amber-500',
+          bg: 'admin-status-warning',
+          dot: 'admin-status-dot-warning',
         };
       case TableStatus.RESERVED:
         return {
           label: 'محجوزة',
-          bg: 'bg-sky-50 text-sky-800 border-sky-200',
-          dot: 'bg-sky-500',
+          bg: 'admin-status-warning',
+          dot: 'admin-status-dot-warning',
         };
       case TableStatus.CLEANING:
         return {
           label: 'قيد التنظيف',
-          bg: 'bg-zinc-100 text-zinc-700 border-zinc-200',
-          dot: 'bg-zinc-400',
+          bg: 'admin-status-info',
+          dot: 'admin-status-dot-info',
         };
       default:
         return {
           label: status,
-          bg: 'bg-zinc-100 text-zinc-700 border-zinc-200',
-          dot: 'bg-zinc-400',
+          bg: 'admin-status-info',
+          dot: 'admin-status-dot-info',
         };
     }
   };
@@ -359,27 +359,27 @@ export function TablesClient({
   const getShapeIcon = (shape: string) => {
     switch (shape) {
       case TableShape.ROUND:
-        return <Circle className="size-3.5 text-zinc-500" strokeWidth={1.8} />;
+        return <Circle className="size-3.5 admin-muted" strokeWidth={1.8} />;
       case TableShape.RECTANGLE:
-        return <RectangleHorizontal className="size-3.5 text-zinc-500" strokeWidth={1.8} />;
+        return <RectangleHorizontal className="size-3.5 admin-muted" strokeWidth={1.8} />;
       case TableShape.SQUARE:
       default:
-        return <Square className="size-3.5 text-zinc-500" strokeWidth={1.8} />;
+        return <Square className="size-3.5 admin-muted" strokeWidth={1.8} />;
     }
   };
 
   return (
     <div className="space-y-6" dir="rtl">
       {/* 1. Header & Actions Bar */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-zinc-200 pb-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b border-[var(--admin-border)] pb-5">
         <div>
           <div className="flex items-center gap-2.5">
-            <div className="grid size-9 place-items-center rounded-xl bg-zinc-900 text-white shadow-xs">
+            <div className="grid size-9 place-items-center rounded-xl admin-primary-action shadow-xs">
               <Armchair className="size-5" strokeWidth={1.8} />
             </div>
             <div>
-              <h1 className="text-xl font-bold tracking-tight text-zinc-900">الصالة والطاولات</h1>
-              <p className="text-xs text-zinc-500">
+              <h1 className="text-xl font-bold tracking-tight text-[var(--admin-foreground)]">الصالة والطاولات</h1>
+              <p className="text-xs admin-muted">
                 إدارة خريطة الطاولات، سعة الصالة، أقسام القاعات، وبطاقات الـ QR الرقمية
               </p>
             </div>
@@ -394,7 +394,7 @@ export function TablesClient({
                 aria-label="تحديد الفرع الحالي"
                 value={currentBranchId}
                 onChange={(e) => handleBranchChange(e.target.value)}
-                className="h-10 rounded-xl border border-zinc-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-zinc-800 shadow-2xs hover:border-zinc-300 focus:outline-none focus:ring-2 focus:ring-zinc-900"
+                className="h-10 rounded-xl border px-3.5 py-1.5 text-xs font-semibold shadow-2xs admin-control focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
               >
                 {branches.map((b) => (
                   <option key={b.id} value={b.id}>
@@ -408,16 +408,16 @@ export function TablesClient({
           <button
             type="button"
             onClick={openManageSectionsModal}
-            className="flex h-10 items-center gap-2 rounded-xl border border-zinc-200 bg-white px-3.5 text-xs font-semibold text-zinc-700 shadow-2xs hover:bg-zinc-50 hover:text-zinc-900 active:scale-95 transition"
+            className="flex h-10 items-center gap-2 rounded-xl border px-3.5 text-xs font-semibold shadow-2xs admin-control active:scale-95 transition"
           >
-            <Layers className="size-4 text-zinc-600" strokeWidth={1.8} />
+            <Layers className="size-4 admin-muted" strokeWidth={1.8} />
             <span>إدارة الأقسام ({sections.length})</span>
           </button>
 
           <button
             type="button"
             onClick={openCreateTableModal}
-            className="flex h-10 items-center gap-2 rounded-xl bg-zinc-900 px-4 text-xs font-semibold text-white shadow-xs hover:bg-zinc-800 active:scale-95 transition"
+            className="flex h-10 items-center gap-2 rounded-xl px-4 text-xs font-semibold shadow-xs admin-primary-action active:scale-95 transition"
           >
             <Plus className="size-4" strokeWidth={2} />
             <span>إضافة طاولة</span>
@@ -427,15 +427,15 @@ export function TablesClient({
 
       {/* Notifications */}
       {errorMessage && (
-        <div className="flex items-center justify-between rounded-xl border border-rose-200 bg-rose-50/90 p-3.5 text-xs font-medium text-rose-800 animate-in fade-in">
+        <div className="flex items-center justify-between rounded-xl border admin-status-danger p-3.5 text-xs font-medium animate-in fade-in">
           <div className="flex items-center gap-2">
-            <AlertCircle className="size-4 shrink-0 text-rose-600" />
+            <AlertCircle className="size-4 shrink-0 admin-status-danger-text" />
             <span>{errorMessage}</span>
           </div>
           <button
             type="button"
             onClick={() => setErrorMessage(null)}
-            className="text-rose-600 hover:text-rose-800"
+            className="admin-status-danger-text hover:opacity-80"
           >
             <X className="size-4" />
           </button>
@@ -443,15 +443,15 @@ export function TablesClient({
       )}
 
       {successMessage && (
-        <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50/90 p-3.5 text-xs font-medium text-emerald-800 animate-in fade-in">
+        <div className="flex items-center justify-between rounded-xl border admin-status-success p-3.5 text-xs font-medium animate-in fade-in">
           <div className="flex items-center gap-2">
-            <Check className="size-4 shrink-0 text-emerald-600" />
+            <Check className="size-4 shrink-0 admin-status-success-text" />
             <span>{successMessage}</span>
           </div>
           <button
             type="button"
             onClick={() => setSuccessMessage(null)}
-            className="text-emerald-600 hover:text-emerald-800"
+            className="admin-status-success-text hover:opacity-80"
           >
             <X className="size-4" />
           </button>
@@ -460,51 +460,51 @@ export function TablesClient({
 
       {/* 2. KPI Metrics Ribbon */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-        <div className="rounded-xl border border-zinc-200 bg-white p-3.5 shadow-2xs">
-          <div className="flex items-center justify-between text-zinc-500">
+        <div className="rounded-xl border border-[var(--admin-border)] bg-[var(--admin-surface)] p-3.5 shadow-2xs">
+          <div className="flex items-center justify-between admin-muted">
             <span className="text-[11px] font-medium">إجمالي الطاولات</span>
-            <Armchair className="size-4 text-zinc-400" strokeWidth={1.8} />
+            <Armchair className="size-4 admin-muted" strokeWidth={1.8} />
           </div>
-          <p className="mt-2 text-xl font-bold text-zinc-900">{stats.totalTables}</p>
+          <p className="mt-2 text-xl font-bold text-[var(--admin-foreground)]">{stats.totalTables}</p>
         </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-3.5 shadow-2xs">
-          <div className="flex items-center justify-between text-zinc-500">
+        <div className="rounded-xl border border-[var(--admin-border)] bg-[var(--admin-surface)] p-3.5 shadow-2xs">
+          <div className="flex items-center justify-between admin-muted">
             <span className="text-[11px] font-medium">سعة المقاعد</span>
-            <Users className="size-4 text-zinc-400" strokeWidth={1.8} />
+            <Users className="size-4 admin-muted" strokeWidth={1.8} />
           </div>
-          <p className="mt-2 text-xl font-bold text-zinc-900">
-            {stats.totalSeats} <span className="text-xs font-normal text-zinc-500">فرد</span>
+          <p className="mt-2 text-xl font-bold text-[var(--admin-foreground)]">
+            {stats.totalSeats} <span className="text-xs font-normal admin-muted">فرد</span>
           </p>
         </div>
 
-        <div className="rounded-xl border border-emerald-200/70 bg-emerald-50/40 p-3.5 shadow-2xs">
-          <div className="flex items-center justify-between text-emerald-700">
+        <div className="rounded-xl border admin-status-success p-3.5 shadow-2xs">
+          <div className="flex items-center justify-between admin-status-success-text">
             <span className="text-[11px] font-semibold">متاحة حالياً</span>
-            <span className="size-2 rounded-full bg-emerald-500" />
+            <span className="size-2 rounded-full admin-status-dot-success" />
           </div>
-          <p className="mt-2 text-xl font-bold text-emerald-900">{stats.availableCount}</p>
+          <p className="mt-2 text-xl font-bold text-[var(--admin-accent-hover)]">{stats.availableCount}</p>
         </div>
 
-        <div className="rounded-xl border border-zinc-300 bg-zinc-900 p-3.5 shadow-2xs text-white">
-          <div className="flex items-center justify-between text-zinc-400">
+        <div className="rounded-xl border border-[var(--admin-primary)] bg-[var(--admin-primary)] p-3.5 shadow-2xs">
+          <div className="flex items-center justify-between text-[var(--admin-primary-soft)]">
             <span className="text-[11px] font-semibold">مشغولة</span>
-            <span className="size-2 rounded-full bg-rose-400" />
+            <span className="size-2 rounded-full admin-status-dot-danger" />
           </div>
-          <p className="mt-2 text-xl font-bold text-white">{stats.occupiedCount}</p>
+          <p className="mt-2 text-xl font-bold text-[var(--admin-surface)]">{stats.occupiedCount}</p>
         </div>
 
-        <div className="col-span-2 sm:col-span-1 rounded-xl border border-amber-200/80 bg-amber-50/50 p-3.5 shadow-2xs">
-          <div className="flex items-center justify-between text-amber-800">
+        <div className="col-span-2 sm:col-span-1 rounded-xl border admin-status-warning p-3.5 shadow-2xs">
+          <div className="flex items-center justify-between admin-status-warning-text">
             <span className="text-[11px] font-semibold">مطبوع الشيك</span>
-            <span className="size-2 rounded-full bg-amber-500" />
+            <span className="size-2 rounded-full admin-status-dot-warning" />
           </div>
-          <p className="mt-2 text-xl font-bold text-amber-900">{stats.billPrintedCount}</p>
+          <p className="mt-2 text-xl font-bold admin-status-warning-text">{stats.billPrintedCount}</p>
         </div>
       </div>
 
       {/* 3. Filter Toolbar & Search */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4 shadow-2xs">
+      <div className="flex flex-col gap-3 admin-card p-4">
         {/* Section Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
           <button
@@ -512,8 +512,8 @@ export function TablesClient({
             onClick={() => setSelectedSectionId('ALL')}
             className={`shrink-0 rounded-xl px-3.5 py-1.5 font-semibold transition ${
               selectedSectionId === 'ALL'
-                ? 'bg-zinc-900 text-white shadow-2xs'
-                : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200/70'
+                ? 'admin-primary-action shadow-2xs'
+                : 'bg-[var(--admin-background)] admin-muted hover:bg-[var(--admin-border)]'
             }`}
           >
             كافة الأقسام ({tables.length})
@@ -528,8 +528,8 @@ export function TablesClient({
                 onClick={() => setSelectedSectionId(sec.id)}
                 className={`shrink-0 rounded-xl px-3.5 py-1.5 font-semibold transition ${
                   selectedSectionId === sec.id
-                    ? 'bg-zinc-900 text-white shadow-2xs'
-                    : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200/70'
+                    ? 'admin-primary-action shadow-2xs'
+                    : 'bg-[var(--admin-background)] admin-muted hover:bg-[var(--admin-border)]'
                 }`}
               >
                 {sec.nameAr} ({count})
@@ -542,8 +542,8 @@ export function TablesClient({
             onClick={() => setSelectedSectionId('NONE')}
             className={`shrink-0 rounded-xl px-3.5 py-1.5 font-semibold transition ${
               selectedSectionId === 'NONE'
-                ? 'bg-zinc-900 text-white shadow-2xs'
-                : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200/70'
+                ? 'admin-primary-action shadow-2xs'
+                : 'bg-[var(--admin-background)] admin-muted hover:bg-[var(--admin-border)]'
             }`}
           >
             بدون قسم ({tables.filter((t) => !t.sectionId).length})
@@ -551,25 +551,25 @@ export function TablesClient({
         </div>
 
         {/* Search & Status Filters */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-zinc-100">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[var(--admin-border)]">
           <div className="relative flex-1 max-w-sm">
-            <Search className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-zinc-400" />
+            <Search className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 admin-muted" />
             <input
               type="text"
               placeholder="بحث برقم الطاولة أو اسم القسم..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-zinc-200 bg-zinc-50/70 py-2 pr-9 pl-3 text-xs text-zinc-900 placeholder-zinc-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-zinc-900"
+              className="w-full rounded-xl border py-2 pr-9 pl-3 text-xs admin-control placeholder:text-[var(--admin-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
             />
           </div>
 
           <div className="flex items-center gap-2">
-            <SlidersHorizontal className="size-4 text-zinc-400" strokeWidth={1.8} />
+            <SlidersHorizontal className="size-4 admin-muted" strokeWidth={1.8} />
             <select
               aria-label="تصفية حسب حالة الطاولة"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="h-9 rounded-xl border border-zinc-200 bg-white px-3 py-1 text-xs font-medium text-zinc-700 focus:outline-none focus:ring-2 focus:ring-zinc-900"
+              className="h-9 rounded-xl border px-3 py-1 text-xs font-medium admin-control focus:outline-none focus:ring-2 focus:ring-[var(--admin-primary)]"
             >
               <option value="ALL">جميع الحالات</option>
               <option value={TableStatus.AVAILABLE}>المتاحة فقط</option>
@@ -585,7 +585,7 @@ export function TablesClient({
               disabled={isPending}
               title="تحديث البيانات"
               aria-label="تحديث البيانات"
-              className="grid size-9 place-items-center rounded-xl border border-zinc-200 bg-white text-zinc-600 hover:bg-zinc-50 active:scale-95 transition disabled:opacity-50"
+              className="grid size-9 place-items-center rounded-xl border admin-control active:scale-95 transition disabled:opacity-50"
             >
               <RefreshCw className={`size-3.5 ${isPending ? 'animate-spin' : ''}`} />
             </button>
@@ -595,18 +595,18 @@ export function TablesClient({
 
       {/* 4. Table Floor Grid */}
       {filteredTables.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-zinc-300 bg-white py-16 px-4 text-center">
-          <div className="grid size-12 place-items-center rounded-2xl bg-zinc-100 text-zinc-400">
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--admin-border)] bg-[var(--admin-surface)] py-16 px-4 text-center">
+          <div className="grid size-12 place-items-center rounded-2xl bg-[var(--admin-background)] admin-muted">
             <Armchair className="size-6" strokeWidth={1.5} />
           </div>
-          <h3 className="mt-3 text-sm font-bold text-zinc-800">لا توجد طاولات مطابقة</h3>
-          <p className="mt-1 max-w-sm text-xs text-zinc-500">
+          <h3 className="mt-3 text-sm font-bold text-[var(--admin-foreground)]">لا توجد طاولات مطابقة</h3>
+          <p className="mt-1 max-w-sm text-xs admin-muted">
             لم يتم العثور على أي طاولة مطابقة للبحث أو معايير التصفية المحددة.
           </p>
           <button
             type="button"
             onClick={openCreateTableModal}
-            className="mt-4 flex items-center gap-1.5 rounded-xl bg-zinc-900 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800"
+            className="mt-4 flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-semibold admin-primary-action"
           >
             <Plus className="size-3.5" />
             <span>إضافة طاولة الآن</span>
@@ -622,25 +622,25 @@ export function TablesClient({
             return (
               <div
                 key={table.id}
-                className="group relative flex flex-col justify-between rounded-2xl border border-zinc-200 bg-white p-4 shadow-2xs hover:border-zinc-300 hover:shadow-xs transition"
+                className="group relative flex flex-col justify-between admin-card admin-card-hover p-4"
               >
                 <div>
                   {/* Card Top: Number + Shape + Status */}
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2">
-                      <div className="grid size-9 place-items-center rounded-xl bg-zinc-100 text-zinc-800 font-bold text-sm">
+                      <div className="grid size-9 place-items-center rounded-xl bg-[var(--admin-background)] text-[var(--admin-foreground)] font-bold text-sm">
                         {table.tableNumber}
                       </div>
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-xs font-bold text-zinc-900">
+                          <span className="text-xs font-bold text-[var(--admin-foreground)]">
                             طاولة {table.tableNumber}
                           </span>
                           <span title={`شكل الطاولة: ${table.shape}`}>
                             {getShapeIcon(table.shape)}
                           </span>
                         </div>
-                        <p className="text-[11px] text-zinc-500 truncate max-w-[120px]">
+                        <p className="text-[11px] admin-muted truncate max-w-[120px]">
                           {table.sectionNameAr || 'بدون قسم'}
                         </p>
                       </div>
@@ -655,15 +655,15 @@ export function TablesClient({
                   </div>
 
                   {/* Attributes: Capacity & Section */}
-                  <div className="mt-3 flex items-center gap-2 text-[11px] text-zinc-600">
-                    <span className="flex items-center gap-1 rounded-md bg-zinc-50 px-2 py-0.5 border border-zinc-100">
-                      <Users className="size-3 text-zinc-400" />
+                  <div className="mt-3 flex items-center gap-2 text-[11px] admin-muted">
+                    <span className="flex items-center gap-1 rounded-md bg-[var(--admin-background)] px-2 py-0.5 border border-[var(--admin-border)]">
+                      <Users className="size-3 admin-muted" />
                       <span>{table.capacity} مقاعد</span>
                     </span>
 
                     {table.sectionNameAr && (
-                      <span className="flex items-center gap-1 rounded-md bg-zinc-50 px-2 py-0.5 border border-zinc-100 truncate">
-                        <Layers className="size-3 text-zinc-400 shrink-0" />
+                      <span className="flex items-center gap-1 rounded-md bg-[var(--admin-background)] px-2 py-0.5 border border-[var(--admin-border)] truncate">
+                        <Layers className="size-3 admin-muted shrink-0" />
                         <span className="truncate">{table.sectionNameAr}</span>
                       </span>
                     )}
@@ -671,23 +671,23 @@ export function TablesClient({
 
                   {/* Active Order Details (if occupied) */}
                   {isBusy && table.activeOrder && (
-                    <div className="mt-3 rounded-xl border border-zinc-200/80 bg-zinc-50/70 p-2.5 text-xs space-y-1.5">
-                      <div className="flex items-center justify-between text-zinc-700">
+                    <div className="mt-3 rounded-xl border border-[var(--admin-border)] bg-[var(--admin-background)] p-2.5 text-xs space-y-1.5">
+                      <div className="flex items-center justify-between text-[var(--admin-foreground)]">
                         <span className="font-mono text-[11px] font-bold">
                           #{table.activeOrder.orderNumber}
                         </span>
-                        <span className="flex items-center gap-1 text-[11px] text-zinc-500">
-                          <Clock className="size-3 text-zinc-400" />
+                        <span className="flex items-center gap-1 text-[11px] admin-muted">
+                          <Clock className="size-3 admin-muted" />
                           <span>{table.activeOrder.minutesSeated} دقيقة</span>
                         </span>
                       </div>
 
-                      <div className="flex items-center justify-between pt-1 border-t border-zinc-200/60 font-bold">
-                        <span className="flex items-center gap-1 text-[11px] text-zinc-500 font-normal">
+                      <div className="flex items-center justify-between pt-1 border-t border-[var(--admin-border)] font-bold">
+                        <span className="flex items-center gap-1 text-[11px] admin-muted font-normal">
                           <ShoppingBag className="size-3" />
                           <span>{table.activeOrder.itemsCount} أصناف</span>
                         </span>
-                        <span className="text-zinc-900">
+                        <span className="text-[var(--admin-foreground)]">
                           {(table.activeOrder.totalMinor / 100).toFixed(2)} {currencySymbol}
                         </span>
                       </div>
@@ -696,11 +696,11 @@ export function TablesClient({
                 </div>
 
                 {/* Card Bottom Actions */}
-                <div className="mt-4 flex items-center justify-between border-t border-zinc-100 pt-3 text-xs">
+                <div className="mt-4 flex items-center justify-between border-t border-[var(--admin-border)] pt-3 text-xs">
                   <button
                     type="button"
                     onClick={() => setQrModalTable(table)}
-                    className="flex items-center gap-1 text-zinc-600 hover:text-zinc-900 font-medium"
+                    className="flex items-center gap-1 admin-muted hover:text-[var(--admin-foreground)] font-medium"
                     title="رمز QR للطاولة"
                   >
                     <QrCode className="size-3.5" />
@@ -711,7 +711,7 @@ export function TablesClient({
                     <button
                       type="button"
                       onClick={() => openEditTableModal(table)}
-                      className="grid size-7 place-items-center rounded-lg text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 transition"
+                      className="grid size-7 place-items-center rounded-lg admin-muted hover:bg-[var(--admin-background)] hover:text-[var(--admin-foreground)] transition"
                       title="تعديل الطاولة"
                       aria-label="تعديل الطاولة"
                     >
@@ -726,8 +726,8 @@ export function TablesClient({
                       aria-label={isBusy ? 'لا يمكن حذف طاولة مشغولة' : 'حذف الطاولة'}
                       className={`grid size-7 place-items-center rounded-lg transition ${
                         isBusy
-                          ? 'cursor-not-allowed text-zinc-300'
-                          : 'text-zinc-500 hover:bg-rose-50 hover:text-rose-600'
+                          ? 'cursor-not-allowed admin-muted'
+                          : 'admin-muted hover:bg-[var(--admin-danger-soft)] hover:text-[var(--admin-danger)]'
                       }`}
                     >
                       <Trash2 className="size-3.5" />
@@ -793,12 +793,12 @@ export function TablesClient({
 
       {/* 8. Modal: Delete Confirm Table */}
       {deleteConfirmTable && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-2xl animate-in zoom-in-95 text-right">
-            <h3 className="text-base font-bold text-zinc-900">تأكيد حذف الطاولة</h3>
-            <p className="mt-2 text-xs text-zinc-600">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[rgba(20,32,51,0.5)] backdrop-blur-xs animate-in fade-in">
+          <div className="w-full max-w-sm rounded-2xl bg-[var(--admin-surface)] p-5 shadow-2xl animate-in zoom-in-95 text-right">
+            <h3 className="text-base font-bold text-[var(--admin-foreground)]">تأكيد حذف الطاولة</h3>
+            <p className="mt-2 text-xs admin-muted">
               هل أنت متأكد من رغبتك في حذف الطاولة رقم{' '}
-              <strong className="text-zinc-900">{deleteConfirmTable.tableNumber}</strong>؟ لا يمكن
+              <strong className="text-[var(--admin-foreground)]">{deleteConfirmTable.tableNumber}</strong>؟ لا يمكن
               التراجع عن هذه الخطوة.
             </p>
 
@@ -806,7 +806,7 @@ export function TablesClient({
               <button
                 type="button"
                 onClick={() => setDeleteConfirmTable(null)}
-                className="rounded-xl border border-zinc-200 px-4 py-2 font-semibold text-zinc-600 hover:bg-zinc-50"
+                className="rounded-xl border px-4 py-2 font-semibold admin-control"
               >
                 إلغاء
               </button>
@@ -814,7 +814,7 @@ export function TablesClient({
                 type="button"
                 onClick={handleDeleteTable}
                 disabled={isPending}
-                className="rounded-xl bg-rose-600 px-4 py-2 font-semibold text-white shadow-xs hover:bg-rose-700 disabled:opacity-50"
+                className="rounded-xl px-4 py-2 font-semibold shadow-xs admin-action-danger disabled:opacity-50"
               >
                 {isPending ? 'جاري الحذف...' : 'نعم، حذف الطاولة'}
               </button>

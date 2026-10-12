@@ -308,10 +308,10 @@ export function StaffClient({
       {/* Top Banner and Navigation Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-zinc-900 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-black text-[var(--admin-foreground)] tracking-tight">
             الموظفين والصلاحيات
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-500 mt-1 font-medium">
+          <p className="text-xs sm:text-sm admin-muted mt-1 font-medium">
             إدارة طاقم العمل، تعديل الصلاحيات، وإعادة تعيين كلمات المرور، ونطاق الفروع
           </p>
         </div>
@@ -319,7 +319,7 @@ export function StaffClient({
         {activeTab === 'STAFF' && (
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-900 text-white text-xs font-bold hover:bg-zinc-800 transition shadow-2xs cursor-pointer shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl admin-primary-action text-xs font-bold transition shadow-2xs cursor-pointer shrink-0"
           >
             <Plus className="size-4" />
             <span>إضافة موظف جديد</span>
@@ -329,21 +329,21 @@ export function StaffClient({
 
       {/* Success Alert */}
       {successMessage && (
-        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-bold flex items-center gap-2 animate-in fade-in">
-          <Check className="size-4 text-emerald-600" />
+        <div className="p-3 admin-status-success rounded-xl text-xs font-bold flex items-center gap-2 animate-in fade-in border">
+          <Check className="size-4 text-[var(--admin-accent-hover)]" />
           <span>{successMessage}</span>
         </div>
       )}
 
       {/* Tab Switcher */}
-      <div className="flex items-center gap-1 bg-zinc-100/80 p-1 rounded-xl w-fit text-xs font-bold border border-zinc-200/50">
+      <div className="flex items-center gap-1 bg-[var(--admin-background)] p-1 rounded-xl w-fit text-xs font-bold border border-[var(--admin-border)]">
         <button
           type="button"
           onClick={() => setActiveTab('STAFF')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition cursor-pointer ${
             activeTab === 'STAFF'
-              ? 'bg-white text-zinc-900 shadow-2xs'
-              : 'text-zinc-600 hover:text-zinc-900'
+              ? 'bg-[var(--admin-surface)] text-[var(--admin-foreground)] shadow-2xs'
+              : 'admin-muted hover:text-[var(--admin-foreground)]'
           }`}
         >
           <Users className="size-4" />
@@ -355,8 +355,8 @@ export function StaffClient({
           onClick={() => setActiveTab('ROLES')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg transition cursor-pointer ${
             activeTab === 'ROLES'
-              ? 'bg-white text-zinc-900 shadow-2xs'
-              : 'text-zinc-600 hover:text-zinc-900'
+              ? 'bg-[var(--admin-surface)] text-[var(--admin-foreground)] shadow-2xs'
+              : 'admin-muted hover:text-[var(--admin-foreground)]'
           }`}
         >
           <Shield className="size-4" />
@@ -369,19 +369,19 @@ export function StaffClient({
         <div className="space-y-4">
           {/* Search Bar */}
           <div className="relative">
-            <Search className="size-4 absolute right-3.5 top-3 text-zinc-400" />
+            <Search className="size-4 absolute right-3.5 top-3 admin-muted" />
             <input
               type="text"
               placeholder="بحث بالاسم، اسم المستخدم، رقم الهاتف، أو الدور الوظيفي..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pr-10 pl-8 py-2.5 text-xs border border-zinc-200 rounded-xl focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium placeholder:text-zinc-400 bg-white"
+              className="w-full pr-10 pl-8 py-2.5 text-xs border border-[var(--admin-border)] rounded-xl focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium placeholder:text-[var(--admin-muted)] bg-[var(--admin-surface)]"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="absolute left-3 top-3 text-zinc-400 hover:text-zinc-600"
+                className="absolute left-3 top-3 admin-muted hover:text-[var(--admin-foreground)]"
               >
                 <X className="size-4" />
               </button>
@@ -391,20 +391,20 @@ export function StaffClient({
           {/* Dual Responsive Engine: Mobile Cards View (block md:hidden) */}
           <div className="block md:hidden space-y-3">
             {filteredStaff.length === 0 ? (
-              <div className="bg-white p-8 text-center text-xs text-zinc-400 rounded-2xl border border-zinc-200">
+              <div className="bg-[var(--admin-surface)] p-8 text-center text-xs admin-muted rounded-2xl border border-[var(--admin-border)]">
                 لا يوجد موظفين يطابقون معايير البحث.
               </div>
             ) : (
               filteredStaff.map((user) => (
                 <div
                   key={user.id}
-                  className="bg-white p-4 rounded-2xl border border-zinc-200 shadow-2xs space-y-3"
+                  className="admin-card p-4 space-y-3"
                 >
                   {/* Card Header */}
-                  <div className="flex items-start justify-between gap-2 border-b border-zinc-100 pb-3">
+                  <div className="flex items-start justify-between gap-2 border-b border-[var(--admin-border)] pb-3">
                     <div>
-                      <h3 className="font-bold text-sm text-zinc-900">{user.fullName}</h3>
-                      <span className="font-mono text-xs text-zinc-400 mt-0.5 block">
+                      <h3 className="font-bold text-sm text-[var(--admin-foreground)]">{user.fullName}</h3>
+                      <span className="font-mono text-xs admin-muted mt-0.5 block">
                         @{user.username}
                       </span>
                     </div>
@@ -412,8 +412,8 @@ export function StaffClient({
                     <span
                       className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
                         user.isActive
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : 'bg-zinc-100 text-zinc-500 border border-zinc-200'
+                          ? 'admin-badge admin-badge-success'
+                          : 'admin-badge admin-badge-neutral'
                       }`}
                     >
                       {user.isActive ? (
@@ -433,20 +433,20 @@ export function StaffClient({
                   {/* Card Body */}
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="space-y-0.5">
-                      <span className="text-[10px] font-bold text-zinc-400 block">الدور الوظيفي:</span>
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-800 text-[11px] font-bold">
-                        <Shield className="size-3 text-zinc-500" />
+                      <span className="text-[10px] font-bold admin-muted block">الدور الوظيفي:</span>
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[var(--admin-background)] text-[var(--admin-foreground)] text-[11px] font-bold">
+                        <Shield className="size-3 admin-muted" />
                         <span>{user.role.name}</span>
                       </span>
                     </div>
 
                     <div className="space-y-0.5">
-                      <span className="text-[10px] font-bold text-zinc-400 block">رقم الهاتف:</span>
+                      <span className="text-[10px] font-bold admin-muted block">رقم الهاتف:</span>
                       <a
                         href={`tel:${user.phone}`}
-                        className="inline-flex items-center gap-1 font-mono text-zinc-700 font-medium hover:underline text-[11px]"
+                        className="inline-flex items-center gap-1 font-mono text-[var(--admin-foreground)] font-medium hover:underline text-[11px]"
                       >
-                        <Phone className="size-3 text-zinc-400" />
+                        <Phone className="size-3 admin-muted" />
                         <span>{user.phone}</span>
                       </a>
                     </div>
@@ -454,32 +454,32 @@ export function StaffClient({
 
                   {/* Assigned Branches */}
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold text-zinc-400 block">نطاق الفروع:</span>
+                    <span className="text-[10px] font-bold admin-muted block">نطاق الفروع:</span>
                     <div className="flex flex-wrap gap-1">
                       {user.userBranches.length > 0 ? (
                         user.userBranches.map((ub) => (
                           <span
                             key={ub.branch.id}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-zinc-50 text-zinc-700 border border-zinc-200 font-medium"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-[var(--admin-background)] text-[var(--admin-foreground)] border border-[var(--admin-border)] font-medium"
                           >
-                            <Building2 className="size-2.5 text-zinc-400" />
+                            <Building2 className="size-2.5 admin-muted" />
                             <span>{ub.branch.nameAr}</span>
                           </span>
                         ))
                       ) : (
-                        <span className="text-zinc-400 text-[11px]">كافة الفروع</span>
+                        <span className="admin-muted text-[11px]">كافة الفروع</span>
                       )}
                     </div>
                   </div>
 
                   {/* Mobile Actions Toolbar */}
-                  <div className="pt-2 border-t border-zinc-100 grid grid-cols-3 gap-1.5 text-xs">
+                  <div className="pt-2 border-t border-[var(--admin-border)] grid grid-cols-3 gap-1.5 text-xs">
                     <button
                       type="button"
                       onClick={() => openEditModal(user)}
-                      className="py-1.5 px-2 bg-zinc-50 hover:bg-zinc-100 text-zinc-700 rounded-lg font-bold flex items-center justify-center gap-1 border border-zinc-200"
+                      className="py-1.5 px-2 admin-control rounded-lg font-bold flex items-center justify-center gap-1 border"
                     >
-                      <Pencil className="size-3 text-zinc-500" />
+                      <Pencil className="size-3 admin-muted" />
                       <span>تعديل</span>
                     </button>
 
@@ -490,9 +490,9 @@ export function StaffClient({
                         setNewPassword('');
                         setError(null);
                       }}
-                      className="py-1.5 px-2 bg-zinc-50 hover:bg-zinc-100 text-zinc-700 rounded-lg font-bold flex items-center justify-center gap-1 border border-zinc-200"
+                      className="py-1.5 px-2 admin-control rounded-lg font-bold flex items-center justify-center gap-1 border"
                     >
-                      <KeyRound className="size-3 text-zinc-500" />
+                      <KeyRound className="size-3 admin-muted" />
                       <span>كلمة السر</span>
                     </button>
 
@@ -502,10 +502,10 @@ export function StaffClient({
                       onClick={() => handleToggleStatus(user)}
                       className={`py-1.5 px-2 rounded-lg font-bold flex items-center justify-center gap-1 border ${
                         user.id === currentUserId
-                          ? 'bg-zinc-100 text-zinc-400 border-zinc-200 cursor-not-allowed'
+                          ? 'bg-[var(--admin-background)] admin-muted border-[var(--admin-border)] cursor-not-allowed'
                           : user.isActive
-                          ? 'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-100'
-                          : 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
+                          ? 'admin-status-danger'
+                          : 'admin-status-success'
                       }`}
                     >
                       <Power className="size-3" />
@@ -518,9 +518,9 @@ export function StaffClient({
           </div>
 
           {/* Desktop Table View (hidden md:block) */}
-          <div className="hidden md:block bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-2xs">
+          <div className="hidden md:block admin-card overflow-hidden">
             <table className="w-full text-right text-xs">
-              <thead className="bg-zinc-50/80 border-b border-zinc-200 text-zinc-500 font-bold">
+              <thead className="bg-[var(--admin-background)] border-b border-[var(--admin-border)] admin-muted font-bold">
                 <tr>
                   <th className="p-4">اسم المستخدم</th>
                   <th className="p-4">الاسم الكامل</th>
@@ -531,29 +531,29 @@ export function StaffClient({
                   <th className="p-4 text-left">الإجراءات</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100">
+              <tbody className="divide-y divide-[var(--admin-border)]">
                 {filteredStaff.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="p-8 text-center text-zinc-400">
+                    <td colSpan={7} className="p-8 text-center admin-muted">
                       لا يوجد موظفين يطابقون معايير البحث.
                     </td>
                   </tr>
                 ) : (
                   filteredStaff.map((user) => (
-                    <tr key={user.id} className="hover:bg-zinc-50/50 transition">
-                      <td className="p-4 font-mono font-bold text-zinc-800">
+                    <tr key={user.id} className="admin-row-hover transition">
+                      <td className="p-4 font-mono font-bold text-[var(--admin-foreground)]">
                         {user.username}
                       </td>
-                      <td className="p-4 font-bold text-zinc-900">{user.fullName}</td>
-                      <td className="p-4 text-zinc-600">
+                      <td className="p-4 font-bold text-[var(--admin-foreground)]">{user.fullName}</td>
+                      <td className="p-4 admin-muted">
                         <div className="flex items-center gap-1.5 font-mono">
-                          <Phone className="size-3 text-zinc-400" />
+                          <Phone className="size-3 admin-muted" />
                           <span>{user.phone}</span>
                         </div>
                       </td>
                       <td className="p-4">
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold bg-zinc-100 text-zinc-800 border border-zinc-200">
-                          <Shield className="size-3 text-zinc-500" />
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold bg-[var(--admin-background)] text-[var(--admin-foreground)] border border-[var(--admin-border)]">
+                          <Shield className="size-3 admin-muted" />
                           <span>{user.role.name}</span>
                         </span>
                       </td>
@@ -563,25 +563,25 @@ export function StaffClient({
                             user.userBranches.map((ub) => (
                               <span
                                 key={ub.branch.id}
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-zinc-50 text-zinc-700 border border-zinc-200 font-medium"
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-[var(--admin-background)] text-[var(--admin-foreground)] border border-[var(--admin-border)] font-medium"
                               >
-                                <Building2 className="size-2.5 text-zinc-400" />
+                                <Building2 className="size-2.5 admin-muted" />
                                 <span>{ub.branch.nameAr}</span>
                               </span>
                             ))
                           ) : (
-                            <span className="text-zinc-400 text-[11px]">كافة الفروع</span>
+                            <span className="admin-muted text-[11px]">كافة الفروع</span>
                           )}
                         </div>
                       </td>
                       <td className="p-4">
                         {user.isActive ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold admin-badge admin-badge-success">
                             <CheckCircle className="size-3" />
                             <span>مفعل</span>
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-zinc-100 text-zinc-500 border border-zinc-200">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold admin-badge admin-badge-neutral">
                             <XCircle className="size-3" />
                             <span>معطل</span>
                           </span>
@@ -592,7 +592,7 @@ export function StaffClient({
                           <button
                             type="button"
                             onClick={() => openEditModal(user)}
-                            className="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold transition"
+                            className="p-1.5 rounded-lg bg-[var(--admin-background)] hover:bg-[var(--admin-border)] text-[var(--admin-foreground)] font-bold transition"
                             title="تعديل بيانات الموظف"
                           >
                             <Pencil className="size-3.5" />
@@ -605,7 +605,7 @@ export function StaffClient({
                               setNewPassword('');
                               setError(null);
                             }}
-                            className="p-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold transition"
+                            className="p-1.5 rounded-lg bg-[var(--admin-background)] hover:bg-[var(--admin-border)] text-[var(--admin-foreground)] font-bold transition"
                             title="تغيير كلمة المرور"
                           >
                             <KeyRound className="size-3.5" />
@@ -617,10 +617,10 @@ export function StaffClient({
                             onClick={() => handleToggleStatus(user)}
                             className={`p-1.5 rounded-lg font-bold transition ${
                               user.id === currentUserId
-                                ? 'bg-zinc-100 text-zinc-300 cursor-not-allowed'
+                                ? 'bg-[var(--admin-background)] admin-muted cursor-not-allowed'
                                 : user.isActive
-                                ? 'bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200'
-                                : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200'
+                                ? 'admin-status-danger border'
+                                : 'admin-status-success border'
                             }`}
                             title={user.isActive ? 'إيقاف الحساب' : 'تفعيل الحساب'}
                           >
@@ -640,12 +640,12 @@ export function StaffClient({
       {/* Tab 2: Roles and Permissions Matrix */}
       {activeTab === 'ROLES' && (
         <div className="space-y-6">
-          <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-2xs space-y-2">
+          <div className="admin-card p-5 space-y-2">
             <div className="flex items-center gap-2">
-              <ShieldAlert className="size-5 text-zinc-800" />
-              <h2 className="text-base font-bold text-zinc-900">مصفوفة الصلاحيات والأدوار المعتمدة</h2>
+              <ShieldAlert className="size-5 text-[var(--admin-foreground)]" />
+              <h2 className="text-base font-bold text-[var(--admin-foreground)]">مصفوفة الصلاحيات والأدوار المعتمدة</h2>
             </div>
-            <p className="text-xs text-zinc-500 leading-relaxed">
+            <p className="text-xs admin-muted leading-relaxed">
               يوضح الجدول التالي الصلاحيات والقدرات الفنية الممنوحة لكل دور وظيفي في المنظومة. الصلاحيات محددة بدقة لضمان أمان العمليات المالية والميدانية.
             </p>
           </div>
@@ -656,25 +656,25 @@ export function StaffClient({
               return (
                 <div
                   key={role.id}
-                  className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-2xs flex flex-col justify-between space-y-4"
+                  className="admin-card p-5 flex flex-col justify-between space-y-4"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs font-black bg-zinc-900 text-white px-2.5 py-1 rounded-lg">
+                      <span className="font-mono text-xs font-black bg-[var(--admin-foreground)] text-[var(--admin-surface)] px-2.5 py-1 rounded-lg">
                         {role.name}
                       </span>
-                      <span className="text-[11px] text-zinc-400 font-mono">
+                      <span className="text-[11px] admin-muted font-mono">
                         {rolePermCodes.length} صلاحيات
                       </span>
                     </div>
 
-                    <p className="text-xs text-zinc-600 font-medium leading-relaxed">
+                    <p className="text-xs admin-muted font-medium leading-relaxed">
                       {role.description || 'دور مخصص في المنظومة'}
                     </p>
                   </div>
 
-                  <div className="space-y-1.5 pt-3 border-t border-zinc-100">
-                    <span className="text-[10px] font-bold text-zinc-400 block uppercase tracking-wider">
+                  <div className="space-y-1.5 pt-3 border-t border-[var(--admin-border)]">
+                    <span className="text-[10px] font-bold admin-muted block uppercase tracking-wider">
                       القدرات التشغيلية الممنوحة:
                     </span>
                     <div className="flex flex-wrap gap-1">
@@ -683,10 +683,10 @@ export function StaffClient({
                         return (
                           <span
                             key={code}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-zinc-50 text-zinc-700 border border-zinc-200 font-medium"
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] bg-[var(--admin-background)] text-[var(--admin-foreground)] border border-[var(--admin-border)] font-medium"
                             title={permDef?.description || code}
                           >
-                            <Check className="size-2.5 text-emerald-600" />
+                            <Check className="size-2.5 text-[var(--admin-accent-hover)]" />
                             <span>{permDef?.name || code}</span>
                           </span>
                         );
@@ -703,66 +703,66 @@ export function StaffClient({
       {/* Modal 1: Add Staff Modal */}
       {isAddModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-zinc-200 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
+          <div className="admin-card max-w-md w-full p-6 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
               <div className="flex items-center gap-2">
-                <Users className="size-5 text-zinc-800" strokeWidth={1.8} />
-                <h3 className="font-bold text-sm text-zinc-900">إضافة موظف جديد</h3>
+                <Users className="size-5 text-[var(--admin-foreground)]" strokeWidth={1.8} />
+                <h3 className="font-bold text-sm text-[var(--admin-foreground)]">إضافة موظف جديد</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-zinc-400 hover:text-zinc-600"
+                className="admin-muted hover:text-[var(--admin-foreground)]"
               >
                 <X className="size-4" />
               </button>
             </div>
 
             {error && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-bold">
+              <div className="p-3 rounded-xl admin-status-danger border text-xs font-bold">
                 {error}
               </div>
             )}
 
             <form onSubmit={handleCreateStaff} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">اسم المستخدم (لتسجيل الدخول)</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">اسم المستخدم (لتسجيل الدخول)</label>
                 <input
                   type="text"
                   required
                   placeholder="مثال: cashier_alex"
                   value={addUsername}
                   onChange={(e) => setAddUsername(e.target.value.toLowerCase())}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] font-mono text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">الاسم الكامل</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">الاسم الكامل</label>
                 <input
                   type="text"
                   required
                   placeholder="مثال: أحمد عبد الله"
                   value={addFullName}
                   onChange={(e) => setAddFullName(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">رقم الهاتف</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">رقم الهاتف</label>
                 <input
                   type="tel"
                   required
                   placeholder="010xxxxxxxx"
                   value={addPhone}
                   onChange={(e) => setAddPhone(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] font-mono text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">كلمة المرور الابتدائية</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">كلمة المرور الابتدائية</label>
                 <input
                   type="password"
                   required
@@ -770,16 +770,16 @@ export function StaffClient({
                   placeholder="6 خانات على الأقل"
                   value={addPassword}
                   onChange={(e) => setAddPassword(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">الدور الوظيفي (الصلاحيات)</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">الدور الوظيفي (الصلاحيات)</label>
                 <select
                   value={addRoleId}
                   onChange={(e) => setAddRoleId(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium"
                 >
                   {roles.map((r) => (
                     <option key={r.id} value={r.id}>
@@ -790,12 +790,12 @@ export function StaffClient({
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">الفروع المعين لها الموظف</label>
-                <div className="max-h-36 overflow-y-auto space-y-1.5 p-2.5 border border-zinc-200 rounded-xl bg-zinc-50">
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">الفروع المعين لها الموظف</label>
+                <div className="max-h-36 overflow-y-auto space-y-1.5 p-2.5 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)]">
                   {branches.map((b) => (
                     <label
                       key={b.id}
-                      className="flex items-center gap-2 cursor-pointer text-xs font-medium text-zinc-800"
+                      className="flex items-center gap-2 cursor-pointer text-xs font-medium text-[var(--admin-foreground)]"
                     >
                       <input
                         type="checkbox"
@@ -807,7 +807,7 @@ export function StaffClient({
                               : [...prev, b.id]
                           );
                         }}
-                        className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-800"
+                        className="rounded border-[var(--admin-border)] text-[var(--admin-primary)] focus:ring-[var(--admin-primary)]"
                       />
                       <span>{b.nameAr} ({b.code})</span>
                     </label>
@@ -815,18 +815,18 @@ export function StaffClient({
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-zinc-100">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--admin-border)]">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-zinc-200 text-zinc-700 hover:bg-zinc-50 font-bold"
+                  className="px-4 py-2 rounded-xl border admin-control font-bold"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 rounded-xl bg-zinc-900 text-white font-bold hover:bg-zinc-800 transition disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl admin-primary-action font-bold transition disabled:opacity-50"
                 >
                   {isSubmitting ? 'جارٍ الحفظ...' : 'إضافة الموظف'}
                 </button>
@@ -839,61 +839,61 @@ export function StaffClient({
       {/* Modal 2: Edit Staff Modal */}
       {editingStaff && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl border border-zinc-200 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
+          <div className="admin-card max-w-md w-full p-6 space-y-4 shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
               <div className="flex items-center gap-2">
-                <Pencil className="size-4 text-zinc-800" />
-                <h3 className="font-bold text-sm text-zinc-900">تعديل بيانات الموظف</h3>
+                <Pencil className="size-4 text-[var(--admin-foreground)]" />
+                <h3 className="font-bold text-sm text-[var(--admin-foreground)]">تعديل بيانات الموظف</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setEditingStaff(null)}
-                className="text-zinc-400 hover:text-zinc-600"
+                className="admin-muted hover:text-[var(--admin-foreground)]"
               >
                 <X className="size-4" />
               </button>
             </div>
 
-            <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-200/80 flex items-center justify-between text-xs">
-              <span className="text-zinc-500 font-bold">اسم المستخدم:</span>
-              <span className="font-mono font-black text-zinc-900">@{editingStaff.username}</span>
+            <div className="p-3 bg-[var(--admin-background)] rounded-xl border border-[var(--admin-border)] flex items-center justify-between text-xs">
+              <span className="admin-muted font-bold">اسم المستخدم:</span>
+              <span className="font-mono font-black text-[var(--admin-foreground)]">@{editingStaff.username}</span>
             </div>
 
             {error && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-bold">
+              <div className="p-3 rounded-xl admin-status-danger border text-xs font-bold">
                 {error}
               </div>
             )}
 
             <form onSubmit={handleUpdateStaff} className="space-y-3.5 text-xs">
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">الاسم الكامل</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">الاسم الكامل</label>
                 <input
                   type="text"
                   required
                   value={editFullName}
                   onChange={(e) => setEditFullName(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">رقم الهاتف</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">رقم الهاتف</label>
                 <input
                   type="tel"
                   required
                   value={editPhone}
                   onChange={(e) => setEditPhone(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 font-mono text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] font-mono text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">الدور الوظيفي (الصلاحيات)</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">الدور الوظيفي (الصلاحيات)</label>
                 <select
                   value={editRoleId}
                   onChange={(e) => setEditRoleId(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium"
                 >
                   {roles.map((r) => (
                     <option key={r.id} value={r.id}>
@@ -904,12 +904,12 @@ export function StaffClient({
               </div>
 
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">الفروع المخصصة</label>
-                <div className="max-h-36 overflow-y-auto space-y-1.5 p-2.5 border border-zinc-200 rounded-xl bg-zinc-50">
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">الفروع المخصصة</label>
+                <div className="max-h-36 overflow-y-auto space-y-1.5 p-2.5 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)]">
                   {branches.map((b) => (
                     <label
                       key={b.id}
-                      className="flex items-center gap-2 cursor-pointer text-xs font-medium text-zinc-800"
+                      className="flex items-center gap-2 cursor-pointer text-xs font-medium text-[var(--admin-foreground)]"
                     >
                       <input
                         type="checkbox"
@@ -921,7 +921,7 @@ export function StaffClient({
                               : [...prev, b.id]
                           );
                         }}
-                        className="rounded border-zinc-300 text-zinc-900 focus:ring-zinc-800"
+                        className="rounded border-[var(--admin-border)] text-[var(--admin-primary)] focus:ring-[var(--admin-primary)]"
                       />
                       <span>{b.nameAr} ({b.code})</span>
                     </label>
@@ -929,18 +929,18 @@ export function StaffClient({
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-3 border-t border-zinc-100">
+              <div className="flex items-center justify-end gap-2 pt-3 border-t border-[var(--admin-border)]">
                 <button
                   type="button"
                   onClick={() => setEditingStaff(null)}
-                  className="px-4 py-2 rounded-xl border border-zinc-200 text-zinc-700 hover:bg-zinc-50 font-bold"
+                  className="px-4 py-2 rounded-xl border admin-control font-bold"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 rounded-xl bg-zinc-900 text-white font-bold hover:bg-zinc-800 transition disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl admin-primary-action font-bold transition disabled:opacity-50"
                 >
                   {isSubmitting ? 'جارٍ الحفظ...' : 'حفظ التعديلات'}
                 </button>
@@ -953,36 +953,36 @@ export function StaffClient({
       {/* Modal 3: Reset Password Modal */}
       {resettingPasswordStaff && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="bg-white rounded-2xl max-w-sm w-full p-6 space-y-4 shadow-xl border border-zinc-200">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
+          <div className="admin-card max-w-sm w-full p-6 space-y-4 shadow-xl">
+            <div className="flex items-center justify-between border-b border-[var(--admin-border)] pb-3">
               <div className="flex items-center gap-2">
-                <KeyRound className="size-4 text-zinc-800" />
-                <h3 className="font-bold text-sm text-zinc-900">إعادة تعيين كلمة المرور</h3>
+                <KeyRound className="size-4 text-[var(--admin-foreground)]" />
+                <h3 className="font-bold text-sm text-[var(--admin-foreground)]">إعادة تعيين كلمة المرور</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setResettingPasswordStaff(null)}
-                className="text-zinc-400 hover:text-zinc-600"
+                className="admin-muted hover:text-[var(--admin-foreground)]"
               >
                 <X className="size-4" />
               </button>
             </div>
 
             <div className="space-y-1 text-xs">
-              <span className="text-zinc-500">الموظف:</span>
-              <p className="font-bold text-zinc-900 text-sm">{resettingPasswordStaff.fullName}</p>
-              <span className="font-mono text-zinc-400 block">@{resettingPasswordStaff.username}</span>
+              <span className="admin-muted">الموظف:</span>
+              <p className="font-bold text-[var(--admin-foreground)] text-sm">{resettingPasswordStaff.fullName}</p>
+              <span className="font-mono admin-muted block">@{resettingPasswordStaff.username}</span>
             </div>
 
             {error && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 font-bold">
+              <div className="p-3 rounded-xl admin-status-danger border text-xs font-bold">
                 {error}
               </div>
             )}
 
             <form onSubmit={handleResetPassword} className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-zinc-700 mb-1">كلمة المرور الجديدة</label>
+                <label className="block font-bold text-[var(--admin-foreground)] mb-1">كلمة المرور الجديدة</label>
                 <input
                   type="password"
                   required
@@ -990,22 +990,22 @@ export function StaffClient({
                   placeholder="أدخل كلمة مرور جديدة (6 خانات على الأقل)"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className="w-full px-3 py-2 border border-zinc-200 rounded-xl bg-zinc-50 text-xs focus:bg-white focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium"
+                  className="w-full px-3 py-2 border border-[var(--admin-border)] rounded-xl bg-[var(--admin-background)] text-xs focus:bg-[var(--admin-surface)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-zinc-100">
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-[var(--admin-border)]">
                 <button
                   type="button"
                   onClick={() => setResettingPasswordStaff(null)}
-                  className="px-4 py-2 rounded-xl border border-zinc-200 text-zinc-700 hover:bg-zinc-50 font-bold"
+                  className="px-4 py-2 rounded-xl border admin-control font-bold"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting || newPassword.length < 6}
-                  className="px-5 py-2 rounded-xl bg-zinc-900 text-white font-bold hover:bg-zinc-800 transition disabled:opacity-50"
+                  className="px-5 py-2 rounded-xl admin-primary-action font-bold transition disabled:opacity-50"
                 >
                   {isSubmitting ? 'جارٍ التغيير...' : 'تأكيد التغيير'}
                 </button>

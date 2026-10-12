@@ -1,0 +1,77 @@
+stages:
+  - test
+  - build
+  - deploy_dev
+
+variables:
+  APP_NAME: masa
+  DEPLOY_ENV: dev
+  DEPLOY_HOST: 192.168.1.183
+  DEPLOY_PORT: "1234"
+  FULL_IMAGE_NAME: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+
+validate:
+  stage: test
+  image: node:22-bookworm-slim
+  tags:
+    - build
+  before_script:
+    - npm ci --no-audit --no-fund --fetch-retries=5 --fetch-retry-mintimeout=20000 --fetch-retry-maxtimeout=600000 --fetch-timeout=600000
+  script:
+    - npm run lint
+    - npm test -- --passWithNoTests
+
+build_image:
+  stage: build
+  image: docker:latest
+  tags:
+    - docker
+  script:
+    - echo "Logging in to GitLab Container Registry"
+    - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
+    - echo "Building image $FULL_IMAGE_NAME"
+    - docker build -t "$FULL_IMAGE_NAME" .
+    - docker push "$FULL_IMAGE_NAME"
+  only:
+    - develop
+    - main
+    - /^release\/.*$/
+
+deploy_dev:
+  stage: deploy_dev
+  tags:
+    - deploy
+  before_script:
+    - mkdir --parents ~/.ssh
+    - |
+      if [ -n "$DEPLOY_SSH_PRIVATE_KEY" ]; then
+        printf '%s\n' "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+      fi
+    - |
+      if [ -n "$DEPLOY_SSH_KNOWN_HOSTS" ]; then
+        printf '%s\n' "$DEPLOY_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+      fi
+  script:
+    - >-
+      ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
+      --limit "$DEPLOY_ENV"
+      -e "app_name=$APP_NAME"
+      -e "deploy_port=$DEPLOY_PORT"
+      -e "docker_image=$FULL_IMAGE_NAME"
+      -e "registry_url=$CI_REGISTRY"
+      -e "registry_user=$CI_REGISTRY_USER"
+      -e "registry_password=$CI_REGISTRY_PASSWORD"
+      -e "runtime_env_file=$APP_RUNTIME_ENV_FILE"
+    - |
+      if command -v curl >/dev/null 2>&1; then
+        curl --fail --silent --show-error --max-time 20 "http://$DEPLOY_HOST:$DEPLOY_PORT/" >/dev/null
+        echo "Health check passed at http://$DEPLOY_HOST:$DEPLOY_PORT/"
+      else
+        echo "curl not found; skipping HTTP health check"
+      fi
+  environment:
+    name: development
+    url: http://192.168.1.183:1234/
+  only:
+    - develop

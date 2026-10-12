@@ -26,24 +26,24 @@ export function InvoiceFilterToolbar({
   onUpdateFilter,
 }: InvoiceFilterToolbarProps) {
   return (
-    <div className="bg-white p-4 rounded-2xl border border-zinc-200 shadow-2xs space-y-3.5">
+    <div className="admin-card p-4 space-y-3.5">
       {/* Tier 1: Search + Quick Date Range Buttons */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="w-4 h-4 absolute right-3.5 top-3 text-zinc-400" />
+          <Search className="w-4 h-4 absolute right-3.5 top-3 admin-muted" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="بحث برقم الفاتورة، اسم الزبون، أو الطاولة..."
-            className="w-full pr-10 pl-8 py-2 text-xs border border-zinc-200 rounded-xl focus:ring-1 focus:ring-zinc-800 outline-hidden font-medium placeholder:text-zinc-400 bg-zinc-50/50 focus:bg-white transition"
+            className="w-full pr-10 pl-8 py-2 text-xs border border-[var(--admin-border)] rounded-xl focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden font-medium placeholder:admin-muted bg-[var(--admin-background)]/50 focus:bg-[var(--admin-surface)] transition"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => onSearchChange('')}
-              className="absolute left-2.5 top-2.5 text-zinc-400 hover:text-zinc-600 cursor-pointer"
+              className="absolute left-2.5 top-2.5 admin-muted hover:text-[var(--admin-foreground)] cursor-pointer"
               title="مسح البحث"
             >
               ✕
@@ -67,8 +67,8 @@ export function InvoiceFilterToolbar({
               onClick={() => onDatePresetChange(preset.id as DatePreset)}
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap cursor-pointer ${
                 filters.datePreset === preset.id
-                  ? 'bg-zinc-900 text-white shadow-2xs'
-                  : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+                  ? 'admin-primary-action shadow-2xs'
+                  : 'admin-control hover:bg-[var(--admin-background)]/60'
               }`}
             >
               {preset.label}
@@ -78,7 +78,7 @@ export function InvoiceFilterToolbar({
       </div>
 
       {/* Quick Date Range - Mobile View (Grid 3x2: Full width, zero clipping, touch-optimized) */}
-      <div className="grid sm:hidden grid-cols-3 gap-1 bg-zinc-100/80 p-1 rounded-xl text-xs w-full">
+      <div className="grid sm:hidden grid-cols-3 gap-1 bg-[var(--admin-background)]/80 p-1 rounded-xl text-xs w-full border border-[var(--admin-border)]">
         {[
           { id: 'ALL', label: 'الكل' },
           { id: 'TODAY', label: 'اليوم' },
@@ -93,8 +93,8 @@ export function InvoiceFilterToolbar({
             onClick={() => onDatePresetChange(preset.id as DatePreset)}
             className={`w-full py-2 px-1 text-center rounded-lg text-xs font-bold transition cursor-pointer ${
               filters.datePreset === preset.id
-                ? 'bg-zinc-900 text-white shadow-2xs'
-                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-200/60'
+                ? 'admin-primary-action shadow-2xs'
+                : 'admin-control hover:bg-[var(--admin-background)]/60'
             }`}
           >
             {preset.label}
@@ -104,29 +104,29 @@ export function InvoiceFilterToolbar({
 
       {/* Custom Date Pickers (Shown only if 'CUSTOM' selected) */}
       {filters.datePreset === 'CUSTOM' && (
-        <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-200/70 text-xs animate-in fade-in duration-150 space-y-2">
-          <div className="flex items-center gap-1.5 font-bold text-zinc-700">
-            <Calendar className="w-3.5 h-3.5 text-zinc-500" />
+        <div className="p-3 bg-[var(--admin-background)] rounded-xl border border-[var(--admin-border)] text-xs animate-in fade-in duration-150 space-y-2">
+          <div className="flex items-center gap-1.5 font-bold text-[var(--admin-foreground)]">
+            <Calendar className="w-3.5 h-3.5 admin-muted" />
             <span>تحديد الفترة الزمنية المخصصة:</span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div className="flex items-center gap-2 bg-white px-3 py-1.5 border border-zinc-200 rounded-lg">
-              <span className="text-[11px] font-bold text-zinc-400 whitespace-nowrap">من:</span>
+            <div className="flex items-center gap-2 bg-[var(--admin-surface)] px-3 py-1.5 border border-[var(--admin-border)] rounded-lg">
+              <span className="text-[11px] font-bold admin-muted whitespace-nowrap">من:</span>
               <input
                 type="date"
                 value={filters.dateFrom}
                 onChange={(e) => onUpdateFilter({ dateFrom: e.target.value })}
-                className="w-full bg-transparent text-xs font-medium text-zinc-800 outline-hidden"
+                className="w-full bg-transparent text-xs font-medium text-[var(--admin-foreground)] outline-hidden"
                 title="من تاريخ"
               />
             </div>
-            <div className="flex items-center gap-2 bg-white px-3 py-1.5 border border-zinc-200 rounded-lg">
-              <span className="text-[11px] font-bold text-zinc-400 whitespace-nowrap">إلى:</span>
+            <div className="flex items-center gap-2 bg-[var(--admin-surface)] px-3 py-1.5 border border-[var(--admin-border)] rounded-lg">
+              <span className="text-[11px] font-bold admin-muted whitespace-nowrap">إلى:</span>
               <input
                 type="date"
                 value={filters.dateTo}
                 onChange={(e) => onUpdateFilter({ dateTo: e.target.value })}
-                className="w-full bg-transparent text-xs font-medium text-zinc-800 outline-hidden"
+                className="w-full bg-transparent text-xs font-medium text-[var(--admin-foreground)] outline-hidden"
                 title="إلى تاريخ"
               />
             </div>
@@ -135,12 +135,12 @@ export function InvoiceFilterToolbar({
       )}
 
       {/* Tier 2: Channels, Order Type & Secondary Filters */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pt-1 border-t border-zinc-100">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pt-1 border-t border-[var(--admin-border)]">
         {/* Quick Filter Pill Groups */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Status Pills */}
-          <div className="flex items-center gap-1 bg-zinc-50 p-1 rounded-xl border border-zinc-200/70">
-            <span className="text-[10px] text-zinc-400 font-bold px-1">السداد:</span>
+          <div className="flex items-center gap-1 bg-[var(--admin-background)] p-1 rounded-xl border border-[var(--admin-border)]">
+            <span className="text-[10px] admin-muted font-bold px-1">السداد:</span>
             {[
               { id: 'ALL', label: 'الكل' },
               { id: 'PAID', label: 'مدفوعة' },
@@ -153,11 +153,11 @@ export function InvoiceFilterToolbar({
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
                   filters.paymentStatus === tab.id
                     ? tab.id === 'PAID'
-                      ? 'bg-emerald-600 text-white shadow-2xs'
+                      ? 'bg-[var(--admin-success)] text-white shadow-2xs'
                       : tab.id === 'PENDING'
-                      ? 'bg-rose-600 text-white shadow-2xs'
-                      : 'bg-zinc-900 text-white shadow-2xs'
-                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                      ? 'bg-[var(--admin-danger)] text-white shadow-2xs'
+                      : 'admin-primary-action shadow-2xs'
+                    : 'admin-muted hover:text-[var(--admin-foreground)] hover:bg-[var(--admin-background)]'
                 }`}
               >
                 {tab.label}
@@ -166,8 +166,8 @@ export function InvoiceFilterToolbar({
           </div>
 
           {/* Order Type Pills */}
-          <div className="flex items-center gap-1 bg-zinc-50 p-1 rounded-xl border border-zinc-200/70">
-            <span className="text-[10px] text-zinc-400 font-bold px-1">النوع:</span>
+          <div className="flex items-center gap-1 bg-[var(--admin-background)] p-1 rounded-xl border border-[var(--admin-border)]">
+            <span className="text-[10px] admin-muted font-bold px-1">النوع:</span>
             {[
               { id: 'ALL', label: 'الكل' },
               { id: 'DINE_IN', label: 'صالة' },
@@ -180,8 +180,8 @@ export function InvoiceFilterToolbar({
                 onClick={() => onUpdateFilter({ type: tab.id })}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
                   filters.type === tab.id
-                    ? 'bg-zinc-900 text-white shadow-2xs'
-                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                    ? 'admin-primary-action shadow-2xs'
+                    : 'admin-muted hover:text-[var(--admin-foreground)] hover:bg-[var(--admin-background)]'
                 }`}
               >
                 {tab.label}
@@ -190,8 +190,8 @@ export function InvoiceFilterToolbar({
           </div>
 
           {/* Channel Pills */}
-          <div className="flex items-center gap-1 bg-zinc-50 p-1 rounded-xl border border-zinc-200/70">
-            <span className="text-[10px] text-zinc-400 font-bold px-1">القناة:</span>
+          <div className="flex items-center gap-1 bg-[var(--admin-background)] p-1 rounded-xl border border-[var(--admin-border)]">
+            <span className="text-[10px] admin-muted font-bold px-1">القناة:</span>
             {[
               { id: 'ALL', label: 'الكل' },
               { id: 'POS', label: 'كاشير' },
@@ -203,8 +203,8 @@ export function InvoiceFilterToolbar({
                 onClick={() => onUpdateFilter({ source: tab.id })}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer ${
                   filters.source === tab.id
-                    ? 'bg-zinc-900 text-white shadow-2xs'
-                    : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
+                    ? 'admin-primary-action shadow-2xs'
+                    : 'admin-muted hover:text-[var(--admin-foreground)] hover:bg-[var(--admin-background)]'
                 }`}
               >
                 {tab.label}
@@ -220,7 +220,7 @@ export function InvoiceFilterToolbar({
             value={filters.branchId}
             disabled={isBranchRestricted}
             onChange={(e) => onUpdateFilter({ branchId: e.target.value })}
-            className="w-full lg:w-auto px-2.5 py-1.5 text-xs border border-zinc-200 rounded-xl bg-white font-medium text-zinc-800 focus:ring-1 focus:ring-zinc-800 outline-hidden cursor-pointer"
+            className="w-full lg:w-auto px-2.5 py-1.5 text-xs border border-[var(--admin-border)] rounded-xl bg-[var(--admin-surface)] font-medium text-[var(--admin-foreground)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden cursor-pointer"
           >
             <option value="ALL">جميع الفروع</option>
             {branches.map((b) => (
@@ -234,7 +234,7 @@ export function InvoiceFilterToolbar({
           <select
             value={filters.cashierId}
             onChange={(e) => onUpdateFilter({ cashierId: e.target.value })}
-            className="w-full lg:w-auto px-2.5 py-1.5 text-xs border border-zinc-200 rounded-xl bg-white font-medium text-zinc-800 focus:ring-1 focus:ring-zinc-800 outline-hidden cursor-pointer"
+            className="w-full lg:w-auto px-2.5 py-1.5 text-xs border border-[var(--admin-border)] rounded-xl bg-[var(--admin-surface)] font-medium text-[var(--admin-foreground)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden cursor-pointer"
           >
             <option value="ALL">جميع الكاشير</option>
             {cashiers.map((c) => (
@@ -248,7 +248,7 @@ export function InvoiceFilterToolbar({
           <select
             value={filters.paymentMethod}
             onChange={(e) => onUpdateFilter({ paymentMethod: e.target.value })}
-            className="w-full lg:w-auto px-2.5 py-1.5 text-xs border border-zinc-200 rounded-xl bg-white font-medium text-zinc-800 focus:ring-1 focus:ring-zinc-800 outline-hidden cursor-pointer"
+            className="w-full lg:w-auto px-2.5 py-1.5 text-xs border border-[var(--admin-border)] rounded-xl bg-[var(--admin-surface)] font-medium text-[var(--admin-foreground)] focus:ring-1 focus:ring-[var(--admin-primary)] outline-hidden cursor-pointer"
           >
             <option value="ALL">طرق الدفع</option>
             <option value="CASH">نقدي</option>

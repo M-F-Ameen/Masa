@@ -535,24 +535,24 @@ export function InvoicesClient({
       )}
 
       {/* 1. Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 border-b border-zinc-200/80 pb-3.5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 border-b border-[var(--admin-border)] pb-3.5">
         <div className="flex items-center gap-2.5 sm:gap-3">
-          <div className="p-2 sm:p-2.5 rounded-2xl bg-zinc-900 text-white shadow-2xs shrink-0">
+          <div className="p-2 sm:p-2.5 rounded-2xl bg-[var(--admin-primary)] text-white shadow-2xs shrink-0">
             <Receipt className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="text-lg sm:text-2xl font-black tracking-tight text-zinc-900">
+              <h1 className="text-lg sm:text-2xl font-black tracking-tight text-[var(--admin-foreground)]">
                 سجل ومراجعة الفواتير
               </h1>
               {hasActiveFilters && (
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                <span className="admin-badge admin-badge-info inline-flex items-center gap-1">
                   <SlidersHorizontal className="w-3 h-3" />
                   <span>نتائج مخصصة ({totalCount})</span>
                 </span>
               )}
             </div>
-            <p className="text-[11px] sm:text-sm text-zinc-500 font-medium mt-0.5">
+            <p className="text-[11px] sm:text-sm admin-muted font-medium mt-0.5">
               مركز الرقابة المالية ومراجعة فواتير الصالة ونقاط البيع والتوصيل
             </p>
           </div>
@@ -565,7 +565,7 @@ export function InvoicesClient({
               type="button"
               onClick={handleResetFilters}
               disabled={isRefreshing}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 rounded-xl hover:bg-rose-100 transition shadow-2xs cursor-pointer disabled:opacity-50"
+              className="admin-action-danger flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-bold rounded-xl transition shadow-2xs cursor-pointer disabled:opacity-50"
               title="إلغاء جميع الفلاتر والعودة للسجل الشامل"
             >
               <RotateCcw className="w-3.5 h-3.5" />
@@ -577,10 +577,10 @@ export function InvoicesClient({
             type="button"
             onClick={handleExportCsv}
             disabled={!orders.length}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-bold text-zinc-700 bg-white border border-zinc-200 rounded-xl hover:bg-zinc-50 transition shadow-2xs cursor-pointer disabled:opacity-50"
+            className="admin-control flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-bold rounded-xl transition shadow-2xs cursor-pointer disabled:opacity-50"
             title="تصدير كشف الفواتير لملف Excel / CSV"
           >
-            <Download className="w-3.5 h-3.5 text-zinc-600" />
+            <Download className="w-3.5 h-3.5" />
             <span>تصدير Excel</span>
           </button>
 
@@ -588,7 +588,7 @@ export function InvoicesClient({
             type="button"
             onClick={() => executeFetch()}
             disabled={isRefreshing}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-zinc-900 rounded-xl hover:bg-zinc-800 transition shadow-2xs cursor-pointer disabled:opacity-50"
+            className="admin-primary-action flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl transition shadow-2xs cursor-pointer disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
             <span>تحديث</span>
@@ -599,65 +599,65 @@ export function InvoicesClient({
       {/* 2. Top Summary KPI Cards (Executive & Focused 4-Card Grid) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
         {/* Total Collected Revenue */}
-        <div className="bg-white p-3 sm:p-3.5 rounded-2xl border border-zinc-200/90 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-500 text-[10px] sm:text-[11px] font-semibold">
+        <div className="admin-card p-3 sm:p-3.5 flex flex-col justify-between">
+          <div className="flex items-center justify-between admin-muted text-[10px] sm:text-[11px] font-semibold">
             <span>المبيعات المحصلة</span>
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-emerald-50 text-emerald-700 grid place-items-center">
+            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-[var(--admin-success-soft)] text-[var(--admin-success)] grid place-items-center">
               <Banknote className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
           </div>
-          <p className="text-base sm:text-xl font-black text-emerald-600 font-mono mt-1.5 sm:mt-2 whitespace-nowrap">
+          <p className="text-base sm:text-xl font-black text-[var(--admin-success)] font-mono mt-1.5 sm:mt-2 whitespace-nowrap">
             {formatMoney(metrics.totalSalesMinor)}
           </p>
-          <span className="text-[10px] sm:text-[11px] text-zinc-400 mt-0.5 sm:mt-1 block">
+          <span className="text-[10px] sm:text-[11px] admin-muted mt-0.5 sm:mt-1 block">
             {metrics.paidCount} فاتورة مسددة
           </span>
         </div>
 
         {/* Dine-In Bills */}
-        <div className="bg-white p-3 sm:p-3.5 rounded-2xl border border-zinc-200/90 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-500 text-[10px] sm:text-[11px] font-semibold">
+        <div className="admin-card p-3 sm:p-3.5 flex flex-col justify-between">
+          <div className="flex items-center justify-between admin-muted text-[10px] sm:text-[11px] font-semibold">
             <span>الصالة والطاولات</span>
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-sky-50 text-sky-700 grid place-items-center">
+            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-[var(--admin-info-soft)] text-[var(--admin-info)] grid place-items-center">
               <Utensils className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
           </div>
-          <p className="text-base sm:text-xl font-black text-zinc-900 font-mono mt-1.5 sm:mt-2 whitespace-nowrap">
+          <p className="text-base sm:text-xl font-black text-[var(--admin-foreground)] font-mono mt-1.5 sm:mt-2 whitespace-nowrap">
             {formatMoney(metrics.dineInSalesMinor)}
           </p>
-          <span className="text-[10px] sm:text-[11px] text-zinc-400 mt-0.5 sm:mt-1 block">
+          <span className="text-[10px] sm:text-[11px] admin-muted mt-0.5 sm:mt-1 block">
             {metrics.dineInCount} طلب صالة
           </span>
         </div>
 
         {/* Takeaway & Delivery Bills */}
-        <div className="bg-white p-3 sm:p-3.5 rounded-2xl border border-zinc-200/90 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-500 text-[10px] sm:text-[11px] font-semibold">
+        <div className="admin-card p-3 sm:p-3.5 flex flex-col justify-between">
+          <div className="flex items-center justify-between admin-muted text-[10px] sm:text-[11px] font-semibold">
             <span>السفري والتوصيل</span>
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-amber-50 text-amber-700 grid place-items-center">
+            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-[var(--admin-warning-soft)] text-[var(--admin-warning)] grid place-items-center">
               <Store className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
           </div>
-          <p className="text-base sm:text-xl font-black text-zinc-900 font-mono mt-1.5 sm:mt-2 whitespace-nowrap">
+          <p className="text-base sm:text-xl font-black text-[var(--admin-foreground)] font-mono mt-1.5 sm:mt-2 whitespace-nowrap">
             {formatMoney(metrics.takeawaySalesMinor + metrics.deliverySalesMinor)}
           </p>
-          <span className="text-[10px] sm:text-[11px] text-zinc-400 mt-0.5 sm:mt-1 block">
+          <span className="text-[10px] sm:text-[11px] admin-muted mt-0.5 sm:mt-1 block">
             {metrics.takeawayCount} سفري • {metrics.deliveryCount} توصيل
           </span>
         </div>
 
         {/* Pending / Open Tabs */}
-        <div className="bg-white p-3 sm:p-3.5 rounded-2xl border border-zinc-200/90 shadow-2xs flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-500 text-[10px] sm:text-[11px] font-semibold">
+        <div className="admin-card p-3 sm:p-3.5 flex flex-col justify-between">
+          <div className="flex items-center justify-between admin-muted text-[10px] sm:text-[11px] font-semibold">
             <span>شيكات معلقة</span>
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-rose-50 text-rose-700 grid place-items-center">
+            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-xl bg-[var(--admin-danger-soft)] text-[var(--admin-danger)] grid place-items-center">
               <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
           </div>
-          <p className="text-base sm:text-xl font-black text-rose-600 font-mono mt-1.5 sm:mt-2 whitespace-nowrap">
+          <p className="text-base sm:text-xl font-black text-[var(--admin-danger)] font-mono mt-1.5 sm:mt-2 whitespace-nowrap">
             {metrics.pendingCount}
           </p>
-          <span className="text-[10px] sm:text-[11px] text-zinc-400 mt-0.5 sm:mt-1 block">
+          <span className="text-[10px] sm:text-[11px] admin-muted mt-0.5 sm:mt-1 block">
             بانتظار التحصيل
           </span>
         </div>
@@ -676,31 +676,31 @@ export function InvoicesClient({
       />
 
       {/* 4. Invoices Audit Table (Stable, Fluid, Zero Layout Shift) */}
-      <div className="bg-white rounded-2xl border border-zinc-200 shadow-2xs overflow-hidden">
+      <div className="admin-card overflow-hidden">
         <div
           className={`transition-opacity duration-200 ${
             isRefreshing ? 'opacity-60 pointer-events-none' : 'opacity-100'
           }`}
         >
           {/* Mobile Feed Cards View (Visible on small screens: block md:hidden) */}
-          <div className="md:hidden divide-y divide-zinc-100">
-            {orders.length === 0 ? (
-              <div className="py-12 px-4 text-center text-zinc-400">
-                <Receipt className="w-9 h-9 mx-auto mb-2 text-zinc-300" />
-                <p className="font-bold text-sm text-zinc-600">لا توجد فواتير مطابقة للشروط</p>
-                <p className="text-xs text-zinc-400 mt-1">جرب تغيير شروط الفلترة أو إعادة ضبطها</p>
-                {hasActiveFilters && (
-                  <button
-                    type="button"
-                    onClick={handleResetFilters}
-                    className="mt-3.5 inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-zinc-900 text-white rounded-xl text-xs font-bold hover:bg-zinc-800 transition shadow-2xs cursor-pointer"
-                  >
-                    <RotateCcw className="w-3.5 h-3.5" />
-                    <span>إعادة ضبط الفلاتر</span>
-                  </button>
-                )}
-              </div>
-            ) : (
+              <div className="md:hidden divide-y divide-[var(--admin-border)]">
+                {orders.length === 0 ? (
+                  <div className="py-12 px-4 text-center admin-muted">
+                    <Receipt className="w-9 h-9 mx-auto mb-2 opacity-50" />
+                    <p className="font-bold text-sm text-[var(--admin-foreground)]">لا توجد فواتير مطابقة للشروط</p>
+                    <p className="text-xs admin-muted mt-1">جرب تغيير شروط الفلترة أو إعادة ضبطها</p>
+                    {hasActiveFilters && (
+                      <button
+                        type="button"
+                        onClick={handleResetFilters}
+                        className="mt-3.5 admin-action-danger inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl transition shadow-2xs cursor-pointer"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span>إعادة ضبط الفلاتر</span>
+                      </button>
+                    )}
+                  </div>
+                ) : (
               orders.map((order) => {
                 const dateObj = new Date(order.createdAt);
                 const dateText = dateObj.toLocaleDateString('ar-EG', {
@@ -714,26 +714,26 @@ export function InvoicesClient({
                 const totalItemCount = order.items.reduce((s, i) => s + i.quantity, 0);
 
                 return (
-                  <div
-                    key={order.id}
-                    onClick={() => setSelectedInvoice(order)}
-                    className="p-3.5 hover:bg-zinc-50 active:bg-zinc-100/60 transition cursor-pointer space-y-2.5"
-                  >
+                    <div
+                      key={order.id}
+                      onClick={() => setSelectedInvoice(order)}
+                      className="p-3.5 admin-row-hover active:bg-[var(--admin-primary-soft)] transition cursor-pointer space-y-2.5"
+                    >
                     {/* Top Row: Order # + Branch + Total */}
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="font-mono font-bold text-zinc-900 text-sm" dir="ltr">
+                        <span className="font-mono font-bold text-[var(--admin-foreground)] text-sm" dir="ltr">
                           #{order.orderNumber}
                         </span>
-                        <p className="text-[11px] text-zinc-400 font-medium mt-0.5">
+                        <p className="text-[11px] admin-muted font-medium mt-0.5">
                           {order.branch?.nameAr || 'الفرع الرئيسي'}
                         </p>
                       </div>
                       <div className="text-left">
-                        <span className="font-mono font-black text-zinc-900 text-base">
+                        <span className="font-mono font-black text-[var(--admin-foreground)] text-base">
                           {formatMoney(order.totalMinor)}
                         </span>
-                        <p className="text-[10px] text-zinc-400 font-mono mt-0.5">
+                        <p className="text-[10px] admin-muted font-mono mt-0.5">
                           {timeText} • {dateText}
                         </p>
                       </div>
@@ -742,39 +742,39 @@ export function InvoicesClient({
                     {/* Middle Row: Badges (Type + Channel + Payment Status + Method) */}
                     <div className="flex flex-wrap items-center gap-1.5 text-xs">
                       {order.type === 'DINE_IN' ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                        <span className="admin-badge admin-badge-info inline-flex items-center gap-1">
                           <Utensils className="w-3 h-3" />
                           <span>صالة {order.tableName ? `(${order.tableName})` : ''}</span>
                         </span>
                       ) : order.type === 'TAKEAWAY' ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                        <span className="admin-badge admin-badge-warning inline-flex items-center gap-1">
                           <Store className="w-3 h-3" />
                           <span>سفري</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                        <span className="admin-badge admin-badge-info inline-flex items-center gap-1">
                           <Bike className="w-3 h-3" />
                           <span>توصيل</span>
                         </span>
                       )}
 
-                      <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-500 border border-zinc-200">
+                      <span className="admin-badge admin-badge-neutral">
                         {order.source === 'POS' ? 'POS' : 'أونلاين'}
                       </span>
 
                       {order.paymentStatus === 'PAID' ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                        <span className="admin-badge admin-badge-success inline-flex items-center gap-1">
                           <CheckCircle2 className="w-3 h-3" />
                           <span>مدفوعة</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                        <span className="admin-badge admin-badge-danger inline-flex items-center gap-1">
                           <Clock className="w-3 h-3" />
                           <span>شيك مفتوح</span>
                         </span>
                       )}
 
-                      <span className="text-[11px] text-zinc-500 font-medium">
+                      <span className="text-[11px] admin-muted font-medium">
                         {order.paymentMethod === 'CASH'
                           ? 'نقدي'
                           : order.paymentMethod === 'CARD'
@@ -786,26 +786,26 @@ export function InvoicesClient({
                     </div>
 
                     {/* Summary Row: Items & Cashier */}
-                    <div className="flex items-center justify-between text-xs text-zinc-500 pt-1 border-t border-zinc-100">
+                    <div className="flex items-center justify-between text-xs admin-muted pt-1 border-t border-[var(--admin-border)]">
                       <span className="truncate max-w-[200px]">
-                        <strong className="text-zinc-700 font-semibold">{totalItemCount} صنف: </strong>
+                        <strong className="text-[var(--admin-foreground)] font-semibold">{totalItemCount} صنف: </strong>
                         {order.items.slice(0, 2).map((i) => i.productNameAr).join('، ')}
                         {order.items.length > 2 && '...'}
                       </span>
-                      <span className="text-[11px] text-zinc-400 shrink-0">
+                      <span className="text-[11px] admin-muted shrink-0">
                         {order.cashier?.fullName || (order.source === 'ONLINE' ? 'الموقع' : '—')}
                       </span>
                     </div>
 
                     {/* Actions Row: 3 Touch Action Buttons */}
                     <div
-                      className="flex items-center gap-2 pt-2 border-t border-zinc-100"
+                      className="flex items-center gap-2 pt-2 border-t border-[var(--admin-border)]"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <button
                         type="button"
                         onClick={() => setSelectedInvoice(order)}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-800 rounded-xl text-xs font-bold transition cursor-pointer"
+                        className="admin-control flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-bold rounded-xl transition cursor-pointer"
                       >
                         <Eye className="w-3.5 h-3.5" />
                         <span>معاينة</span>
@@ -813,7 +813,7 @@ export function InvoicesClient({
                       <button
                         type="button"
                         onClick={() => handlePrintThermal(order)}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs"
+                        className="admin-primary-action flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-bold rounded-xl transition cursor-pointer shadow-2xs"
                       >
                         <Printer className="w-3.5 h-3.5" />
                         <span>فاتورة</span>
@@ -821,7 +821,7 @@ export function InvoicesClient({
                       <button
                         type="button"
                         onClick={() => handlePrintKot(order)}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700 rounded-xl text-xs font-bold transition cursor-pointer"
+                        className="admin-control flex-1 flex items-center justify-center gap-1.5 py-1.5 text-xs font-bold rounded-xl transition cursor-pointer"
                       >
                         <ChefHat className="w-3.5 h-3.5" />
                         <span>بون مطبخ</span>
@@ -837,7 +837,7 @@ export function InvoicesClient({
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-right border-collapse min-w-[760px]">
               <thead>
-                <tr className="bg-zinc-50/90 border-b border-zinc-200 text-zinc-600 text-xs font-bold">
+                <tr className="bg-[var(--admin-background)]/90 border-b border-[var(--admin-border)] admin-muted text-xs font-bold">
                   <th className="py-3.5 px-4 w-[17%]">الفاتورة والفرع</th>
                   <th className="py-3.5 px-3 w-[13%]">الوقت والتاريخ</th>
                   <th className="py-3.5 px-3 w-[18%]">النوع والقناة</th>
@@ -848,18 +848,18 @@ export function InvoicesClient({
                   <th className="py-3.5 px-3 w-[10%] text-center">إجراءات</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100 text-xs text-zinc-800 font-medium">
+              <tbody className="divide-y divide-[var(--admin-border)] text-xs text-[var(--admin-foreground)] font-medium">
                 {orders.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="py-14 text-center text-zinc-400">
-                      <Receipt className="w-9 h-9 mx-auto mb-2 text-zinc-300" />
-                      <p className="font-bold text-sm text-zinc-600">لا توجد فواتير مطابقة للشروط المحددة</p>
-                      <p className="text-xs text-zinc-400 mt-1">جرب تغيير شروط الفلترة أو إعادة ضبطها</p>
+                    <td colSpan={8} className="py-14 text-center admin-muted">
+                      <Receipt className="w-9 h-9 mx-auto mb-2 opacity-50" />
+                      <p className="font-bold text-sm text-[var(--admin-foreground)]">لا توجد فواتير مطابقة للشروط المحددة</p>
+                      <p className="text-xs admin-muted mt-1">جرب تغيير شروط الفلترة أو إعادة ضبطها</p>
                       {hasActiveFilters && (
                         <button
                           type="button"
                           onClick={handleResetFilters}
-                          className="mt-3.5 inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-zinc-900 text-white rounded-xl text-xs font-bold hover:bg-zinc-800 transition shadow-2xs cursor-pointer"
+                          className="mt-3.5 admin-action-danger inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl transition shadow-2xs cursor-pointer"
                         >
                           <RotateCcw className="w-3.5 h-3.5" />
                           <span>إعادة ضبط الفلاتر</span>
@@ -884,19 +884,19 @@ export function InvoicesClient({
                     return (
                       <tr
                         key={order.id}
-                        className="hover:bg-zinc-50/80 transition-colors group cursor-pointer"
+                        className="admin-row-hover transition-colors group cursor-pointer"
                         onClick={() => setSelectedInvoice(order)}
                       >
                         {/* 1. Order Number & Branch */}
                         <td className="py-3.5 px-4 whitespace-nowrap">
                           <div className="flex flex-col">
                             <span
-                              className="font-mono font-bold text-zinc-900 group-hover:text-blue-600 transition text-sm"
+                              className="font-mono font-bold text-[var(--admin-foreground)] group-hover:text-[var(--admin-primary)] transition text-sm"
                               dir="ltr"
                             >
                               #{order.orderNumber}
                             </span>
-                            <span className="text-[11px] text-zinc-400 font-medium">
+                            <span className="text-[11px] admin-muted font-medium">
                               {order.branch?.nameAr || 'الفرع الرئيسي'}
                             </span>
                           </div>
@@ -905,8 +905,8 @@ export function InvoicesClient({
                         {/* 2. Date & Time */}
                         <td className="py-3.5 px-3 whitespace-nowrap">
                           <div className="flex flex-col">
-                            <span className="font-mono text-zinc-800 font-semibold text-xs">{timeText}</span>
-                            <span className="text-zinc-400 text-[10px]">{dateText}</span>
+                            <span className="font-mono text-[var(--admin-foreground)] font-semibold text-xs">{timeText}</span>
+                            <span className="admin-muted text-[10px]">{dateText}</span>
                           </div>
                         </td>
 
@@ -914,41 +914,41 @@ export function InvoicesClient({
                         <td className="py-3.5 px-3 whitespace-nowrap">
                           <div className="flex items-center gap-1.5 flex-wrap">
                             {order.type === 'DINE_IN' ? (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-sky-50 text-sky-700 border border-sky-200">
+                              <span className="admin-badge admin-badge-info inline-flex items-center gap-1">
                                 <Utensils className="w-3 h-3" />
                                 <span>صالة {order.tableName ? `(${order.tableName})` : ''}</span>
                               </span>
                             ) : order.type === 'TAKEAWAY' ? (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                              <span className="admin-badge admin-badge-warning inline-flex items-center gap-1">
                                 <Store className="w-3 h-3" />
                                 <span>سفري</span>
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                              <span className="admin-badge admin-badge-info inline-flex items-center gap-1">
                                 <Bike className="w-3 h-3" />
                                 <span>توصيل</span>
                               </span>
                             )}
 
-                            <span className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-zinc-100 text-zinc-500 border border-zinc-200">
+                            <span className="admin-badge admin-badge-neutral">
                               {order.source === 'POS' ? 'POS' : 'أونلاين'}
                             </span>
                           </div>
                         </td>
 
                         {/* 4. Cashier / Staff */}
-                        <td className="py-3.5 px-3 text-zinc-600 whitespace-nowrap font-medium text-xs">
+                        <td className="py-3.5 px-3 admin-muted whitespace-nowrap font-medium text-xs">
                           {order.cashier?.fullName || (order.source === 'ONLINE' ? 'الموقع العام' : '—')}
                         </td>
 
                         {/* 5. Items Summary */}
-                        <td className="py-3.5 px-3 text-zinc-600">
+                        <td className="py-3.5 px-3 admin-muted">
                           <div className="flex items-center gap-1.5 max-w-[170px]">
-                            <span className="inline-block px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-700 font-bold font-mono text-[10px] shrink-0">
+                            <span className="inline-block px-1.5 py-0.5 rounded bg-[var(--admin-background)] text-[var(--admin-foreground)] font-bold font-mono text-[10px] shrink-0">
                               {totalItemCount} صنف
                             </span>
                             <span
-                              className="text-zinc-700 text-xs truncate"
+                              className="text-[var(--admin-foreground)] text-xs truncate"
                               title={order.items.map((i) => i.productNameAr).join('، ')}
                             >
                               {order.items
@@ -964,18 +964,18 @@ export function InvoicesClient({
                         <td className="py-3.5 px-3 whitespace-nowrap">
                           <div className="flex items-center gap-1.5">
                             {order.paymentStatus === 'PAID' ? (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              <span className="admin-badge admin-badge-success inline-flex items-center gap-1">
                                 <CheckCircle2 className="w-3 h-3" />
                                 <span>مدفوعة</span>
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200">
+                              <span className="admin-badge admin-badge-danger inline-flex items-center gap-1">
                                 <Clock className="w-3 h-3" />
                                 <span>شيك مفتوح</span>
                               </span>
                             )}
 
-                            <span className="text-[11px] text-zinc-500 font-medium">
+                            <span className="text-[11px] admin-muted font-medium">
                               {order.paymentMethod === 'CASH'
                                 ? 'نقدي'
                                 : order.paymentMethod === 'CARD'
@@ -988,7 +988,7 @@ export function InvoicesClient({
                         </td>
 
                         {/* 7. Total Amount */}
-                        <td className="py-3.5 px-3 text-left font-black font-mono text-zinc-900 text-sm whitespace-nowrap">
+                        <td className="py-3.5 px-3 text-left font-black font-mono text-[var(--admin-foreground)] text-sm whitespace-nowrap">
                           {formatMoney(order.totalMinor)}
                         </td>
 
@@ -1002,7 +1002,7 @@ export function InvoicesClient({
                               type="button"
                               onClick={() => setSelectedInvoice(order)}
                               title="تدقيق تفاصيل الفاتورة"
-                              className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 transition cursor-pointer"
+                              className="p-1.5 rounded-lg admin-muted hover:text-[var(--admin-foreground)] hover:bg-[var(--admin-background)] transition cursor-pointer"
                             >
                               <Eye className="w-4 h-4" />
                             </button>
@@ -1010,7 +1010,7 @@ export function InvoicesClient({
                               type="button"
                               onClick={() => handlePrintThermal(order)}
                               title="طباعة إيصال الفاتورة 80mm"
-                              className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 transition cursor-pointer"
+                              className="p-1.5 rounded-lg admin-muted hover:text-[var(--admin-foreground)] hover:bg-[var(--admin-background)] transition cursor-pointer"
                             >
                               <Printer className="w-4 h-4" />
                             </button>
@@ -1018,7 +1018,7 @@ export function InvoicesClient({
                               type="button"
                               onClick={() => handlePrintKot(order)}
                               title="طباعة بون المطبخ KOT"
-                              className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 transition cursor-pointer"
+                              className="p-1.5 rounded-lg admin-muted hover:text-[var(--admin-foreground)] hover:bg-[var(--admin-background)] transition cursor-pointer"
                             >
                               <ChefHat className="w-4 h-4" />
                             </button>
@@ -1035,18 +1035,18 @@ export function InvoicesClient({
 
         {/* 5. Pagination Bar */}
         {totalCount > 0 && (
-          <div className="p-3 sm:p-4 border-t border-zinc-100 bg-zinc-50/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-zinc-600 font-medium">
+          <div className="p-3 sm:p-4 border-t border-[var(--admin-border)] bg-[var(--admin-background)]/70 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs admin-muted font-medium">
             <div>
               <span>عرض </span>
-              <strong className="text-zinc-900 font-mono">
+              <strong className="text-[var(--admin-foreground)] font-mono">
                 {(currentPage - 1) * pageSize + 1}
               </strong>
               <span> إلى </span>
-              <strong className="text-zinc-900 font-mono">
+              <strong className="text-[var(--admin-foreground)] font-mono">
                 {Math.min(currentPage * pageSize, totalCount)}
               </strong>
               <span> من أصل </span>
-              <strong className="text-zinc-900 font-mono">{totalCount}</strong>
+              <strong className="text-[var(--admin-foreground)] font-mono">{totalCount}</strong>
               <span> فاتورة</span>
             </div>
 
@@ -1055,7 +1055,7 @@ export function InvoicesClient({
                 type="button"
                 disabled={currentPage <= 1 || isRefreshing}
                 onClick={() => handlePageChange(currentPage - 1)}
-                className="flex items-center gap-1 px-2.5 py-1.5 border border-zinc-200 rounded-lg bg-white text-zinc-700 hover:bg-zinc-100 transition cursor-pointer disabled:opacity-40"
+                className="admin-control flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg transition cursor-pointer disabled:opacity-40"
               >
                 <ChevronRight className="w-3.5 h-3.5" />
                 <span>السابق</span>
@@ -1063,27 +1063,27 @@ export function InvoicesClient({
 
               <div className="flex items-center gap-1 px-2 font-mono text-xs">
                 <span>صفحة </span>
-                <span className="font-bold text-zinc-900">{currentPage}</span>
+                <span className="font-bold text-[var(--admin-foreground)]">{currentPage}</span>
                 <span> من </span>
-                <span className="font-bold text-zinc-900">{totalPages}</span>
+                <span className="font-bold text-[var(--admin-foreground)]">{totalPages}</span>
               </div>
 
               <button
                 type="button"
                 disabled={currentPage >= totalPages || isRefreshing}
                 onClick={() => handlePageChange(currentPage + 1)}
-                className="flex items-center gap-1 px-2.5 py-1.5 border border-zinc-200 rounded-lg bg-white text-zinc-700 hover:bg-zinc-100 transition cursor-pointer disabled:opacity-40"
+                className="admin-control flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg transition cursor-pointer disabled:opacity-40"
               >
                 <span>التالي</span>
                 <ChevronLeft className="w-3.5 h-3.5" />
               </button>
 
-              <div className="ms-2 flex items-center gap-1 border-s border-zinc-200 ps-2">
-                <span className="text-[11px] text-zinc-400">العدد:</span>
+              <div className="ms-2 flex items-center gap-1 border-s border-[var(--admin-border)] ps-2">
+                <span className="text-[11px] admin-muted">العدد:</span>
                 <select
                   value={pageSize}
                   onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-                  className="px-2 py-1 border border-zinc-200 rounded-lg bg-white text-xs font-semibold text-zinc-700 outline-hidden focus:ring-1 focus:ring-zinc-800 cursor-pointer"
+                  className="admin-control px-2 py-1 text-xs font-semibold outline-hidden cursor-pointer"
                 >
                   <option value={15}>15</option>
                   <option value={25}>25</option>

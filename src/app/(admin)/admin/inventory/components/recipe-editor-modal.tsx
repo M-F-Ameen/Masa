@@ -115,15 +115,15 @@ export function RecipeEditorModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4" dir="rtl">
-      <div className="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-xl border border-zinc-200 bg-white shadow-xl">
-        <div className="flex items-center justify-between border-b border-zinc-100 p-4">
+      <div className="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-xl border border-[var(--admin-border)] bg-[var(--admin-surface)] shadow-xl">
+        <div className="flex items-center justify-between border-b border-[var(--admin-border)] p-4">
           <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-zinc-700" strokeWidth={1.75} />
+            <BookOpen className="w-5 h-5 text-[var(--admin-foreground)]" strokeWidth={1.75} />
             <div>
-              <h3 className="font-semibold text-zinc-900 text-base">
+              <h3 className="font-semibold text-[var(--admin-foreground)] text-base">
                 وصفة ومكونات: {product.nameAr}
               </h3>
-              <p className="text-xs text-zinc-500 font-mono">
+              <p className="text-xs admin-muted font-mono">
                 {product.nameEn} • {product.categoryNameAr}
               </p>
             </div>
@@ -131,7 +131,7 @@ export function RecipeEditorModal({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100"
+            className="p-1 rounded-lg text-[var(--admin-muted)] hover:text-[var(--admin-foreground)] hover:bg-[var(--admin-background)]"
           >
             <X className="w-5 h-5" />
           </button>
@@ -139,13 +139,13 @@ export function RecipeEditorModal({
 
         <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-4 space-y-4">
           {error && (
-            <div className="p-3 text-xs text-rose-700 bg-rose-50 border border-rose-200 rounded-lg">
+            <div className="p-3 text-xs border admin-status-danger rounded-lg">
               {error}
             </div>
           )}
 
-          <div className="bg-zinc-50 border border-zinc-200 rounded-lg p-3 text-xs text-zinc-600 space-y-1">
-            <p className="font-semibold text-zinc-800">ملاحظة تشغيلية (الوصفات اختيارية):</p>
+          <div className="bg-[var(--admin-background)] border border-[var(--admin-border)] rounded-lg p-3 text-xs text-[var(--admin-muted)] space-y-1">
+            <p className="font-semibold text-[var(--admin-foreground)]">ملاحظة تشغيلية (الوصفات اختيارية):</p>
             <p>
               إذا لم تقم بإضافة مكونات، سيعمل الصنف بنظام التشغيل المباشر دون خصم تلقائي من الوصفات.
               يمكنك ربط المكونات بالصنف ككل، أو تخصيص مكونات لكل مقاس أو إضافة بشكل مستقل.
@@ -154,11 +154,11 @@ export function RecipeEditorModal({
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-zinc-800">بنود الوصفة واستهلاك المواد الخام</span>
+              <span className="text-xs font-semibold text-[var(--admin-foreground)]">بنود الوصفة واستهلاك المواد الخام</span>
               <button
                 type="button"
                 onClick={handleAddLine}
-                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-zinc-800 bg-zinc-100 hover:bg-zinc-200 rounded-md border border-zinc-300"
+                className="admin-control inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded-md border"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>إضافة مكون للطبق</span>
@@ -166,7 +166,7 @@ export function RecipeEditorModal({
             </div>
 
             {lines.length === 0 ? (
-              <div className="text-center py-8 border border-dashed border-zinc-200 rounded-lg text-zinc-500 text-xs">
+              <div className="text-center py-8 border border-dashed border-[var(--admin-border)] rounded-lg text-[var(--admin-muted)] text-xs">
                 لا توجد مكونات مربوطة حالياً. الصنف يعمل بالتشغيل المباشر.
               </div>
             ) : (
@@ -176,14 +176,14 @@ export function RecipeEditorModal({
                   return (
                     <div
                       key={line.id}
-                      className="flex flex-col sm:flex-row items-start sm:items-center gap-2 p-2.5 rounded-lg border border-zinc-200 bg-zinc-50/50"
+                      className="flex flex-col sm:flex-row items-start sm:items-center gap-2 p-2.5 rounded-lg border border-[var(--admin-border)] bg-[var(--admin-background)]"
                     >
                       {/* Component Item */}
                       <div className="flex-1 w-full sm:w-auto">
                         <select
                           value={line.inventoryItemId}
                           onChange={(e) => handleUpdateLine(line.id, { inventoryItemId: e.target.value })}
-                          className="w-full text-xs border border-zinc-300 rounded-md px-2 py-1.5 bg-white text-zinc-900"
+                          className="w-full text-xs border border-[var(--admin-border)] rounded-md px-2 py-1.5 bg-[var(--admin-surface)] text-[var(--admin-foreground)]"
                         >
                           {inventoryItems.map((inv) => (
                             <option key={inv.id} value={inv.id}>
@@ -202,7 +202,7 @@ export function RecipeEditorModal({
                               scopeType: e.target.value as 'PRODUCT' | 'SIZE' | 'MODIFIER',
                             })
                           }
-                          className="w-full text-xs border border-zinc-300 rounded-md px-2 py-1.5 bg-white text-zinc-900"
+                          className="w-full text-xs border border-[var(--admin-border)] rounded-md px-2 py-1.5 bg-[var(--admin-surface)] text-[var(--admin-foreground)]"
                         >
                           <option value="PRODUCT">الصنف ككل</option>
                           {product.sizes.length > 0 && <option value="SIZE">لمقاس محدد</option>}
@@ -216,7 +216,7 @@ export function RecipeEditorModal({
                           <select
                             value={line.productSizeId ?? ''}
                             onChange={(e) => handleUpdateLine(line.id, { productSizeId: e.target.value })}
-                            className="w-full text-xs border border-zinc-300 rounded-md px-2 py-1.5 bg-white text-zinc-900"
+                            className="w-full text-xs border border-[var(--admin-border)] rounded-md px-2 py-1.5 bg-[var(--admin-surface)] text-[var(--admin-foreground)]"
                           >
                             {product.sizes.map((s) => (
                               <option key={s.id} value={s.id}>
@@ -232,7 +232,7 @@ export function RecipeEditorModal({
                           <select
                             value={line.modifierId ?? ''}
                             onChange={(e) => handleUpdateLine(line.id, { modifierId: e.target.value })}
-                            className="w-full text-xs border border-zinc-300 rounded-md px-2 py-1.5 bg-white text-zinc-900"
+                            className="w-full text-xs border border-[var(--admin-border)] rounded-md px-2 py-1.5 bg-[var(--admin-surface)] text-[var(--admin-foreground)]"
                           >
                             {product.modifiers.map((m) => (
                               <option key={m.id} value={m.id}>
@@ -253,9 +253,9 @@ export function RecipeEditorModal({
                           value={line.quantity || ''}
                           onChange={(e) => handleUpdateLine(line.id, { quantity: Number(e.target.value) })}
                           placeholder="الكمية"
-                          className="w-full text-xs font-mono border border-zinc-300 rounded-md px-2 py-1.5 bg-white text-zinc-900"
+                          className="w-full text-xs font-mono border border-[var(--admin-border)] rounded-md px-2 py-1.5 bg-[var(--admin-surface)] text-[var(--admin-foreground)]"
                         />
-                        <span className="text-[10px] text-zinc-500 whitespace-nowrap">
+                        <span className="text-[10px] text-[var(--admin-muted)] whitespace-nowrap">
                           {selectedInv?.unit ?? ''}
                         </span>
                       </div>
@@ -264,7 +264,7 @@ export function RecipeEditorModal({
                       <button
                         type="button"
                         onClick={() => handleRemoveLine(line.id)}
-                        className="p-1.5 text-zinc-400 hover:text-rose-600 hover:bg-rose-50 rounded-md self-end sm:self-auto"
+                        className="p-1.5 text-[var(--admin-muted)] hover:text-[var(--admin-danger)] hover:bg-[var(--admin-danger-soft)] rounded-md self-end sm:self-auto"
                         title="حذف البند"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -276,18 +276,18 @@ export function RecipeEditorModal({
             )}
           </div>
 
-          <div className="flex justify-end gap-2 pt-4 border-t border-zinc-100">
+          <div className="flex justify-end gap-2 pt-4 border-t border-[var(--admin-border)]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-xs font-medium text-zinc-600 border border-zinc-200 rounded-lg hover:bg-zinc-50"
+              className="admin-control px-4 py-2 text-xs font-medium rounded-lg border"
             >
               إلغاء
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium text-white bg-zinc-900 rounded-lg hover:bg-zinc-800 disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium admin-primary-action rounded-lg disabled:opacity-50"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
               <span>حفظ الوصفة</span>

@@ -69,8 +69,8 @@ export function BranchSwitcher({
 
   if (branches.length === 0) {
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-zinc-200 bg-zinc-50 text-xs text-zinc-500">
-        <Building2 className="w-4 h-4 text-zinc-400" strokeWidth={1.75} />
+      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[var(--admin-border)] bg-[var(--admin-surface)] text-xs admin-muted">
+        <Building2 className="w-4 h-4 text-[var(--admin-primary)]" strokeWidth={1.75} />
         <span>لا يوجد فروع نشطة</span>
       </div>
     );
@@ -79,10 +79,10 @@ export function BranchSwitcher({
   // Branch Scoping: If user is branch-restricted, show a static locked badge with no switcher dropdown
   if (!canSwitchBranches || branches.length <= 1) {
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-zinc-200 bg-zinc-50 text-xs font-medium text-zinc-700">
-        <Building2 className="w-4 h-4 text-zinc-500" strokeWidth={1.75} />
-        <span className="text-zinc-500">الفرع:</span>
-        <span className="font-semibold text-zinc-900">
+      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-[var(--admin-border)] bg-[var(--admin-surface)] text-xs font-medium text-[var(--admin-foreground)]">
+        <Building2 className="w-4 h-4 text-[var(--admin-primary)]" strokeWidth={1.75} />
+        <span className="admin-muted">الفرع:</span>
+        <span className="font-semibold text-[var(--admin-foreground)]">
           {activeBranch ? `${activeBranch.nameAr} (${activeBranch.code})` : 'الفرع المحدد'}
         </span>
       </div>
@@ -95,23 +95,23 @@ export function BranchSwitcher({
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         disabled={isPending}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-zinc-200 bg-zinc-50 hover:bg-zinc-100 text-xs font-medium text-zinc-700 transition-colors shadow-2xs focus:outline-none focus:ring-1 focus:ring-zinc-400"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border admin-control text-xs font-medium transition-colors shadow-2xs focus:outline-none focus:ring-1 focus:ring-[var(--admin-primary)]"
       >
-        <Building2 className="w-4 h-4 text-zinc-500" strokeWidth={1.75} />
-        <span className="text-zinc-500">الفرع النشط:</span>
-        <span className="font-semibold text-zinc-900">
+        <Building2 className="w-4 h-4 text-[var(--admin-primary)]" strokeWidth={1.75} />
+        <span className="admin-muted">الفرع النشط:</span>
+        <span className="font-semibold text-[var(--admin-foreground)]">
           {activeBranch ? `${activeBranch.nameAr} (${activeBranch.code})` : 'اختر الفرع'}
         </span>
         <ChevronDown
-          className={`w-3.5 h-3.5 text-zinc-400 transition-transform duration-200 ${
+          className={`w-3.5 h-3.5 admin-muted transition-transform duration-200 ${
             isOpen ? 'rotate-180' : ''
           }`}
         />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-1.5 w-64 bg-white border border-zinc-200 rounded-lg shadow-lg z-50 py-1 text-xs animate-in fade-in slide-in-from-top-1 duration-150">
-          <div className="px-3 py-2 border-b border-zinc-100 text-zinc-500 font-medium">
+        <div className="absolute right-0 mt-1.5 w-64 bg-[var(--admin-surface)] border border-[var(--admin-border)] rounded-lg shadow-lg z-50 py-1 text-xs animate-in fade-in slide-in-from-top-1 duration-150">
+          <div className="px-3 py-2 border-b border-[var(--admin-border)] admin-muted font-medium">
             تبديل نطاق العمل الميداني
           </div>
           <div className="max-h-60 overflow-y-auto py-1">
@@ -122,17 +122,17 @@ export function BranchSwitcher({
                   key={branch.id}
                   type="button"
                   onClick={() => handleSelectBranch(branch.id)}
-                  className={`w-full text-right px-3 py-2 flex items-center justify-between hover:bg-zinc-50 transition-colors ${
-                    isSelected ? 'bg-zinc-50 text-zinc-900 font-semibold' : 'text-zinc-700'
+                  className={`w-full text-right px-3 py-2 flex items-center justify-between hover:bg-[var(--admin-background)] transition-colors ${
+                    isSelected ? 'bg-[var(--admin-primary-soft)] text-[var(--admin-foreground)] font-semibold' : 'text-[var(--admin-foreground)]'
                   }`}
                 >
                   <div className="flex items-center gap-2 truncate">
-                    <span className="font-mono text-[11px] px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600">
+                    <span className="font-mono text-[11px] px-1.5 py-0.5 rounded admin-id-chip">
                       {branch.code}
                     </span>
                     <span className="truncate">{branch.nameAr}</span>
                   </div>
-                  {isSelected && <Check className="w-4 h-4 text-emerald-600 shrink-0" strokeWidth={2} />}
+                  {isSelected && <Check className="w-4 h-4 text-[var(--admin-primary)] shrink-0" strokeWidth={2} />}
                 </button>
               );
             })}

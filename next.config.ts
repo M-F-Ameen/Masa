@@ -15,6 +15,13 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   output: 'standalone',
   poweredByHeader: false,
+  // Next's bundled Webpack xxhash WASM path can fail under Node 22 while
+  // hashing the production module graph. Use a stable native hash instead.
+  webpack(config) {
+    config.output.hashFunction = 'sha256';
+    return config;
+  },
+  turbopack: {},
   images: {
     remotePatterns: [
       {
