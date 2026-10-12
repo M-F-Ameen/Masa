@@ -21,6 +21,7 @@ const nextConfig: NextConfig = {
     config.output.hashFunction = 'sha256';
     return config;
   },
+  turbopack: {},
   images: {
     remotePatterns: [
       {
