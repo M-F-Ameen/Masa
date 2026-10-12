@@ -23,7 +23,7 @@ Create a GitLab project and push this existing `enhancements` branch. Enable
 the Container Registry. The GitLab runner must provide three tags:
 
 - `build`: Node.js validation jobs
-- `docker`: a privileged Docker-in-Docker runner
+- `docker`: a runner able to pull `gcr.io/kaniko-project/executor:v1.21.0-debug`
 - `deploy`: a runner allowed to install/use Ansible and reach `192.168.1.183`
 
 Add these CI/CD variables. Secrets should be masked and protected according to
@@ -34,6 +34,7 @@ the team’s branch policy:
 | `DEPLOY_SSH_PRIVATE_KEY` | Variable | Private SSH key for the `deploy` user |
 | `DEPLOY_SSH_KNOWN_HOSTS` | Variable | Pre-approved `known_hosts` entry for `192.168.1.183` |
 | `APP_RUNTIME_ENV_FILE` | File | Production runtime values (`DATABASE_URL`, `JWT_SECRET`, and app settings) |
+| `REGISTRY_CA_CERT` | File | Root/intermediate CA that signs `gitlab.pps.local:5050`; required if the runner CA is not automatically available |
 
 The runtime environment file must contain a database reachable from the
 development server. Do not commit it or pass it as a normal repository file.
@@ -56,6 +57,7 @@ The server owner must confirm all of the following before the first deploy:
 - `deploy` can run Docker commands and write `/opt/apps/masa`.
 - `192.168.1.183:1234` is available, or the port mapping is changed in GitLab.
 - The server can reach the GitLab Container Registry over HTTPS.
+- The build job can trust the GitLab registry certificate through `CI_SERVER_TLS_CA_FILE` or `REGISTRY_CA_CERT`.
 - The database host in `APP_RUNTIME_ENV_FILE` is reachable from the container.
 
 The first deployment should be run manually with the server owner present so

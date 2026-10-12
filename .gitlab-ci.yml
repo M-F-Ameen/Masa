@@ -9,8 +9,6 @@ variables:
   DEPLOY_HOST: 192.168.1.183
   DEPLOY_PORT: "1234"
   IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
-  DOCKER_TLS_CERTDIR: ""
-  DOCKER_HOST: tcp://docker:2375
 
 workflow:
   rules:
@@ -36,21 +34,36 @@ validate:
 
 build_image:
   stage: build
-  image: docker:27.4.1-cli
-  services:
-    - name: docker:27.4.1-dind
-      command: ["--tls=false"]
+  image:
+    name: gcr.io/kaniko-project/executor:v1.21.0-debug
+    entrypoint: [""]
   tags:
     - docker
   needs:
     - validate
-  before_script:
-    - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" --username "$CI_REGISTRY_USER" --password-stdin
   script:
-    - docker build --pull --tag "$IMAGE_TAG" .
-    - docker push "$IMAGE_TAG"
-    - docker tag "$IMAGE_TAG" "$CI_REGISTRY_IMAGE:enhancements"
-    - docker push "$CI_REGISTRY_IMAGE:enhancements"
+    - mkdir --parents /kaniko/.docker
+    - >-
+      printf '{"auths":{"%s":{"username":"%s","password":"%s"}}}\n'
+      "$CI_REGISTRY" "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD"
+      > /kaniko/.docker/config.json
+    - |
+      if [ -n "${CI_SERVER_TLS_CA_FILE:-}" ] && [ -f "$CI_SERVER_TLS_CA_FILE" ]; then
+        cat "$CI_SERVER_TLS_CA_FILE" >> /kaniko/ssl/certs/ca-certificates.crt
+      fi
+      if [ -n "${REGISTRY_CA_CERT:-}" ] && [ -f "$REGISTRY_CA_CERT" ]; then
+        cat "$REGISTRY_CA_CERT" >> /kaniko/ssl/certs/ca-certificates.crt
+      fi
+      if [ ! -f "${CI_SERVER_TLS_CA_FILE:-}" ] && [ ! -f "${REGISTRY_CA_CERT:-}" ]; then
+        echo "Missing registry CA. Configure REGISTRY_CA_CERT as a GitLab File variable."
+        exit 1
+      fi
+    - >-
+      /kaniko/executor
+      --context "$CI_PROJECT_DIR"
+      --dockerfile "$CI_PROJECT_DIR/Dockerfile"
+      --destination "$IMAGE_TAG"
+      --destination "$CI_REGISTRY_IMAGE:enhancements"
 
 deploy_dev:
   stage: deploy
