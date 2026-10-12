@@ -1,0 +1,91 @@
+stages:
+  - validate
+  - build
+  - deploy
+
+variables:
+  APP_NAME: masa
+  DEPLOY_ENV: dev
+  DEPLOY_HOST: 192.168.1.183
+  DEPLOY_PORT: "80"
+  IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_HOST: tcp://docker:2375
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "enhancements"'
+    - when: never
+
+validate:
+  stage: validate
+  image: node:22-bookworm-slim
+  tags:
+    - build
+  cache:
+    key:
+      files:
+        - package-lock.json
+    paths:
+      - .npm/
+  before_script:
+    - npm ci --cache .npm --prefer-offline
+  script:
+    - npm run lint
+    - npm test -- --passWithNoTests
+
+build_image:
+  stage: build
+  image: docker:27.4.1-cli
+  services:
+    - name: docker:27.4.1-dind
+      command: ["--tls=false"]
+  tags:
+    - docker
+  needs:
+    - validate
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" --username "$CI_REGISTRY_USER" --password-stdin
+  script:
+    - docker build --pull --tag "$IMAGE_TAG" .
+    - docker push "$IMAGE_TAG"
+    - docker tag "$IMAGE_TAG" "$CI_REGISTRY_IMAGE:enhancements"
+    - docker push "$CI_REGISTRY_IMAGE:enhancements"
+
+deploy_dev:
+  stage: deploy
+  image: python:3.12-slim
+  tags:
+    - deploy
+  needs:
+    - build_image
+  before_script:
+    - apt-get update
+    - apt-get install --yes --no-install-recommends openssh-client
+    - pip install --no-cache-dir ansible-core
+    - mkdir --parents ~/.ssh
+    - printf '%s\n' "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+    - chmod 600 ~/.ssh/id_ed25519
+    - printf '%s\n' "$DEPLOY_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+  script:
+    - >-
+      ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
+      --limit "$DEPLOY_ENV"
+      -e "app_name=$APP_NAME"
+      -e "deploy_port=$DEPLOY_PORT"
+      -e "docker_image=$IMAGE_TAG"
+      -e "registry_url=$CI_REGISTRY"
+      -e "registry_user=$CI_REGISTRY_USER"
+      -e "registry_password=$CI_REGISTRY_PASSWORD"
+      -e "runtime_env_file=$APP_RUNTIME_ENV_FILE"
+    - >-
+      python -c "import os; from urllib.request import urlopen;
+      url = 'http://' + os.environ['DEPLOY_HOST'] + '/';
+      response = urlopen(url, timeout=20);
+      print(url, response.status);
+      assert response.status < 500"
+  environment:
+    name: development
+    url: http://192.168.1.183/
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "enhancements"'
