@@ -11,8 +11,10 @@ WORKDIR /app
 
 ENV NEXT_TELEMETRY_DISABLED=1
 # Prisma 7 reads DATABASE_URL from prisma.config.ts during generation.
-# This is only a build-time placeholder; runtime secrets are injected by Ansible.
+# These are only build-time placeholders so `next build` can collect page data;
+# runtime secrets are injected by Ansible via the Compose env_file.
 ENV DATABASE_URL=mysql://build:build@127.0.0.1:3306/build_db
+ENV JWT_SECRET=build-only-placeholder-jwt-secret-please-override
 
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY package.json package-lock.json ./
