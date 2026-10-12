@@ -54,8 +54,8 @@ deploy_dev:
       fi
   script:
     - |
-      if [ -z "${APP_RUNTIME_ENV_FILE:-}" ]; then
-        echo "APP_RUNTIME_ENV_FILE is empty or undefined." >&2
+      if [ -z "${APP_RUNTIME_ENV_FILE:-}" ] || [ ! -f "$APP_RUNTIME_ENV_FILE" ]; then
+        echo "APP_RUNTIME_ENV_FILE is missing or is not a readable file path." >&2
         echo "Add it in Settings > CI/CD > Variables as type 'File', and make it available to this branch (unprotect it, or protect '$CI_COMMIT_REF_NAME')." >&2
         exit 1
       fi
