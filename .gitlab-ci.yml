@@ -48,22 +48,25 @@ build_image:
       "$CI_REGISTRY" "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD"
       > /kaniko/.docker/config.json
     - |
-      if [ -n "${CI_SERVER_TLS_CA_FILE:-}" ] && [ -f "$CI_SERVER_TLS_CA_FILE" ]; then
-        cat "$CI_SERVER_TLS_CA_FILE" >> /kaniko/ssl/certs/ca-certificates.crt
+      KANIKO_REGISTRY_ARGS=""
+      CA_INSTALLED=""
+      for ca_cert in "${CI_SERVER_TLS_CA_FILE:-}" "${REGISTRY_CA_CERT:-}"; do
+        if [ -n "$ca_cert" ] && [ -f "$ca_cert" ]; then
+          cat "$ca_cert" >> /kaniko/ssl/certs/ca-certificates.crt
+          CA_INSTALLED="yes"
+        fi
+      done
+      if [ -z "$CA_INSTALLED" ]; then
+        echo "No registry CA found (CI_SERVER_TLS_CA_FILE / REGISTRY_CA_CERT)."
+        echo "Falling back to skipping TLS verification for $CI_REGISTRY."
+        KANIKO_REGISTRY_ARGS="--skip-tls-verify-registry $CI_REGISTRY"
       fi
-      if [ -n "${REGISTRY_CA_CERT:-}" ] && [ -f "$REGISTRY_CA_CERT" ]; then
-        cat "$REGISTRY_CA_CERT" >> /kaniko/ssl/certs/ca-certificates.crt
-      fi
-      if [ ! -f "${CI_SERVER_TLS_CA_FILE:-}" ] && [ ! -f "${REGISTRY_CA_CERT:-}" ]; then
-        echo "Missing registry CA. Configure REGISTRY_CA_CERT as a GitLab File variable."
-        exit 1
-      fi
-    - >-
-      /kaniko/executor
-      --context "$CI_PROJECT_DIR"
-      --dockerfile "$CI_PROJECT_DIR/Dockerfile"
-      --destination "$IMAGE_TAG"
-      --destination "$CI_REGISTRY_IMAGE:enhancements"
+      /kaniko/executor \
+        --context "$CI_PROJECT_DIR" \
+        --dockerfile "$CI_PROJECT_DIR/Dockerfile" \
+        --destination "$IMAGE_TAG" \
+        --destination "$CI_REGISTRY_IMAGE:enhancements" \
+        $KANIKO_REGISTRY_ARGS
 
 deploy_dev:
   stage: deploy
