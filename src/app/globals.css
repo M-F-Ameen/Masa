@@ -615,6 +615,8 @@ body {
 }
 
 .kitchen-app .kitchen-control {
+  box-sizing: border-box;
+  height: 44px;
   min-height: 44px;
   border: 1px solid var(--kitchen-border);
   border-radius: 14px;
@@ -639,6 +641,9 @@ body {
 }
 
 .kitchen-app .kitchen-control-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 44px;
   padding: 0;
 }

@@ -317,7 +317,7 @@ export function AdminShell({
         </header>
 
         {/* Page Content */}
-        <main className="mx-auto min-h-0 w-full max-w-7xl flex-1 overflow-y-auto overscroll-contain scrollbar-none p-3.5 sm:p-5 md:p-8">
+        <main className="admin-main-content mx-auto min-h-0 w-full max-w-none flex-1 overflow-y-auto overscroll-contain scrollbar-none p-3.5 sm:p-5 md:p-8">
           {children}
         </main>
       </div>

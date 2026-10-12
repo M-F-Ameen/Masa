@@ -205,7 +205,7 @@ export function MenuManager({
   ];
 
   return (
-    <div className="mx-auto w-full max-w-7xl space-y-5 pb-20 sm:space-y-7">
+    <div className="mx-auto w-full max-w-none space-y-5 pb-20 sm:space-y-7">
       <section className="admin-card p-4 sm:rounded-3xl sm:p-7">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div><p className="text-xs font-semibold tracking-wide admin-muted">الكتالوج المركزي</p><h1 className="mt-1 text-2xl font-bold tracking-tight text-[var(--admin-foreground)] sm:text-3xl">المنيو والأصناف</h1><p className="mt-2 max-w-xl text-sm leading-6 admin-muted">إدارة المنتجات والأسعار والإضافات، ثم ضبط توفر كل صنف حسب الفرع.</p></div>
