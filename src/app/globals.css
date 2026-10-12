@@ -498,6 +498,12 @@ body {
   color: var(--admin-foreground);
 }
 
+.admin-app .admin-number {
+  font-family: 'Roboto', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
 .admin-app .admin-action-danger {
   background: var(--admin-danger);
   color: #FFFFFF;

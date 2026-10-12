@@ -34,44 +34,19 @@ validate:
 
 build_image:
   stage: build
-  image:
-    name: gcr.io/kaniko-project/executor:v1.21.0-debug
-    entrypoint: [""]
+  image: docker:latest
   tags:
     - docker
   needs:
     - validate
-  timeout: 2 hours
   script:
-    - mkdir --parents /kaniko/.docker
-    - >-
-      printf '{"auths":{"%s":{"username":"%s","password":"%s"}}}\n'
-      "$CI_REGISTRY" "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD"
-      > /kaniko/.docker/config.json
-    - |
-      KANIKO_REGISTRY_ARGS=""
-      CA_INSTALLED=""
-      for ca_cert in "${CI_SERVER_TLS_CA_FILE:-}" "${REGISTRY_CA_CERT:-}"; do
-        if [ -n "$ca_cert" ] && [ -f "$ca_cert" ]; then
-          cat "$ca_cert" >> /kaniko/ssl/certs/ca-certificates.crt
-          CA_INSTALLED="yes"
-        fi
-      done
-      if [ -z "$CA_INSTALLED" ]; then
-        echo "No registry CA found (CI_SERVER_TLS_CA_FILE / REGISTRY_CA_CERT)."
-        echo "Falling back to skipping TLS verification for $CI_REGISTRY."
-        KANIKO_REGISTRY_ARGS="--skip-tls-verify-registry $CI_REGISTRY"
-      fi
-      /kaniko/executor \
-        --context "$CI_PROJECT_DIR" \
-        --dockerfile "$CI_PROJECT_DIR/Dockerfile" \
-        --cache=true \
-        --cache-repo "$CI_REGISTRY_IMAGE/cache" \
-        --snapshot-mode=redo \
-        --use-new-run=true \
-        --destination "$IMAGE_TAG" \
-        --destination "$CI_REGISTRY_IMAGE:enhancements" \
-        $KANIKO_REGISTRY_ARGS
+    - echo "Logging in to GitLab Container Registry"
+    - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
+    - echo "Building image $IMAGE_TAG"
+    - docker build -t "$IMAGE_TAG" .
+    - docker push "$IMAGE_TAG"
+    - docker tag "$IMAGE_TAG" "$CI_REGISTRY_IMAGE:enhancements"
+    - docker push "$CI_REGISTRY_IMAGE:enhancements"
 
 deploy_dev:
   stage: deploy

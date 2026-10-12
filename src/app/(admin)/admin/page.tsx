@@ -13,7 +13,6 @@ import {
   Clock,
   AlertTriangle,
   ChevronLeft,
-  ShieldCheck,
   Activity,
   Check,
 } from 'lucide-react';
@@ -46,18 +45,12 @@ export default async function AdminDashboardPage() {
   }
 
   // 1. Fetch Contextual Core Data
-  const [settings, userProfile, activeBranch] = await Promise.all([
+  const [settings, userProfile] = await Promise.all([
     prisma.restaurantSetting.findFirst(),
     prisma.user.findUnique({
       where: { id: session.userId },
       include: { role: { select: { name: true, description: true } } },
     }),
-    verifiedBranchId
-      ? prisma.branch.findUnique({
-          where: { id: verifiedBranchId },
-          select: { id: true, code: true, nameAr: true, nameEn: true, phone: true },
-        })
-      : null,
   ]);
 
   const currency = settings?.currency || 'EGP';
@@ -195,7 +188,6 @@ export default async function AdminDashboardPage() {
   ).length;
 
   const displayName = userProfile?.fullName ?? 'المستخدم';
-  const roleName = userProfile?.role?.name ?? session.role;
 
   // Format minor to major with currency
   const formatMoney = (minor: number) => {
@@ -207,20 +199,7 @@ export default async function AdminDashboardPage() {
       {/* 1. Contextual Executive Welcome Banner */}
       <div className="admin-card relative overflow-hidden p-5 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="admin-soft-primary inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-bold font-mono">
-                <ShieldCheck className="admin-muted size-3.5" />
-                <span>{roleName}</span>
-              </span>
-              {activeBranch && (
-                <span className="admin-soft-accent inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-bold font-mono">
-                  <span className="size-1.5 rounded-full bg-[var(--admin-accent)] animate-pulse" />
-                  <span>{activeBranch.nameAr} ({activeBranch.code})</span>
-                </span>
-              )}
-            </div>
-
+<div className="space-y-1.5">
             <h1 className="text-xl sm:text-2xl font-black text-[var(--admin-foreground)] tracking-tight">
               مرحباً، {displayName}
             </h1>
@@ -316,7 +295,7 @@ export default async function AdminDashboardPage() {
               </div>
             </div>
             <div className="mt-3">
-              <div className="text-xl sm:text-2xl font-black text-[var(--admin-foreground)] font-mono tracking-tight">
+<div className="admin-number text-2xl sm:text-3xl font-black text-[var(--admin-foreground)] tracking-tight">
                 {formatMoney(todayRevenueMoney.amount)}
               </div>
               <p className="admin-muted mt-1 text-[11px] font-medium">
@@ -336,7 +315,7 @@ export default async function AdminDashboardPage() {
               </div>
             </div>
             <div className="mt-3">
-              <div className="text-xl sm:text-2xl font-black text-[var(--admin-info)] font-mono tracking-tight">
+<div className="admin-number text-2xl sm:text-3xl font-black text-[var(--admin-info)] tracking-tight">
                 {activeInFlightOrdersCount}
               </div>
               <p className="admin-muted mt-1 text-[11px] font-medium">
@@ -357,10 +336,10 @@ export default async function AdminDashboardPage() {
             </div>
             <div className="mt-3">
               <div className="flex items-baseline gap-2">
-                <span className="text-xl sm:text-2xl font-black text-[var(--admin-foreground)] font-mono">
+<span className="admin-number text-2xl sm:text-3xl font-black text-[var(--admin-foreground)]">
                   {occupiedTablesCount}/{totalTablesCount}
                 </span>
-                <span className="text-xs font-bold text-[var(--admin-warning)] font-mono">
+                <span className="admin-number text-sm font-bold text-[var(--admin-warning)]">
                   ({occupancyPercentage}%)
                 </span>
               </div>
@@ -641,7 +620,7 @@ export default async function AdminDashboardPage() {
               className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
               <span className="admin-muted block text-[11px] font-medium">الفروع النشطة</span>
-              <span className="mt-1 block text-2xl font-black text-[var(--admin-foreground)] font-mono">
+              <span className="admin-number mt-1 block text-3xl font-black text-[var(--admin-foreground)]">
                 {orgStats[0]}
               </span>
               <span className="admin-status-success-text mt-1 flex items-center gap-1 text-[10px] font-bold">
@@ -655,7 +634,7 @@ export default async function AdminDashboardPage() {
               className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
               <span className="admin-muted block text-[11px] font-medium">فريق العمل (RBAC)</span>
-              <span className="mt-1 block text-2xl font-black text-[var(--admin-foreground)] font-mono">
+              <span className="admin-number mt-1 block text-3xl font-black text-[var(--admin-foreground)]">
                 {orgStats[1]}
               </span>
               <span className="admin-muted mt-1 block text-[10px] font-medium">
@@ -668,7 +647,7 @@ export default async function AdminDashboardPage() {
               className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
               <span className="admin-muted block text-[11px] font-medium">أصناف الكتالوج</span>
-              <span className="mt-1 block text-2xl font-black text-[var(--admin-foreground)] font-mono">
+              <span className="admin-number mt-1 block text-3xl font-black text-[var(--admin-foreground)]">
                 {orgStats[2]}
               </span>
               <span className="admin-muted mt-1 block text-[10px] font-medium">
@@ -681,7 +660,7 @@ export default async function AdminDashboardPage() {
               className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
               <span className="admin-muted block text-[11px] font-medium">عملاء الـ CRM</span>
-              <span className="mt-1 block text-2xl font-black text-[var(--admin-foreground)] font-mono">
+              <span className="admin-number mt-1 block text-3xl font-black text-[var(--admin-foreground)]">
                 {orgStats[3]}
               </span>
               <span className="admin-muted mt-1 block text-[10px] font-medium">
