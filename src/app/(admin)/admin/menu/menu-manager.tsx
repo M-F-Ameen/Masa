@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
-import { Archive, Check, ChevronDown, CirclePlus, FolderOpen, Layers3, Pencil, Plus, QrCode, Search, Sparkles, Trash2, Utensils, X } from 'lucide-react';
-import { deleteCategoryAction, deleteModifierGroupAction, deleteProductAction, saveCategoryAction, saveModifierGroupAction, saveProductAction, setBranchAvailabilityAction, setCatalogStatusAction, toggleProductFeaturedAction } from '../../../actions/catalog.actions';
+import { Archive, Check, ChevronDown, CirclePlus, Download, FileSpreadsheet, FolderOpen, Layers3, LoaderCircle, Pencil, Plus, QrCode, Search, Sparkles, Trash2, Upload, Utensils, X } from 'lucide-react';
+import { deleteCategoryAction, deleteModifierGroupAction, deleteProductAction, importCatalogAction, saveCategoryAction, saveModifierGroupAction, saveProductAction, setBranchAvailabilityAction, setCatalogStatusAction, toggleProductFeaturedAction } from '../../../actions/catalog.actions';
 import { CatalogResource } from '../../../../domain/catalog/enums/catalog-resource.enum';
 import { MenuQrModal } from './menu-qr-modal';
 import {
@@ -61,10 +61,49 @@ export function MenuManager({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [error, setError] = useState('');
+  const [importFeedback, setImportFeedback] = useState('');
+  const [isImporting, setIsImporting] = useState(false);
+  const importInputRef = useRef<HTMLInputElement>(null);
   const [pending, setPending] = useState(false);
   const [branchId, setBranchId] = useState(branches[0]?.id ?? '');
   const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  async function handleCatalogImport(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+
+    if (!/\.xlsx?$/i.test(file.name)) {
+      setError('صيغة الملف غير مدعومة. استخدم ملف Excel بصيغة xlsx أو xls.');
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setError('حجم ملف Excel يجب ألا يتجاوز 10 ميجابايت.');
+      return;
+    }
+
+    setIsImporting(true);
+    setError('');
+    setImportFeedback('');
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const result = await importCatalogAction(formData);
+      if (!result.success) {
+        setError(result.error);
+        return;
+      }
+
+      const { categoriesCreated, categoriesUpdated, productsCreated, productsUpdated, sizesCreated, sizesUpdated } = result.data;
+      setImportFeedback(
+        `تم الاستيراد بنجاح: ${categoriesCreated + categoriesUpdated} تصنيف، ${productsCreated + productsUpdated} صنف، ${sizesCreated + sizesUpdated} مقاس. سيتم تحديث الصفحة الآن.`,
+      );
+      window.setTimeout(() => window.location.reload(), 900);
+    } finally {
+      setIsImporting(false);
+    }
+  }
 
   // Products Category Filter & Pagination
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('ALL');
@@ -224,15 +263,36 @@ export function MenuManager({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="relative w-full sm:max-w-sm"><Search className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--admin-muted)]" size={17} /><input className={`${inputClass} pr-10`} placeholder="ابحث في المنيو" value={query} onChange={(event) => setQuery(event.target.value)} /></div>
         {tab === 'products' && branches.length > 0 && <label className="relative block w-full sm:w-64"><span className="sr-only">الفرع</span><select className={`${inputClass} appearance-none pl-10`} value={branchId} onChange={(event) => setBranchId(event.target.value)}>{branches.map((branch) => <option value={branch.id} key={branch.id}>{branch.nameAr}</option>)}</select><ChevronDown className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--admin-muted)]" size={17} /></label>}
+        <input ref={importInputRef} type="file" accept=".xlsx,.xls" className="hidden" onChange={handleCatalogImport} />
+        <div className="flex w-full items-center gap-2 sm:w-auto">
+          <a href="/api/admin/menu/export?template=1" download="masa-menu-template.xlsx" className="admin-control flex min-h-12 items-center justify-center gap-2 rounded-xl border px-3.5 text-xs font-semibold shadow-2xs transition" title="تحميل قالب Excel للاستيراد">
+            <FileSpreadsheet size={16} />
+            <span className="hidden lg:inline">قالب Excel</span>
+          </a>
+          <button type="button" disabled={isImporting} onClick={() => importInputRef.current?.click()} className="admin-control flex min-h-12 items-center justify-center gap-2 rounded-xl border px-3.5 text-xs font-semibold shadow-2xs transition disabled:cursor-wait disabled:opacity-60" title="استيراد الأصناف والتصنيفات من Excel">
+            {isImporting ? <LoaderCircle size={16} className="animate-spin" /> : <Upload size={16} />}
+            <span className="hidden lg:inline">{isImporting ? 'جارٍ الاستيراد...' : 'استيراد Excel'}</span>
+          </button>
+          <a href="/api/admin/menu/export" download="masa-menu-export.xlsx" className="admin-control flex min-h-12 items-center justify-center gap-2 rounded-xl border px-3.5 text-xs font-semibold shadow-2xs transition" title="تصدير الأصناف والتصنيفات إلى Excel">
+            <Download size={16} />
+            <span className="hidden lg:inline">تصدير Excel</span>
+          </a>
+        </div>
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <button type="button" onClick={() => setIsQrModalOpen(true)} className="admin-control flex min-h-12 items-center justify-center gap-2 rounded-xl border px-3.5 text-xs font-semibold shadow-2xs transition"><QrCode size={16} /><span>كيو آر المنيو</span></button>
           <button onClick={() => openNew(tab)} className="admin-primary-action flex min-h-12 flex-1 sm:flex-none items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold shadow-sm transition"><Plus size={17} />{tab === 'products' ? 'إضافة صنف' : tab === 'categories' ? 'إضافة تصنيف' : 'إنشاء مجموعة إضافات'}</button>
         </div>
       </div>
 
+      {importFeedback && !modal && (
+        <div role="status" className="rounded-xl border border-[var(--admin-accent)]/25 bg-[var(--admin-accent-soft)] px-4 py-3 text-sm text-[var(--admin-accent-hover)]">
+          {importFeedback}
+        </div>
+      )}
+
       {error && !modal && (
         <div role="alert" className="flex items-start justify-between gap-3 rounded-xl border admin-status-danger px-4 py-3 text-sm">
-          <p className="leading-relaxed flex-1">{error}</p>
+          <p className="flex-1 whitespace-pre-line leading-relaxed">{error}</p>
           <button type="button" onClick={() => setError('')} aria-label="إغلاق التنبيه" className="text-[var(--admin-danger)] hover:opacity-70">
             <X size={16} />
           </button>
@@ -520,6 +580,8 @@ export function MenuManager({
     </div>
   );
 }
+
+
 
 function Metric({ label, value }: { label: string; value: number }) { return <div className="rounded-xl bg-[var(--admin-background)] px-3 py-2.5"><p className="text-lg font-bold tabular-nums text-[var(--admin-foreground)]">{value}</p><p className="text-[11px] admin-muted">{label}</p></div>; }
 

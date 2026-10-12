@@ -41,6 +41,7 @@ build_image:
     - docker
   needs:
     - validate
+  timeout: 2 hours
   script:
     - mkdir --parents /kaniko/.docker
     - >-
@@ -64,6 +65,10 @@ build_image:
       /kaniko/executor \
         --context "$CI_PROJECT_DIR" \
         --dockerfile "$CI_PROJECT_DIR/Dockerfile" \
+        --cache=true \
+        --cache-repo "$CI_REGISTRY_IMAGE/cache" \
+        --snapshot-mode=redo \
+        --use-new-run=true \
         --destination "$IMAGE_TAG" \
         --destination "$CI_REGISTRY_IMAGE:enhancements" \
         $KANIKO_REGISTRY_ARGS

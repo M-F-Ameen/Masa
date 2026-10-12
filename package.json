@@ -23,6 +23,7 @@
     "@types/react-dom": "^19",
     "bcryptjs": "^3.0.3",
     "dotenv": "^18.0.4",
+    "exceljs": "^4.4.0",
     "jose": "^6.2.12",
     "lucide-react": "^1.48.0",
     "mariadb": "^3.5.4",
