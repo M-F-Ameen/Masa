@@ -7,7 +7,7 @@ variables:
   APP_NAME: masa
   DEPLOY_ENV: dev
   DEPLOY_HOST: 192.168.1.183
-  DEPLOY_PORT: "80"
+  DEPLOY_PORT: "1234"
   IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
   DOCKER_TLS_CERTDIR: ""
   DOCKER_HOST: tcp://docker:2375
@@ -86,6 +86,6 @@ deploy_dev:
       assert response.status < 500"
   environment:
     name: development
-    url: http://192.168.1.183/
+    url: http://192.168.1.183:1234/
   rules:
     - if: '$CI_COMMIT_BRANCH == "enhancements"'

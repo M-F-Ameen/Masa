@@ -10,12 +10,12 @@ server at `192.168.1.183`.
 3. Build and push an immutable Docker image to the GitLab Container Registry.
 4. Connect to the server with Ansible over SSH.
 5. Write the runtime `.env`, pull the image, restart the Compose service, and
-   verify port 80.
+   verify port 1234.
 
 The application listens on port 3000 inside the container. The deployment
-publishes it on port 80, so the expected URL is:
+publishes it on port 1234, so the expected URL is:
 
-`http://192.168.1.183/`
+`http://192.168.1.183:1234/`
 
 ## GitLab project setup
 
@@ -54,7 +54,7 @@ The server owner must confirm all of the following before the first deploy:
 - SSH access for `deploy` using the configured key.
 - Docker Engine and the Docker Compose v2 plugin are installed.
 - `deploy` can run Docker commands and write `/opt/apps/masa`.
-- `192.168.1.183:80` is available, or the port mapping is changed in GitLab.
+- `192.168.1.183:1234` is available, or the port mapping is changed in GitLab.
 - The server can reach the GitLab Container Registry over HTTPS.
 - The database host in `APP_RUNTIME_ENV_FILE` is reachable from the container.
 

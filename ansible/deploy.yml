@@ -6,7 +6,7 @@
 
   vars:
     app_dir: "/opt/apps/{{ app_name }}"
-    app_port: "{{ deploy_port | default('80') }}"
+    app_port: "{{ deploy_port | default('1234') }}"
     container_port: "3000"
     image_name: "{{ docker_image }}"
 
