@@ -80,7 +80,7 @@ deploy_dev:
       -e "runtime_env_file=$APP_RUNTIME_ENV_FILE"
     - >-
       python -c "import os; from urllib.request import urlopen;
-      url = 'http://' + os.environ['DEPLOY_HOST'] + '/';
+      url = 'http://' + os.environ['DEPLOY_HOST'] + ':' + os.environ['DEPLOY_PORT'] + '/';
       response = urlopen(url, timeout=20);
       print(url, response.status);
       assert response.status < 500"
