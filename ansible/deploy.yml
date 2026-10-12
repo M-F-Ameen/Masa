@@ -14,13 +14,17 @@
     - name: Validate required deployment variables
       ansible.builtin.assert:
         that:
-          - app_name is defined
-          - docker_image is defined
-          - registry_url is defined
-          - registry_user is defined
-          - registry_password is defined
-          - runtime_env_file is defined
-        fail_msg: "The deployment requires an image, registry credentials, and a runtime environment file."
+          - app_name | default('') | length > 0
+          - docker_image | default('') | length > 0
+          - registry_url | default('') | length > 0
+          - registry_user | default('') | length > 0
+          - registry_password | default('') | length > 0
+          - runtime_env_file | default('') | length > 0
+        fail_msg: >-
+          The deployment requires an image, registry credentials, and a runtime
+          environment file. Ensure APP_RUNTIME_ENV_FILE is configured as a
+          File-type CI/CD variable that is available to this branch (either
+          unprotected, or the branch is protected).
 
   tasks:
     - name: Create application directory

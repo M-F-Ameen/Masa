@@ -1,6 +1,6 @@
 # GitLab CI/CD deployment
 
-This project deploys only from the `enhancements` branch to the development
+This project deploys only from the `develop` branch to the development
 server at `192.168.1.183`.
 
 ## Pipeline
@@ -19,7 +19,7 @@ publishes it on port 1234, so the expected URL is:
 
 ## GitLab project setup
 
-Create a GitLab project and push this existing `enhancements` branch. Enable
+Create a GitLab project and push this existing `develop` branch. Enable
 the Container Registry. The GitLab runner must provide three tags:
 
 - `build`: Node.js validation jobs
@@ -37,6 +37,12 @@ the team’s branch policy:
 
 The runtime environment file must contain a database reachable from the
 development server. Do not commit it or pass it as a normal repository file.
+
+Each variable must be exposed to the deploying branch. If a variable is marked
+**Protected**, it is only injected on protected branches, so either uncheck
+**Protected** or protect `develop` (Settings → Repository → Protected branches).
+An unavailable or empty `APP_RUNTIME_ENV_FILE` fails the deploy job with a clear
+message.
 
 ## Database migration decision
 

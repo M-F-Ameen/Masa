@@ -53,6 +53,12 @@ deploy_dev:
         printf '%s\n' "$DEPLOY_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
       fi
   script:
+    - |
+      if [ -z "${APP_RUNTIME_ENV_FILE:-}" ]; then
+        echo "APP_RUNTIME_ENV_FILE is empty or undefined." >&2
+        echo "Add it in Settings > CI/CD > Variables as type 'File', and make it available to this branch (unprotect it, or protect '$CI_COMMIT_REF_NAME')." >&2
+        exit 1
+      fi
     - >-
       ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
       --limit "$DEPLOY_ENV"
