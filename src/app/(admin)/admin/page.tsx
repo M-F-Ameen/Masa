@@ -303,12 +303,12 @@ export default async function AdminDashboardPage() {
       )}
 
       {/* 3. Live Operational Pulse (Today's Key Performance Indicators) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+      <div className="flex flex-wrap justify-center gap-3.5">
         {/* Metric 1: Today's Revenue (Role Protected) */}
         {(session.isSuperAdmin ||
           RbacGuard.hasPermission(session, PermissionCode.VIEW_REPORTS) ||
           RbacGuard.hasPermission(session, PermissionCode.MANAGE_ORDERS)) && (
-          <div className="admin-card flex flex-col justify-between p-4.5">
+          <div className="admin-card flex w-full flex-col justify-between p-5 sm:w-[calc(50%-0.4375rem)] lg:w-[calc(25%-0.65625rem)]">
             <div className="flex items-center justify-between">
               <span className="admin-muted text-xs font-bold">مبيعات اليوم المحصلة</span>
               <div className="admin-status-success grid size-8 place-items-center rounded-xl border">
@@ -328,7 +328,7 @@ export default async function AdminDashboardPage() {
 
         {/* Metric 2: In-Flight Orders */}
         {(session.isSuperAdmin || RbacGuard.hasPermission(session, PermissionCode.MANAGE_ORDERS)) && (
-          <div className="admin-card flex flex-col justify-between p-4.5">
+          <div className="admin-card flex w-full flex-col justify-between p-5 sm:w-[calc(50%-0.4375rem)] lg:w-[calc(25%-0.65625rem)]">
             <div className="flex items-center justify-between">
               <span className="admin-muted text-xs font-bold">الطلبات النشطة الآن</span>
               <div className="admin-status-info grid size-8 place-items-center rounded-xl border">
@@ -348,7 +348,7 @@ export default async function AdminDashboardPage() {
 
         {/* Metric 3: Table Occupancy */}
         {(session.isSuperAdmin || RbacGuard.hasPermission(session, PermissionCode.MANAGE_BRANCHES)) && (
-          <div className="admin-card flex flex-col justify-between p-4.5">
+          <div className="admin-card flex w-full flex-col justify-between p-5 sm:w-[calc(50%-0.4375rem)] lg:w-[calc(25%-0.65625rem)]">
             <div className="flex items-center justify-between">
               <span className="admin-muted text-xs font-bold">إشغال الصالة والطاولات</span>
               <div className="admin-status-warning grid size-8 place-items-center rounded-xl border">
@@ -378,7 +378,7 @@ export default async function AdminDashboardPage() {
         {(session.isSuperAdmin ||
           RbacGuard.hasPermission(session, PermissionCode.MANAGE_FINANCE) ||
           RbacGuard.hasPermission(session, PermissionCode.POS_ACCESS)) && (
-          <div className="admin-card flex flex-col justify-between p-4.5">
+          <div className="admin-card flex w-full flex-col justify-between p-5 sm:w-[calc(50%-0.4375rem)] lg:w-[calc(25%-0.65625rem)]">
             <div className="flex items-center justify-between">
               <span className="admin-muted text-xs font-bold">الوردية المالية الحالية</span>
               <div className="admin-status-info grid size-8 place-items-center rounded-xl border">
@@ -415,12 +415,12 @@ export default async function AdminDashboardPage() {
           الإجراءات والعمليات السريعة
         </h2>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <div className="flex flex-wrap justify-center gap-3">
           {/* Action 1: POS Screen */}
           {RbacGuard.hasPermission(session, PermissionCode.POS_ACCESS) && (
             <Link
               href="/pos"
-              className="admin-primary-action group flex min-h-[110px] flex-col justify-between rounded-2xl p-4 transition"
+              className="admin-primary-action group flex min-h-[110px] w-full flex-col justify-between rounded-2xl p-4.5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
               <div className="flex items-center justify-between">
                 <div className="size-9 rounded-xl bg-white/10 grid place-items-center text-white">
@@ -439,7 +439,7 @@ export default async function AdminDashboardPage() {
           {RbacGuard.hasPermission(session, PermissionCode.MANAGE_ORDERS) && (
             <Link
               href="/admin/orders"
-              className="admin-card admin-card-hover group flex min-h-[110px] flex-col justify-between p-4 text-[var(--admin-foreground)]"
+              className="admin-card admin-card-hover group flex min-h-[110px] w-full flex-col justify-between p-4.5 text-[var(--admin-foreground)] sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
               <div className="flex items-center justify-between">
                 <div className="admin-status-danger grid size-9 place-items-center rounded-xl border">
@@ -464,10 +464,13 @@ export default async function AdminDashboardPage() {
           {RbacGuard.hasPermission(session, PermissionCode.KITCHEN_VIEW) && (
             <Link
               href="/admin/kitchen"
-              className="admin-card admin-card-hover group flex min-h-[110px] flex-col justify-between p-4 text-[var(--admin-foreground)]"
+              className="admin-card admin-card-hover group flex min-h-[110px] w-full flex-col justify-between p-4.5 text-[var(--admin-foreground)] sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
+              <div className="flex items-center justify-between">
                 <div className="admin-status-info grid size-9 place-items-center rounded-xl border">
-                <ChefHat className="size-5" strokeWidth={1.8} />
+                  <ChefHat className="size-5" strokeWidth={1.8} />
+                </div>
+                <ChevronLeft className="admin-muted size-4 group-hover:text-[var(--admin-primary)] group-hover:-translate-x-0.5 transition" />
               </div>
               <div>
                 <p className="text-sm font-bold">شاشة المطبخ (KDS)</p>
@@ -481,7 +484,7 @@ export default async function AdminDashboardPage() {
             RbacGuard.hasPermission(session, PermissionCode.VIEW_REPORTS)) && (
             <Link
               href="/admin/invoices"
-              className="admin-card admin-card-hover group flex min-h-[110px] flex-col justify-between p-4 text-[var(--admin-foreground)]"
+              className="admin-card admin-card-hover group flex min-h-[110px] w-full flex-col justify-between p-4.5 text-[var(--admin-foreground)] sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
               <div className="flex items-center justify-between">
                 <div className="admin-status-info grid size-9 place-items-center rounded-xl border">
@@ -500,7 +503,7 @@ export default async function AdminDashboardPage() {
           {RbacGuard.hasPermission(session, PermissionCode.MANAGE_FINANCE) && (
             <Link
               href="/admin/finance"
-              className="admin-card admin-card-hover group flex min-h-[110px] flex-col justify-between p-4 text-[var(--admin-foreground)]"
+              className="admin-card admin-card-hover group flex min-h-[110px] w-full flex-col justify-between p-4.5 text-[var(--admin-foreground)] sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
               <div className="flex items-center justify-between">
                 <div className="admin-status-info grid size-9 place-items-center rounded-xl border">
@@ -519,7 +522,7 @@ export default async function AdminDashboardPage() {
           {RbacGuard.hasPermission(session, PermissionCode.MANAGE_INVENTORY) && (
             <Link
               href="/admin/inventory"
-              className="admin-card admin-card-hover group flex min-h-[110px] flex-col justify-between p-4 text-[var(--admin-foreground)]"
+              className="admin-card admin-card-hover group flex min-h-[110px] w-full flex-col justify-between p-4.5 text-[var(--admin-foreground)] sm:w-[calc(50%-0.375rem)] lg:w-[calc(33.333%-0.5rem)]"
             >
               <div className="flex items-center justify-between">
                 <div className="admin-status-warning grid size-9 place-items-center rounded-xl border">
@@ -632,10 +635,10 @@ export default async function AdminDashboardPage() {
             نظرة المنظومة المركزية (Super Admin)
           </h2>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/admin/branches"
-              className="admin-card admin-card-hover p-4 transition"
+              className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
               <span className="admin-muted block text-[11px] font-medium">الفروع النشطة</span>
               <span className="mt-1 block text-2xl font-black text-[var(--admin-foreground)] font-mono">
@@ -649,7 +652,7 @@ export default async function AdminDashboardPage() {
 
             <Link
               href="/admin/staff"
-              className="admin-card admin-card-hover p-4 transition"
+              className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
               <span className="admin-muted block text-[11px] font-medium">فريق العمل (RBAC)</span>
               <span className="mt-1 block text-2xl font-black text-[var(--admin-foreground)] font-mono">
@@ -662,7 +665,7 @@ export default async function AdminDashboardPage() {
 
             <Link
               href="/admin/menu"
-              className="admin-card admin-card-hover p-4 transition"
+              className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
               <span className="admin-muted block text-[11px] font-medium">أصناف الكتالوج</span>
               <span className="mt-1 block text-2xl font-black text-[var(--admin-foreground)] font-mono">
@@ -675,7 +678,7 @@ export default async function AdminDashboardPage() {
 
             <Link
               href="/admin/customers"
-              className="admin-card admin-card-hover p-4 transition"
+              className="admin-card admin-card-hover w-full p-5 transition sm:w-[calc(50%-0.375rem)] lg:w-[calc(25%-0.5625rem)]"
             >
               <span className="admin-muted block text-[11px] font-medium">عملاء الـ CRM</span>
               <span className="mt-1 block text-2xl font-black text-[var(--admin-foreground)] font-mono">

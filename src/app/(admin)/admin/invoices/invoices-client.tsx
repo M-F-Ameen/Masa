@@ -942,7 +942,7 @@ export function InvoicesClient({
                         </td>
 
                         {/* 5. Items Summary */}
-                        <td className="py-3.5 px-3 text-zinc-600">
+                        <td className="py-3.5 px-3 admin-muted">
                           <div className="flex items-center gap-1.5 max-w-[170px]">
                             <span className="inline-block px-1.5 py-0.5 rounded bg-[var(--admin-background)] text-[var(--admin-foreground)] font-bold font-mono text-[10px] shrink-0">
                               {totalItemCount} صنف

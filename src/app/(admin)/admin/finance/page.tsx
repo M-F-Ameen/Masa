@@ -37,7 +37,7 @@ export default async function AdminFinancePage() {
 
   if (allowedBranches.length === 0) {
     return (
-      <div className="p-6 text-center text-zinc-500" dir="rtl">
+      <div className="p-6 text-center admin-muted" dir="rtl">
         لم يتم العثور على أي فرع مخصص لحسابك أو نشط في النظام.
       </div>
     );

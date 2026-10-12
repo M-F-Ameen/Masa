@@ -69,7 +69,7 @@ export function FinanceExpensesTab({
       {/* Source Filter */}
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-zinc-500">مصدر الصرف:</span>
+          <span className="text-xs font-medium admin-muted">مصدر الصرف:</span>
           <div className="inline-flex rounded-lg border border-[var(--admin-border)] bg-[var(--admin-surface)] p-1 text-xs">
             {(['ALL', ExpenseSource.REGISTER_CASH, ExpenseSource.SAFE_PETTY_CASH] as const).map(
               (src) => (
@@ -96,10 +96,10 @@ export function FinanceExpensesTab({
       </div>
 
       {/* Expenses Table */}
-      <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-xs">
+      <div className="admin-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-right text-xs sm:text-sm">
-            <thead className="border-b border-zinc-200 bg-zinc-50 text-zinc-600">
+            <thead className="border-b border-[var(--admin-border)] bg-[var(--admin-background)] admin-muted">
               <tr>
                 <th className="px-4 py-3 font-semibold">التاريخ</th>
                 <th className="px-4 py-3 font-semibold">التصنيف</th>
@@ -110,49 +110,49 @@ export function FinanceExpensesTab({
                 <th className="px-4 py-3 font-semibold">الموظف القائم بالصرف</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-100">
+            <tbody className="divide-y divide-[var(--admin-border)]">
               {filteredExpenses.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-8 text-center text-zinc-400">
+                  <td colSpan={7} className="px-4 py-8 text-center admin-muted">
                     لا توجد مصروفات مسجلة تطابق التصفية
                   </td>
                 </tr>
               ) : (
                 filteredExpenses.map((exp) => (
-                  <tr key={exp.id} className="hover:bg-zinc-50/75 transition-colors">
-                    <td className="px-4 py-3.5 text-zinc-600">
+                  <tr key={exp.id} className="admin-row-hover transition-colors">
+                    <td className="px-4 py-3.5 admin-muted">
                       {new Date(exp.createdAt).toLocaleDateString('ar-EG')}
-                      <div className="text-[11px] text-zinc-400">
+                      <div className="text-[11px] admin-muted">
                         {new Date(exp.createdAt).toLocaleTimeString('ar-EG', {
                           hour: '2-digit',
                           minute: '2-digit',
                         })}
                       </div>
                     </td>
-                    <td className="px-4 py-3.5 font-medium text-zinc-900">
+                    <td className="px-4 py-3.5 font-medium text-[var(--admin-foreground)]">
                       {exp.categoryNameAr}
                     </td>
-                    <td className="px-4 py-3.5 text-zinc-700 max-w-xs truncate" title={exp.description}>
+                    <td className="px-4 py-3.5 text-[var(--admin-foreground)] max-w-xs truncate" title={exp.description}>
                       {exp.description}
                     </td>
                     <td className="px-4 py-3.5">
                       {exp.source === ExpenseSource.REGISTER_CASH ? (
-                        <span className="inline-flex rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-800 border border-amber-200">
+                        <span className="admin-badge admin-badge-warning">
                           درج الكاشير
                         </span>
                       ) : (
-                        <span className="inline-flex rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-800 border border-indigo-200">
+                        <span className="admin-badge admin-badge-info">
                           الخزينة المركزية
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3.5 font-mono text-zinc-600">
+                    <td className="px-4 py-3.5 font-mono admin-muted">
                       {exp.receiptNumber || '—'}
                     </td>
-                    <td className="px-4 py-3.5 font-mono font-bold text-zinc-900">
+                    <td className="px-4 py-3.5 font-mono font-bold text-[var(--admin-foreground)]">
                       {formatMoney(exp.amountMinor)}
                     </td>
-                    <td className="px-4 py-3.5 text-zinc-600">
+                    <td className="px-4 py-3.5 admin-muted">
                       {exp.spentByName}
                     </td>
                   </tr>
