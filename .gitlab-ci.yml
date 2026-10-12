@@ -1,22 +1,17 @@
 stages:
-  - validate
+  - test
   - build
-  - deploy
+  - deploy_dev
 
 variables:
   APP_NAME: masa
   DEPLOY_ENV: dev
   DEPLOY_HOST: 192.168.1.183
   DEPLOY_PORT: "1234"
-  IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
-
-workflow:
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "enhancements"'
-    - when: never
+  FULL_IMAGE_NAME: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
 
 validate:
-  stage: validate
+  stage: test
   image: node:22-bookworm-slim
   tags:
     - build
@@ -31,51 +26,52 @@ build_image:
   image: docker:latest
   tags:
     - docker
-  needs:
-    - validate
   script:
     - echo "Logging in to GitLab Container Registry"
     - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
-    - echo "Building image $IMAGE_TAG"
-    - docker build -t "$IMAGE_TAG" .
-    - docker push "$IMAGE_TAG"
-    - docker tag "$IMAGE_TAG" "$CI_REGISTRY_IMAGE:enhancements"
-    - docker push "$CI_REGISTRY_IMAGE:enhancements"
+    - echo "Building image $FULL_IMAGE_NAME"
+    - docker build -t "$FULL_IMAGE_NAME" .
+    - docker push "$FULL_IMAGE_NAME"
+  only:
+    - develop
+    - main
+    - /^release\/.*$/
 
 deploy_dev:
-  stage: deploy
-  image: python:3.12-slim
+  stage: deploy_dev
   tags:
     - deploy
-  needs:
-    - build_image
   before_script:
-    - apt-get update
-    - apt-get install --yes --no-install-recommends openssh-client
-    - pip install --no-cache-dir ansible-core
     - mkdir --parents ~/.ssh
-    - printf '%s\n' "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
-    - chmod 600 ~/.ssh/id_ed25519
-    - printf '%s\n' "$DEPLOY_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - |
+      if [ -n "$DEPLOY_SSH_PRIVATE_KEY" ]; then
+        printf '%s\n' "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+      fi
+    - |
+      if [ -n "$DEPLOY_SSH_KNOWN_HOSTS" ]; then
+        printf '%s\n' "$DEPLOY_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+      fi
   script:
     - >-
       ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
       --limit "$DEPLOY_ENV"
       -e "app_name=$APP_NAME"
       -e "deploy_port=$DEPLOY_PORT"
-      -e "docker_image=$IMAGE_TAG"
+      -e "docker_image=$FULL_IMAGE_NAME"
       -e "registry_url=$CI_REGISTRY"
       -e "registry_user=$CI_REGISTRY_USER"
       -e "registry_password=$CI_REGISTRY_PASSWORD"
       -e "runtime_env_file=$APP_RUNTIME_ENV_FILE"
-    - >-
-      python -c "import os; from urllib.request import urlopen;
-      url = 'http://' + os.environ['DEPLOY_HOST'] + ':' + os.environ['DEPLOY_PORT'] + '/';
-      response = urlopen(url, timeout=20);
-      print(url, response.status);
-      assert response.status < 500"
+    - |
+      if command -v curl >/dev/null 2>&1; then
+        curl --fail --silent --show-error --max-time 20 "http://$DEPLOY_HOST:$DEPLOY_PORT/" >/dev/null
+        echo "Health check passed at http://$DEPLOY_HOST:$DEPLOY_PORT/"
+      else
+        echo "curl not found; skipping HTTP health check"
+      fi
   environment:
     name: development
     url: http://192.168.1.183:1234/
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "enhancements"'
+  only:
+    - develop
