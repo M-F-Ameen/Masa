@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import {
@@ -16,6 +16,14 @@ import {
 } from 'lucide-react';
 import { AdminNav, AdminNavItem, AdminNavSection, ICON_MAP } from './admin-nav';
 import { BranchSwitcher } from './branch-switcher';
+
+const ADMIN_SEARCH_PROMPTS = [
+  'البحث بالباركود',
+  'البحث باسم المنتج',
+  'البحث برقم الطلب',
+  'البحث باسم العميل',
+  'البحث في القوائم',
+] as const;
 
 interface AdminShellProps {
   restaurantNameAr: string;
@@ -52,7 +60,73 @@ export function AdminShell({
 }: AdminShellProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [isReducedMotion, setIsReducedMotion] = useState(false);
+  const [searchPlaceholder, setSearchPlaceholder] = useState<string>(ADMIN_SEARCH_PROMPTS[0]);
+  const placeholderAnimationRef = useRef({
+    promptIndex: 0,
+    characterIndex: 0,
+    isDeleting: false,
+  });
   const pathname = usePathname();
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const updateMotionPreference = () => {
+      setIsReducedMotion(mediaQuery.matches);
+
+      if (mediaQuery.matches) {
+        setSearchPlaceholder(ADMIN_SEARCH_PROMPTS[0]);
+      }
+    };
+
+    mediaQuery.addEventListener?.('change', updateMotionPreference);
+
+    return () => mediaQuery.removeEventListener?.('change', updateMotionPreference);
+  }, []);
+
+  useEffect(() => {
+    if (isReducedMotion || search || isSearchFocused) return;
+
+    let timeoutId: ReturnType<typeof setTimeout>;
+    let isCancelled = false;
+
+    const animatePlaceholder = () => {
+      if (isCancelled) return;
+
+      const animation = placeholderAnimationRef.current;
+      const prompt = ADMIN_SEARCH_PROMPTS[animation.promptIndex];
+      let delay = animation.isDeleting ? 42 : 72;
+
+      if (animation.isDeleting) {
+        animation.characterIndex -= 1;
+        setSearchPlaceholder(prompt.slice(0, animation.characterIndex));
+
+        if (animation.characterIndex === 0) {
+          animation.promptIndex = (animation.promptIndex + 1) % ADMIN_SEARCH_PROMPTS.length;
+          animation.isDeleting = false;
+          delay = 320;
+        }
+      } else {
+        animation.characterIndex += 1;
+        setSearchPlaceholder(prompt.slice(0, animation.characterIndex));
+
+        if (animation.characterIndex === prompt.length) {
+          animation.isDeleting = true;
+          delay = 1700;
+        }
+      }
+
+      timeoutId = setTimeout(animatePlaceholder, delay);
+    };
+
+    timeoutId = setTimeout(animatePlaceholder, 72);
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(timeoutId);
+    };
+  }, [isReducedMotion, isSearchFocused, search]);
 
   const activeBranch = branches.find((b) => b.id === activeBranchId) ?? branches[0] ?? null;
 
@@ -277,9 +351,11 @@ export function AdminShell({
             <input
               type="search"
               aria-label="البحث في القائمة"
-              placeholder="ابحث في القائمة..."
+              placeholder={searchPlaceholder}
               value={search}
               onChange={(event) => setSearch(event.target.value)}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
               className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[#142644] outline-none placeholder:text-[#91A0B8] focus:ring-0"
             />
           </label>
