@@ -20,14 +20,8 @@ validate:
   image: node:22-bookworm-slim
   tags:
     - build
-  cache:
-    key:
-      files:
-        - package-lock.json
-    paths:
-      - .npm/
   before_script:
-    - npm ci --cache .npm --prefer-offline
+    - npm ci --no-audit --no-fund
   script:
     - npm run lint
     - npm test -- --passWithNoTests
