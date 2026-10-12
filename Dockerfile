@@ -2,7 +2,12 @@ FROM node:22-bookworm-slim AS dependencies
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci --no-audit --no-fund
+RUN --mount=type=cache,target=/root/.npm \
+  npm ci --no-audit --no-fund \
+  --fetch-retries=5 \
+  --fetch-retry-mintimeout=20000 \
+  --fetch-retry-maxtimeout=600000 \
+  --fetch-timeout=600000
 
 FROM node:22-bookworm-slim AS builder
 WORKDIR /app

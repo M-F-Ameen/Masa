@@ -228,20 +228,29 @@ export function PosFloorPlan({
                       onSelectOccupiedTable(table);
                     }
                   }}
-                  className={`group relative flex flex-col justify-between rounded-2xl border p-3.5 text-right transition cursor-pointer select-none active:scale-[0.98] ${
+                  className={`group relative flex min-h-[214px] flex-col justify-between rounded-[14px] border p-3 text-right shadow-[0_4px_12px_rgba(20,38,68,0.05)] transition cursor-pointer select-none active:scale-[0.98] hover:-translate-y-0.5 hover:shadow-[0_10px_20px_rgba(20,38,68,0.1)] ${
                     isAvailable
-                      ? 'border-emerald-200/90 bg-emerald-50/50 hover:bg-emerald-50 hover:border-emerald-300 shadow-2xs'
-                      : isBillPrinted
-                      ? 'border-amber-200/90 bg-amber-50/70 hover:bg-amber-50 shadow-2xs'
-                      : 'border-[#DCE3EF] bg-white shadow-2xs hover:border-[#B9C9E2]'
+                      ? 'border-emerald-200/90 bg-white hover:border-emerald-300'
+                    : isBillPrinted
+                      ? 'border-amber-200/90 bg-white hover:border-amber-300'
+                      : 'border-[#DCE3EF] bg-white hover:border-[#B9C9E2]'
                   }`}
                 >
-                  <div>
+                  <div className="flex min-h-0 flex-1 flex-col">
+                    <div
+                      className={`relative mb-3 flex min-h-[92px] items-center justify-center overflow-hidden rounded-[12px] bg-[radial-gradient(circle_at_50%_48%,#fff_0%,#f7f8fc_70%,#eef2f9_100%)] ${
+                        isAvailable
+                          ? 'ring-1 ring-inset ring-emerald-100'
+                          : isBillPrinted
+                          ? 'ring-1 ring-inset ring-amber-100'
+                          : 'ring-1 ring-inset ring-[#E8EDF6]'
+                      }`}
+                    >
                     {/* Top row: Table number & status */}
                     <div className="flex items-start justify-between gap-1">
                       <div className="flex items-center gap-1.5">
                         <div
-                          className={`grid size-9 place-items-center rounded-xl font-bold text-sm ${
+                          className={`grid size-12 place-items-center rounded-[14px] font-bold text-base shadow-[0_5px_10px_rgba(20,38,68,0.12)] ${
                             isAvailable
                               ? 'bg-emerald-600 text-white'
                               : isBillPrinted
@@ -276,9 +285,10 @@ export function PosFloorPlan({
                         {isAvailable ? 'متاحة' : isBillPrinted ? 'مطبوع الشيك' : 'مشغولة'}
                       </span>
                     </div>
+                    </div>
 
                     {/* Capacity */}
-                    <div className="mt-2.5 flex items-center justify-between text-[11px] text-[#526B90]">
+                    <div className="mt-auto flex items-center justify-between border-t border-[#E7ECF4] pt-2 text-[11px] text-[#526B90]">
                       <span className="flex items-center gap-1">
                         <Users className="size-3 text-[#8D9AB2]" />
                         <span>{table.capacity} مقاعد</span>
