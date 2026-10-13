@@ -231,7 +231,7 @@ export function AdminShell({
                       width={160}
                       height={56}
                       unoptimized
-                      className="h-11 w-full object-contain"
+                      className="admin-sidebar-wordmark h-11 w-full object-contain"
                     />
                   ) : (
                     <div className="admin-sidebar-logo grid size-9 shrink-0 place-items-center rounded-xl">
@@ -314,7 +314,7 @@ export function AdminShell({
                 width={180}
                 height={64}
                 unoptimized
-                className="h-14 w-full object-contain"
+                className="admin-sidebar-wordmark h-14 w-full object-contain"
               />
             ) : (
               <div className="admin-sidebar-logo grid size-10 shrink-0 place-items-center rounded-xl">

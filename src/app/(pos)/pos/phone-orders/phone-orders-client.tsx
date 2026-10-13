@@ -25,7 +25,7 @@ import { Money } from '../../../../domain/shared/value-objects/money';
 import { findPhoneCustomerAction, createPhoneOrderAction } from '../../../actions/phone-order.actions';
 import { PosCatalog } from '../pos-catalog';
 import { ProductPicker } from '../product-picker';
-import { CartLines, CartTotals } from '../pos-cart';
+import { CartLines } from '../pos-cart';
 import { posInput, posPrimary } from '../pos-ui';
 
 type SavedAddress = {
@@ -111,18 +111,28 @@ export function PhoneOrdersClient({
   useEffect(() => {
     const updateDateTime = () => {
       const now = new Date();
-      const date = new Intl.DateTimeFormat('ar-EG-u-nu-latn', {
-        weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
-      }).format(now);
-      const time = new Intl.DateTimeFormat('ar-EG-u-nu-latn', {
-        hour: '2-digit', minute: '2-digit', hour12: true,
-      }).format(now);
-      setHeaderDateTime({ date, time });
+      const dateParts = new Intl.DateTimeFormat('ar-EG-u-nu-latn', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }).formatToParts(now);
+      const timeParts = new Intl.DateTimeFormat('ar-EG-u-nu-latn', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      }).formatToParts(now);
+      const part = (parts: Intl.DateTimeFormatPart[], type: Intl.DateTimeFormatPartTypes) =>
+        parts.find((item) => item.type === type)?.value ?? '';
+      setHeaderDateTime({
+        date: [part(dateParts, 'weekday'), part(dateParts, 'day'), part(dateParts, 'month'), part(dateParts, 'year')].join(' '),
+        time: `${part(timeParts, 'hour')}:${part(timeParts, 'minute')} ${part(timeParts, 'dayPeriod')}`.trim(),
+      });
     };
     updateDateTime();
     const timer = window.setInterval(updateDateTime, 30_000);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [settings.locale]);
 
   const products = useMemo(() => categories.flatMap((category) => category.products), [categories]);
   const productsInCart = useMemo(() => {
@@ -297,43 +307,103 @@ export function PhoneOrdersClient({
 
   return (
     <main className="pos-app min-h-dvh bg-[var(--pos-canvas)] text-[var(--pos-foreground)]" dir="rtl">
-      <header dir="rtl" className="sticky top-0 z-20 flex min-h-[96px] shrink-0 flex-wrap items-center justify-between gap-3 bg-[var(--pos-canvas)] px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-4 lg:px-8">
-        <div className="order-1 flex min-w-0 items-center gap-3 lg:flex-1">
+      <header className="relative z-20 flex min-h-[96px] shrink-0 flex-wrap items-center justify-between gap-3 bg-[var(--pos-canvas)] px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-4 lg:px-8">
+        <div dir="rtl" className="flex min-w-0 basis-full items-center gap-3 lg:flex-1 lg:basis-auto">
+          {settings.logoUrl ? (
+            <Image
+              src={settings.logoUrl}
+              alt={settings.nameAr}
+              width={180}
+              height={64}
+              unoptimized
+              className="h-14 w-32 shrink-0 object-contain sm:w-40"
+            />
+          ) : (
+            <span className="pos-brand-mark grid size-14 shrink-0 place-items-center rounded-[16px] shadow-[0_7px_15px_rgba(19,20,23,0.14)]">
+              <Utensils size={24} strokeWidth={1.7} />
+            </span>
+          )}
           <div className="relative shrink-0">
-            <button type="button" aria-label="القائمة" title="القائمة" aria-expanded={userMenuOpen} aria-haspopup="menu" onClick={() => setUserMenuOpen((open) => !open)} className="grid size-14 shrink-0 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]">
+            <button
+              type="button"
+              aria-label="القائمة"
+              title="القائمة"
+              aria-expanded={userMenuOpen}
+              aria-haspopup="menu"
+              onClick={() => setUserMenuOpen((open) => !open)}
+              className="grid size-14 shrink-0 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]"
+            >
               <Menu size={22} strokeWidth={1.8} />
             </button>
-            {userMenuOpen && <div dir="rtl" role="menu" className="absolute right-0 top-[calc(100%+10px)] z-50 w-64 rounded-[16px] border border-[var(--pos-border)] bg-white p-2 text-sm text-[var(--pos-foreground)] shadow-[0_18px_45px_rgba(19,20,23,0.14)]">
-              <Link href="/pos" role="menuitem" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]"><ArrowRight size={15} />نقطة البيع</Link>
-              <Link href="/admin/orders" role="menuitem" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]"><ShoppingBag size={15} />إدارة الطلبات</Link>
-            </div>}
+            {userMenuOpen && (
+              <div dir="rtl" role="menu" className="absolute right-0 top-[calc(100%+10px)] z-50 w-64 rounded-[16px] border border-[var(--pos-border)] bg-white p-2 text-sm text-[var(--pos-foreground)] shadow-[0_18px_45px_rgba(19,20,23,0.14)]">
+                <Link href="/pos" role="menuitem" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]">
+                  <ArrowRight size={15} />
+                  نقطة البيع
+                </Link>
+                <Link href="/admin/orders" role="menuitem" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]">
+                  <ShoppingBag size={15} />
+                  إدارة الطلبات
+                </Link>
+                <Link href="/admin" role="menuitem" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]">
+                  <ArrowRight size={15} />
+                  الإدارة
+                </Link>
+              </div>
+            )}
           </div>
-          <Link href="/pos" aria-label="العودة إلى نقطة البيع" title="نقطة البيع" className="grid size-14 shrink-0 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]">
+          <Link
+            href="/pos"
+            aria-label="العودة إلى نقطة البيع"
+            title="نقطة البيع"
+            className="grid size-14 shrink-0 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]"
+          >
             <ShoppingBag size={20} strokeWidth={1.8} />
           </Link>
-          {settings.logoUrl ? (
-            <Image src={settings.logoUrl} alt={settings.nameAr} width={180} height={64} unoptimized className="h-14 w-32 shrink-0 object-contain sm:w-40" />
-          ) : (
-            <span className="pos-brand-mark grid size-14 shrink-0 place-items-center rounded-[16px] shadow-[0_7px_15px_rgba(19,20,23,0.14)]"><Utensils size={24} strokeWidth={1.7} /></span>
-          )}
+          <label className="flex h-14 min-w-0 flex-1 items-center gap-2.5 rounded-[16px] border border-[var(--pos-border)] bg-white px-3.5 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition focus-within:border-[var(--pos-signal)] focus-within:ring-2 focus-within:ring-[var(--pos-signal)]/10">
+            <Search size={20} strokeWidth={1.8} className="shrink-0 text-[var(--pos-muted)]" />
+            <input
+              aria-label="البحث عن صنف"
+              placeholder="ابحث عن صنف بالاسم..."
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[var(--pos-foreground)] outline-none placeholder:text-[var(--pos-muted)] focus:ring-0"
+            />
+          </label>
         </div>
-        <label className="order-2 flex h-12 w-full min-w-0 items-center gap-2.5 rounded-[16px] border border-[var(--pos-border)] bg-white px-3.5 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition focus-within:border-[var(--pos-signal)] focus-within:ring-2 focus-within:ring-[var(--pos-signal)]/10 lg:order-2 lg:h-14 lg:w-auto lg:flex-1">
-          <Search size={20} strokeWidth={1.8} className="shrink-0 text-[var(--pos-muted)]" />
-          <input aria-label="البحث عن صنف" placeholder="ابحث عن صنف بالاسم..." value={search} onChange={(event) => setSearch(event.target.value)} className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[var(--pos-foreground)] outline-none placeholder:text-[var(--pos-muted)] focus:ring-0" />
-        </label>
-        <div dir="ltr" className="order-1 flex shrink-0 items-center gap-2.5 lg:order-3 lg:gap-3">
+
+        <div dir="ltr" className="flex shrink-0 items-center gap-2.5 lg:gap-3">
           <div className="hidden h-14 w-[190px] shrink-0 flex-col items-center justify-center gap-1 rounded-[16px] border border-[var(--pos-border)] bg-white px-2 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] lg:flex">
-            <span dir="ltr" className="text-2xl font-extrabold leading-none tabular-nums">{headerDateTime.time || '—'}</span>
-            <div dir="rtl" className="w-full whitespace-nowrap text-center text-xs font-semibold leading-none text-[var(--pos-muted)]">{headerDateTime.date || '—'}</div>
+            <span dir="ltr" className="text-2xl font-extrabold leading-none tabular-nums">
+              {headerDateTime.time || '—'}
+            </span>
+            <div dir="rtl" className="w-full whitespace-nowrap text-center text-xs font-semibold leading-none text-[var(--pos-muted)]">
+              {headerDateTime.date || '—'}
+            </div>
           </div>
-          <Link href="/admin/orders" aria-label="إدارة الطلبات" title="إدارة الطلبات" className="relative grid size-14 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]"><Bell size={20} strokeWidth={1.7} /></Link>
-          <button type="button" aria-label="طباعة" title="طباعة" onClick={() => window.print()} className="hidden size-14 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)] sm:grid"><Printer size={20} strokeWidth={1.7} /></button>
+          <Link
+            href="/admin/orders"
+            aria-label="إدارة الطلبات"
+            title="إدارة الطلبات"
+            className="relative grid size-14 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]"
+          >
+            <Bell size={20} strokeWidth={1.7} />
+          </Link>
+          <button
+            type="button"
+            aria-label="طباعة"
+            title="طباعة"
+            onClick={() => window.print()}
+            className="hidden size-14 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)] sm:grid"
+          >
+            <Printer size={20} strokeWidth={1.7} />
+          </button>
         </div>
       </header>
 
-      <div className="mx-auto grid w-full max-w-[1800px] grid-cols-1 gap-4 p-3 pb-28 sm:p-5 sm:pb-28 xl:h-[calc(100dvh-116px)] xl:min-h-0 xl:grid-cols-[minmax(0,1fr)_390px] xl:items-stretch xl:pb-5">
-        <section className="min-w-0 xl:h-full xl:min-h-0">
-          <section ref={catalogRef} className="overflow-hidden rounded-[18px] border border-[var(--pos-border)] bg-white shadow-[0_5px_16px_rgba(19,20,23,0.04)] xl:flex xl:h-full xl:min-h-0 xl:flex-col">
+      <div className="relative grid w-full grid-cols-1 gap-3 bg-[var(--pos-canvas)] p-2.5 pb-28 sm:p-3 sm:pb-28 lg:h-[calc(100dvh-96px)] lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_minmax(280px,25%)] lg:items-stretch lg:gap-3.5 lg:overflow-hidden lg:p-2 lg:pb-2">
+        <section className="min-w-0 lg:h-full lg:min-h-0">
+          <section ref={catalogRef} className="overflow-hidden rounded-[16px] border border-[var(--pos-border)] bg-white shadow-[0_5px_16px_rgba(19,20,23,0.04)] lg:flex lg:h-full lg:min-h-0 lg:flex-col">
             <h1 className="sr-only">أصناف الطلب</h1>
             <div className="flex-1 h-full overflow-y-auto">
               <PosCatalog categories={categories} currency={settings.currency} locale={settings.locale} disabled={isSubmitting} search={search} onSelect={setSelectedProduct} />
@@ -341,8 +411,8 @@ export function PhoneOrdersClient({
           </section>
         </section>
 
-        <aside ref={summaryRef} className="min-h-[520px] xl:h-full xl:min-h-0">
-          <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-[18px] border border-[var(--pos-border)] bg-white shadow-[0_7px_20px_rgba(19,20,23,0.06)]">
+        <aside ref={summaryRef} className="min-h-[520px] lg:h-full lg:min-h-0">
+          <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-[16px] border border-[var(--pos-border)] bg-white shadow-[0_5px_16px_rgba(19,20,23,0.05)]">
             <div role="tablist" aria-label="تفاصيل الطلب" className="grid shrink-0 grid-cols-2 gap-1 border-b border-[var(--pos-border)] bg-[var(--pos-canvas)] p-2">
               <button type="button" role="tab" aria-selected={activePanelTab === 'SUMMARY'} onClick={() => setActivePanelTab('SUMMARY')} className={`flex min-h-11 items-center justify-center gap-2 rounded-[12px] px-2 text-xs font-bold transition ${activePanelTab === 'SUMMARY' ? 'bg-white text-[var(--pos-foreground)] shadow-sm' : 'text-[var(--pos-muted)] hover:bg-white/70'}`}><ShoppingBag size={16} />ملخص الطلب</button>
               <button type="button" role="tab" aria-selected={activePanelTab === 'CUSTOMER'} onClick={() => setActivePanelTab('CUSTOMER')} className={`flex min-h-11 items-center justify-center gap-2 rounded-[12px] px-2 text-xs font-bold transition ${activePanelTab === 'CUSTOMER' ? 'bg-white text-[var(--pos-foreground)] shadow-sm' : 'text-[var(--pos-muted)] hover:bg-white/70'}`}><UserRound size={16} />بيانات العميل</button>
@@ -351,7 +421,7 @@ export function PhoneOrdersClient({
               <div className="min-h-0 flex-1 overflow-y-auto p-3">
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <div><h2 className="text-sm font-black">الطلب الحالي</h2><p className="mt-1 text-[11px] text-[var(--pos-muted)]">{items.reduce((sum, item) => sum + item.quantity, 0)} صنف · {orderType === OrderType.DELIVERY ? 'توصيل' : 'استلام'}</p></div>
-                  <span className="rounded-full bg-[var(--pos-signal-soft)] px-3 py-1.5 text-[11px] font-bold text-[var(--pos-primary)]">{items.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                  <span aria-label={`${items.reduce((sum, item) => sum + item.quantity, 0)} صنف`} className="grid size-9 shrink-0 place-items-center rounded-full bg-[var(--pos-foreground)] text-sm font-extrabold tabular-nums text-white shadow-sm">{items.reduce((sum, item) => sum + item.quantity, 0)}</span>
                 </div>
                 <CartLines items={items} products={productsInCart} settings={settings} locked={isSubmitting} changeQuantity={changeQuantity} />
               </div>
@@ -359,8 +429,24 @@ export function PhoneOrdersClient({
                 <label className="block text-xs font-bold">ملاحظة للمطبخ أو الطلب
                   <textarea value={customerNotes} onChange={(event) => { refreshDraftKey(); setCustomerNotes(event.target.value); }} rows={2} maxLength={500} placeholder="مثال: بدون سكر، الاتصال عند الوصول" className="mt-1.5 min-h-16 w-full resize-y rounded-[13px] border border-[var(--pos-border)] bg-[var(--pos-canvas)] px-3 py-2 text-sm font-normal outline-none placeholder:text-[var(--pos-muted)] focus:border-[var(--pos-signal)] focus:bg-white focus:ring-2 focus:ring-[var(--pos-signal)]/15" />
                 </label>
-                {orderType === OrderType.DELIVERY && <div className="flex justify-between text-xs text-[var(--pos-muted)]"><span>التوصيل</span><span className="font-mono">{Money.fromMinor(deliveryFeeMinor, settings.currency).format(settings.locale)}</span></div>}
-                <CartTotals totals={totals} settings={settings} />
+                <div className="space-y-2 rounded-[12px] border border-[var(--pos-border)] bg-[var(--pos-canvas)] px-3.5 py-3 text-sm text-[var(--pos-foreground)]">
+                  <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                    <span className="text-right font-medium">المجموع الفرعي</span>
+                    <span dir="ltr" className="text-left font-mono font-semibold tabular-nums">{Money.fromMinor(totals.subtotalMinor, settings.currency).format(settings.locale)}</span>
+                  </div>
+                  <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                    <span className="text-right font-medium">الضريبة</span>
+                    <span dir="ltr" className="text-left font-mono font-semibold tabular-nums">{Money.fromMinor(totals.taxMinor, settings.currency).format(settings.locale)}</span>
+                  </div>
+                  {orderType === OrderType.DELIVERY && <div className="grid grid-cols-[1fr_auto] items-center gap-4">
+                    <span className="text-right font-medium">رسوم التوصيل</span>
+                    <span dir="ltr" className="text-left font-mono font-semibold tabular-nums">{Money.fromMinor(deliveryFeeMinor, settings.currency).format(settings.locale)}</span>
+                  </div>}
+                  <div className="grid grid-cols-[1fr_auto] items-center gap-4 border-t border-[var(--pos-border)] pt-2.5 text-base font-black">
+                    <span className="text-right">الإجمالي</span>
+                    <span dir="ltr" className="text-left text-xl tabular-nums">{Money.fromMinor(totals.totalMinor, settings.currency).format(settings.locale)}</span>
+                  </div>
+                </div>
                 <div className="rounded-[12px] bg-amber-50 px-3 py-2 text-[11px] leading-5 text-amber-900">الدفع عند الاستلام — لا تُسجل بيانات البطاقة عبر الهاتف.</div>
                 <div className={`rounded-[12px] px-3 py-2 text-[11px] leading-5 ${canSubmit ? 'bg-emerald-50 text-emerald-800' : 'bg-[var(--pos-signal-soft)] text-[var(--pos-foreground)]'}`}>
                   {canSubmit ? 'الطلب جاهز للإرسال.' : missingRequirement()}
@@ -464,8 +550,8 @@ export function PhoneOrdersClient({
         </aside>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--pos-border)] bg-white/95 p-3 shadow-[0_-8px_24px_rgba(19,20,23,0.08)] backdrop-blur-sm xl:hidden">
-        <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-3">
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-[var(--pos-border)] bg-white/95 p-3 shadow-[0_-8px_24px_rgba(19,20,23,0.08)] backdrop-blur-sm lg:hidden">
+        <div className="flex items-center justify-between gap-3">
           <div className="min-w-0">
             <p className="text-[11px] text-[var(--pos-muted)]">{items.reduce((sum, item) => sum + item.quantity, 0)} صنف في الطلب</p>
             <p className="truncate text-base font-black">{Money.fromMinor(totals.totalMinor, settings.currency).format(settings.locale)}</p>

@@ -19,6 +19,7 @@ import {
   ChefHat,
   Receipt,
   CalendarCheck,
+  PhoneCall,
   LucideIcon,
 } from 'lucide-react';
 
@@ -39,6 +40,7 @@ export const ICON_MAP: Record<string, LucideIcon> = {
   ChefHat,
   Receipt,
   CalendarCheck,
+  PhoneCall,
 };
 
 export interface AdminNavItem {

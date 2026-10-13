@@ -251,6 +251,20 @@ function PosHeader({
 return (
 <header className="relative z-20 flex min-h-[96px] shrink-0 flex-wrap items-center justify-between gap-3 bg-[var(--pos-canvas)] px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-4 lg:px-8">
       <div dir="rtl" className="flex min-w-0 basis-full items-center gap-3 lg:flex-1 lg:basis-auto">
+        {state.settings.logoUrl ? (
+          <Image
+            src={state.settings.logoUrl}
+            alt={state.settings.nameAr}
+            width={180}
+            height={64}
+            unoptimized
+            className="h-14 w-32 shrink-0 object-contain sm:w-40"
+          />
+        ) : (
+          <span className="pos-brand-mark grid size-14 shrink-0 place-items-center rounded-[16px] shadow-[0_7px_15px_rgba(19,20,23,0.14)]">
+            <Utensils size={24} strokeWidth={1.7} />
+          </span>
+        )}
         {/* Cashier menu */}
         <div className="relative shrink-0">
           <button
@@ -343,20 +357,6 @@ return (
         >
           <PhoneCall size={20} strokeWidth={1.8} />
         </Link>
-        {state.settings.logoUrl ? (
-          <Image
-            src={state.settings.logoUrl}
-            alt={state.settings.nameAr}
-            width={180}
-            height={64}
-            unoptimized
-            className="h-14 w-32 shrink-0 object-contain sm:w-40"
-          />
-        ) : (
-          <span className="pos-brand-mark grid size-14 shrink-0 place-items-center rounded-[16px] shadow-[0_7px_15px_rgba(19,20,23,0.14)]">
-            <Utensils size={24} strokeWidth={1.7} />
-          </span>
-        )}
         <label className="flex h-14 min-w-0 flex-1 items-center gap-2.5 rounded-[16px] border border-[var(--pos-border)] bg-white px-3.5 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition focus-within:border-[var(--pos-signal)] focus-within:ring-2 focus-within:ring-[var(--pos-signal)]/10">
           <Search size={20} strokeWidth={1.8} className="shrink-0 text-[var(--pos-muted)]" />
           <input

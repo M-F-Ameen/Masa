@@ -113,6 +113,12 @@ export default async function AdminLayout({
           requiredPermission: PermissionCode.POS_ACCESS,
         },
         {
+          label: 'طلبات الهاتف',
+          href: '/pos/phone-orders',
+          iconName: 'PhoneCall',
+          requiredPermission: PermissionCode.POS_ACCESS,
+        },
+        {
           label: 'مركز الطلبات',
           href: '/admin/orders',
           iconName: 'ShoppingBag',
