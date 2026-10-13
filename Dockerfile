@@ -31,9 +31,13 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
+ENV HOME=/home/nextjs
+ENV PATH="/app/node_modules/.bin:$PATH"
 
 RUN groupadd --system --gid 1001 nodejs \
-  && useradd --system --uid 1001 --gid nodejs nextjs
+  && useradd --system --uid 1001 --gid nodejs -m -d /home/nextjs nextjs \
+  && mkdir -p /home/nextjs/.npm /home/nextjs/.cache \
+  && chown -R nextjs:nodejs /home/nextjs
 
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
@@ -41,13 +45,11 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./prisma.config.ts
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=nextjs:nodejs /app/src ./src
 COPY --from=dependencies --chown=nextjs:nodejs /app/node_modules ./node_modules
-
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 USER nextjs
 EXPOSE 3000
 
-ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["node", "server.js"]
+

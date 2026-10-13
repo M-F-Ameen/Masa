@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import {
   ArrowRight,
@@ -59,11 +60,11 @@ function RecentReceipts({
 }) {
   return (
     <PosModal title="آخر فواتير الكاشير في الفرع" onClose={onClose}>
-      {!receipts.length && <p className="text-sm text-[#72819A]">لا توجد مبيعات بعد.</p>}
+      {!receipts.length && <p className="text-sm text-[var(--pos-muted)]">لا توجد مبيعات بعد.</p>}
       {receipts.map((receipt) => (
         <div
           key={receipt.id}
-          className="mb-3 flex items-center justify-between gap-2 rounded-[14px] border border-[#DCE3EF] bg-[#F7F9FD] p-3"
+          className="mb-3 flex items-center justify-between gap-2 rounded-[14px] border border-[var(--pos-border)] bg-[var(--pos-soft)] p-3"
         >
           <div>
             <p className="break-all text-xs" dir="ltr">
@@ -126,10 +127,10 @@ function PostSaleModal({
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="font-mono font-bold text-sm text-[#142644]" dir="ltr">
+              <span className="font-mono font-bold text-sm text-[var(--pos-foreground)]" dir="ltr">
                 #{receipt.orderNumber}
               </span>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#142644] text-white">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[var(--pos-foreground)] text-white">
                 {receipt.type === OrderType.DINE_IN ? 'صالة' : 'سفري'}
               </span>
               {receipt.orderNumber.startsWith('OFFLINE-') && (
@@ -138,7 +139,7 @@ function PostSaleModal({
                 </span>
               )}
             </div>
-            <p className="text-xs text-[#526B90] font-bold mt-0.5">
+            <p className="text-xs text-[var(--pos-muted)] font-bold mt-0.5">
               الإجمالي:{' '}
               {Money.fromMinor(receipt.totalMinor, currency).format(receipt.locale)}
             </p>
@@ -150,25 +151,25 @@ function PostSaleModal({
           <button
             type="button"
             onClick={() => onPrintReceipt(receipt)}
-            className="flex items-center justify-center gap-2 min-h-12 p-3 rounded-[14px] border border-[#DCE3EF] bg-white hover:bg-[#F1F5FD] text-[#142644] text-xs font-bold transition shadow-[0_3px_10px_rgba(20,38,68,0.04)]"
+            className="flex items-center justify-center gap-2 min-h-12 p-3 rounded-[14px] border border-[var(--pos-border)] bg-white hover:bg-[var(--pos-soft)] text-[var(--pos-foreground)] text-xs font-bold transition shadow-[0_3px_10px_rgba(19,20,23,0.04)]"
           >
-            <Printer className="w-4 h-4 text-[#526B90]" />
+            <Printer className="w-4 h-4 text-[var(--pos-muted)]" />
             <span>طباعة فاتورة العميل</span>
           </button>
 
           <button
             type="button"
             onClick={() => onPrintKot(receipt)}
-            className="flex items-center justify-center gap-2 min-h-12 p-3 rounded-[14px] border border-[#C6D5F1] bg-[#EDF3FF] hover:bg-[#DDE7FA] text-[#2D61C9] text-xs font-bold transition shadow-[0_3px_10px_rgba(45,97,201,0.08)]"
+            className="flex items-center justify-center gap-2 min-h-12 p-3 rounded-[14px] border border-[var(--pos-border)] bg-[var(--pos-soft)] hover:bg-[var(--pos-soft-hover)] text-[var(--pos-primary)] text-xs font-bold transition shadow-[0_3px_10px_rgba(19,20,23,0.08)]"
           >
-            <ChefHat className="w-4 h-4 text-[#2D61C9]" />
+            <ChefHat className="w-4 h-4 text-[var(--pos-primary)]" />
             <span>طباعة بون المطبخ (KOT)</span>
           </button>
 
           <button
             type="button"
             onClick={() => onPrintBoth(receipt)}
-            className="sm:col-span-2 flex items-center justify-center gap-2 min-h-14 p-3 rounded-[14px] bg-[#2D61C9] hover:bg-[#2756B8] text-white text-xs font-bold transition shadow-[0_7px_16px_rgba(45,97,201,0.18)]"
+            className="pos-primary-action sm:col-span-2 flex items-center justify-center gap-2 min-h-14 p-3 rounded-[14px] bg-[var(--pos-primary)] hover:bg-[var(--pos-primary-hover)] text-white text-xs font-bold transition shadow-[0_7px_16px_rgba(19,20,23,0.18)]"
           >
             <Printer className="w-4 h-4" />
             <span>طباعة الفاتورة وبون المطبخ معاً</span>
@@ -176,8 +177,8 @@ function PostSaleModal({
         </div>
 
         {/* Auto-print KOT toggle */}
-        <div className="flex items-center justify-between p-3 rounded-[14px] bg-[#F7F9FD] border border-[#DCE3EF] text-xs">
-          <label htmlFor="auto-print-kot-toggle" className="cursor-pointer font-medium text-[#526B90] select-none">
+        <div className="flex items-center justify-between p-3 rounded-[14px] bg-[var(--pos-soft)] border border-[var(--pos-border)] text-xs">
+          <label htmlFor="auto-print-kot-toggle" className="cursor-pointer font-medium text-[var(--pos-muted)] select-none">
             طباعة بون المطبخ تلقائياً مع الفاتورة عند كل بيع
           </label>
           <input
@@ -185,7 +186,7 @@ function PostSaleModal({
             type="checkbox"
             checked={autoPrintKot}
             onChange={(e) => onToggleAutoPrintKot(e.target.checked)}
-            className="size-4 rounded border-[#C6D2E5] text-[#2D61C9] focus:ring-[#2D61C9] cursor-pointer"
+            className="size-4 rounded border-[var(--pos-metal)] text-[var(--pos-primary)] focus:ring-[var(--pos-signal)] cursor-pointer"
           />
         </div>
 
@@ -193,7 +194,7 @@ function PostSaleModal({
         <button
           type="button"
           onClick={onClose}
-          className="w-full min-h-12 py-2.5 rounded-[14px] border border-[#DCE3EF] text-[#526B90] hover:bg-[#E9EEFC] text-xs font-semibold transition"
+          className="w-full min-h-12 py-2.5 rounded-[14px] border border-[var(--pos-border)] text-[var(--pos-muted)] hover:bg-[var(--pos-soft)] text-xs font-semibold transition"
         >
           طلب جديد (متابعة)
         </button>
@@ -249,28 +250,39 @@ function PosHeader({
   ).length;
 
 return (
-<header className="relative z-20 flex min-h-[96px] shrink-0 flex-wrap items-center justify-between gap-3 bg-[#F7F8FC] px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-4 lg:px-8">
+<header className="relative z-20 flex min-h-[96px] shrink-0 flex-wrap items-center justify-between gap-3 bg-[var(--pos-canvas)] px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-4 lg:px-8">
       <div dir="rtl" className="flex min-w-0 basis-full items-center gap-3 lg:flex-1 lg:basis-auto">
-        <span className="grid size-14 shrink-0 place-items-center rounded-[16px] bg-[#142644] text-white shadow-[0_7px_15px_rgba(20,38,68,0.14)]">
-          <Utensils size={24} strokeWidth={1.7} />
-        </span>
-        <label className="flex h-14 min-w-0 flex-1 items-center gap-2.5 rounded-[16px] border border-[#DCE3EF] bg-white px-3.5 text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition focus-within:border-[#2D61C9] focus-within:ring-2 focus-within:ring-[#2D61C9]/10">
-          <Search size={20} strokeWidth={1.8} className="shrink-0 text-[#627594]" />
+        {state.settings.logoUrl ? (
+          <Image
+            src={state.settings.logoUrl}
+            alt={state.settings.nameAr}
+            width={180}
+            height={64}
+            unoptimized
+            className="h-14 w-32 shrink-0 object-contain sm:w-40"
+          />
+        ) : (
+          <span className="pos-brand-mark grid size-14 shrink-0 place-items-center rounded-[16px] shadow-[0_7px_15px_rgba(19,20,23,0.14)]">
+            <Utensils size={24} strokeWidth={1.7} />
+          </span>
+        )}
+        <label className="flex h-14 min-w-0 flex-1 items-center gap-2.5 rounded-[16px] border border-[var(--pos-border)] bg-white px-3.5 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition focus-within:border-[var(--pos-signal)] focus-within:ring-2 focus-within:ring-[var(--pos-signal)]/10">
+          <Search size={20} strokeWidth={1.8} className="shrink-0 text-[var(--pos-muted)]" />
           <input
             aria-label="البحث عن صنف"
             placeholder="ابحث عن صنف بالاسم..."
             value={search}
             onChange={(event) => onSearchChange(event.target.value)}
-            className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[#142644] outline-none placeholder:text-[#91A0B8] focus:ring-0"
+            className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[var(--pos-foreground)] outline-none placeholder:text-[var(--pos-muted)] focus:ring-0"
           />
         </label>
       </div>
 
       <div dir="ltr" className="flex shrink-0 items-center gap-2.5 lg:gap-3">
-<div className="hidden h-14 items-center gap-2.5 rounded-[16px] border border-[#DCE3EF] bg-white px-3 text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] lg:flex">
-          <Sun size={20} strokeWidth={1.7} className="text-[#2D61C9]" />
-          <span aria-hidden="true" className="h-8 w-px bg-[#DCE3EF]" />
-          <div dir="rtl" className="flex min-w-[150px] flex-col justify-center gap-0.5 leading-tight text-[#142644]">
+<div className="hidden h-14 items-center gap-2.5 rounded-[16px] border border-[var(--pos-border)] bg-white px-3 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] lg:flex">
+          <Sun size={20} strokeWidth={1.7} className="text-[var(--pos-signal)]" />
+          <span aria-hidden="true" className="h-8 w-px bg-[var(--pos-border)]" />
+          <div dir="rtl" className="flex min-w-[150px] flex-col justify-center gap-0.5 leading-tight text-[var(--pos-foreground)]">
             <span className="text-sm font-bold">{headerDateTime.date || '—'}</span>
             <span className="text-sm font-semibold">{headerDateTime.time || '—'}</span>
           </div>
@@ -281,10 +293,10 @@ return (
           aria-label="آخر الفواتير"
           title="آخر الفواتير"
           onClick={() => state.setShowHistory(true)}
-className="relative grid size-14 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition hover:border-[#B9C9E2] hover:bg-[#F7F9FD]"
+className="relative grid size-14 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]"
         >
           <Bell size={20} strokeWidth={1.7} />
-          {state.receipts.length > 0 && <span className="absolute right-2 top-2 size-2.5 rounded-full bg-[#2D61C9]" />}
+          {state.receipts.length > 0 && <span className="absolute right-2 top-2 size-2.5 rounded-full bg-[var(--pos-signal)]" />}
         </button>
 
         <button
@@ -292,7 +304,7 @@ className="relative grid size-14 place-items-center rounded-[16px] border border
           aria-label="طباعة"
           title="طباعة"
           onClick={() => window.print()}
-className="hidden size-14 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition hover:border-[#B9C9E2] hover:bg-[#F7F9FD] sm:grid"
+className="hidden size-14 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)] sm:grid"
         >
           <Printer size={20} strokeWidth={1.7} />
         </button>
@@ -304,18 +316,31 @@ className="hidden size-14 place-items-center rounded-[16px] border border-[#DCE3
             aria-expanded={userMenuOpen}
             aria-haspopup="menu"
             onClick={() => setUserMenuOpen((open) => !open)}
-className="flex h-14 min-w-[150px] items-center justify-between gap-3 rounded-[16px] border border-[#DCE3EF] bg-white px-4 text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition hover:border-[#B9C9E2] hover:bg-[#F7F9FD]"
+            dir="rtl"
+            className="flex h-14 w-[220px] items-center justify-between gap-3 rounded-[16px] border border-[var(--pos-border)] bg-white px-3 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]"
           >
-            <ChevronDown size={18} strokeWidth={1.8} />
-            <span dir="rtl" className="flex flex-1 flex-col items-end leading-tight">
-              <span className="text-xs text-[#72819A]">المستخدم</span>
+            {state.settings.logoUrl ? (
+              <span className="grid h-10 w-24 shrink-0 place-items-center rounded-[10px] border border-[var(--pos-border)] bg-[var(--pos-soft)] px-1.5">
+                <img
+                  src={state.settings.logoUrl}
+                  alt="شعار المطعم"
+                  className="max-h-full w-full object-contain"
+                />
+              </span>
+            ) : (
+              <span className="grid size-10 shrink-0 place-items-center rounded-[10px] border border-[var(--pos-border)] bg-[var(--pos-soft)]">
+                <UserRound size={20} strokeWidth={1.7} className="text-[var(--pos-muted)]" />
+              </span>
+            )}
+            <span className="flex min-w-0 flex-1 flex-col items-start leading-tight">
+              <span className="text-xs text-[var(--pos-muted)]">المستخدم</span>
               <strong className="text-sm">المدير</strong>
             </span>
-            <UserRound size={20} strokeWidth={1.7} className="text-[#72819A]" />
+            <ChevronDown size={18} strokeWidth={1.8} className="shrink-0 text-[var(--pos-muted)]" />
           </button>
 
           {userMenuOpen && (
-            <div dir="rtl" role="menu" className="absolute left-0 top-[calc(100%+10px)] z-50 w-64 rounded-[16px] border border-[#DCE3EF] bg-white p-2 text-sm text-[#142644] shadow-[0_18px_45px_rgba(20,38,68,0.14)]">
+            <div dir="rtl" role="menu" className="absolute left-0 top-[calc(100%+10px)] z-50 w-64 rounded-[16px] border border-[var(--pos-border)] bg-white p-2 text-sm text-[var(--pos-foreground)] shadow-[0_18px_45px_rgba(19,20,23,0.14)]">
               {!state.offlineSync.isOnline ? (
                 <div className="mb-1 flex items-center gap-2 rounded-[12px] bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700">
                   <WifiOff size={15} />
@@ -333,7 +358,7 @@ className="flex h-14 min-w-[150px] items-center justify-between gap-3 rounded-[1
                   {state.offlineSync.isSyncing ? 'جاري المزامنة...' : `مزامنة (${state.offlineSync.pendingCount})`}
                 </button>
               ) : (
-                <div className="mb-1 flex items-center gap-2 rounded-[12px] bg-[#F7F9FD] px-3 py-2 text-xs text-[#72819A]">
+                <div className="mb-1 flex items-center gap-2 rounded-[12px] bg-[var(--pos-soft)] px-3 py-2 text-xs text-[var(--pos-muted)]">
                   <span className="size-2 rounded-full bg-emerald-500" />
                   متصل
                 </div>
@@ -347,10 +372,10 @@ className="flex h-14 min-w-[150px] items-center justify-between gap-3 rounded-[1
                     state.setViewMode(state.viewMode === 'FLOOR_PLAN' ? 'SALE' : 'FLOOR_PLAN');
                     setUserMenuOpen(false);
                   }}
-                  className="flex w-full items-center justify-between rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[#E9EEFC]"
+                  className="flex w-full items-center justify-between rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]"
                 >
                   <span className="flex items-center gap-2"><Armchair size={15} />{state.viewMode === 'FLOOR_PLAN' ? 'الطلب السريع' : 'خريطة الصالة'}</span>
-                  {occupiedTablesCount > 0 && <span className="rounded-full bg-[#E9EEFC] px-1.5 text-[10px] text-[#2D61C9]">{occupiedTablesCount}</span>}
+                  {occupiedTablesCount > 0 && <span className="rounded-full bg-[var(--pos-soft)] px-1.5 text-[10px] text-[var(--pos-primary)]">{occupiedTablesCount}</span>}
                 </button>
               )}
 
@@ -362,12 +387,12 @@ className="flex h-14 min-w-[150px] items-center justify-between gap-3 rounded-[1
                   state.setShowShift(true);
                   setUserMenuOpen(false);
                 }}
-                className="flex w-full items-center rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[#E9EEFC] disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex w-full items-center rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {state.shift ? 'إغلاق الوردية' : 'فتح وردية'}
               </button>
 
-              <Link href="/admin" role="menuitem" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[#E9EEFC]">
+              <Link href="/admin" role="menuitem" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]">
                 <ArrowRight size={15} />
                 الإدارة
               </Link>
@@ -380,10 +405,10 @@ className="flex h-14 min-w-[150px] items-center justify-between gap-3 rounded-[1
             type="button"
             onClick={onOpenMobileCart}
             aria-label="سلة الطلب الحالية"
-className="relative grid size-14 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#405675] transition hover:bg-[#E9EEFC] lg:hidden"
+className="relative grid size-14 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-muted)] transition hover:bg-[var(--pos-soft)] lg:hidden"
           >
             <ShoppingCart size={18} strokeWidth={1.75} />
-            {cartItemCount > 0 && <span className="absolute -right-1 -top-1 grid size-4 place-items-center rounded-full bg-[#2D61C9] text-[9px] font-bold text-white">{cartItemCount}</span>}
+            {cartItemCount > 0 && <span className="absolute -right-1 -top-1 grid size-4 place-items-center rounded-full bg-[var(--pos-primary)] text-[9px] font-bold text-white">{cartItemCount}</span>}
           </button>
         )}
       </div>
@@ -403,9 +428,9 @@ function PosSalePanel({
   const { sale, totals, pricingError } = state;
 
   return (
-    <aside className="flex h-full flex-col justify-between overflow-hidden rounded-[16px] border border-[#DCE3EF] bg-white shadow-[0_5px_16px_rgba(20,38,68,0.05)]">
+    <aside className="flex h-full flex-col justify-between overflow-hidden rounded-[16px] border border-[var(--pos-border)] bg-white shadow-[0_5px_16px_rgba(19,20,23,0.05)]">
       {/* 1. Header: Order Title & Order Type (سفري / صالة) */}
-      <div className="shrink-0 border-b border-[#E7ECF4] bg-white p-4 sm:p-5">
+      <div className="shrink-0 border-b border-[var(--pos-border)] bg-white p-4 sm:p-5">
         <div className="relative flex items-center justify-center gap-2">
           <div className="flex items-center gap-2">
             {isMobile && (
@@ -413,13 +438,13 @@ function PosSalePanel({
                 type="button"
                 onClick={onClose}
                 aria-label="إغلاق السلة"
-                className="absolute left-0 grid size-8 place-items-center rounded-[10px] border border-[#DCE3EF] text-[#72819A] hover:bg-[#F7F9FD]"
+                className="absolute left-0 grid size-8 place-items-center rounded-[10px] border border-[var(--pos-border)] text-[var(--pos-muted)] hover:bg-[var(--pos-soft)]"
               >
                 <X size={16} />
               </button>
             )}
-            <h2 className="flex items-center gap-2 text-sm font-bold text-[#142644] sm:text-base">
-              <ShoppingCart size={19} strokeWidth={1.75} className="text-[#142644]" />
+            <h2 className="flex items-center gap-2 text-sm font-bold text-[var(--pos-foreground)] sm:text-base">
+              <ShoppingCart size={19} strokeWidth={1.75} className="text-[var(--pos-foreground)]" />
               الطلب الحالي
             </h2>
           </div>
@@ -444,7 +469,7 @@ function PosSalePanel({
       </div>
 
       {/* 2. Middle: Cart Lines (THE ONLY SCROLLABLE PART) */}
-      <div className="min-h-0 flex-1 overflow-y-auto bg-[#FBFCFF] p-3 sm:p-4">
+      <div className="min-h-0 flex-1 overflow-y-auto bg-[var(--pos-surface)] p-3 sm:p-4">
         <CartLines
           items={state.items}
           products={state.products}
@@ -455,7 +480,7 @@ function PosSalePanel({
       </div>
 
       {/* 3. Bottom: Pinned Summary, Compact Options, Payment Trigger */}
-      <div className="shrink-0 space-y-3 border-t border-[#E7ECF4] bg-white p-4 sm:p-5">
+      <div className="shrink-0 space-y-3 border-t border-[var(--pos-border)] bg-white p-4 sm:p-5">
         <CartTotals totals={totals} settings={state.settings} />
         <CartOptions
           canDiscount={state.canDiscount}
@@ -478,7 +503,7 @@ function PosSalePanel({
           <button
             disabled={!state.items.length}
             onClick={() => state.addItemsToTab(state.activeTabOrderId!)}
-            className="flex min-h-14 items-center justify-center gap-2 rounded-[14px] bg-[#2D61C9] hover:bg-[#2756B8] w-full py-2.5 text-sm font-bold text-white shadow-[0_7px_16px_rgba(45,97,201,0.18)] active:scale-95 transition disabled:opacity-50"
+            className="pos-primary-action flex min-h-14 items-center justify-center gap-2 rounded-[14px] bg-[var(--pos-primary)] hover:bg-[var(--pos-primary-hover)] w-full py-2.5 text-sm font-bold text-white shadow-[0_7px_16px_rgba(19,20,23,0.18)] active:scale-95 transition disabled:opacity-50"
           >
             <Plus size={16} />
             <span>إرسال الأصناف لطاولة {state.selectedTable?.tableNumber}</span>
@@ -488,7 +513,7 @@ function PosSalePanel({
             <button
               disabled={!state.items.length}
               onClick={() => state.openTableTab(state.selectedTable!.id, state.guestCount)}
-              className="flex min-h-14 items-center justify-center gap-2 rounded-[14px] bg-[#142644] hover:bg-[#0F1D35] w-full py-2.5 text-xs font-bold text-white shadow-[0_6px_14px_rgba(20,38,68,0.14)] active:scale-95 transition disabled:opacity-50"
+              className="pos-primary-action flex min-h-14 items-center justify-center gap-2 rounded-[14px] bg-[var(--pos-foreground)] hover:bg-[var(--pos-primary-hover)] w-full py-2.5 text-xs font-bold text-white shadow-[0_6px_14px_rgba(19,20,23,0.14)] active:scale-95 transition disabled:opacity-50"
             >
               <Armchair size={15} />
               <span>حفظ كطلب مفتوح لطاولة {state.selectedTable.tableNumber}</span>
@@ -496,7 +521,7 @@ function PosSalePanel({
             <button
               disabled={sale.pending || (!sale.uncertain && !totals) || !state.items.length}
               onClick={() => state.setIsPaymentModalOpen(true)}
-              className="flex min-h-11 items-center justify-center gap-2 rounded-[14px] border border-[#DCE3EF] bg-[#F7F9FD] hover:bg-[#E9EEFC] w-full py-2 text-xs font-semibold text-[#405675] active:scale-95 transition disabled:opacity-50"
+              className="flex min-h-11 items-center justify-center gap-2 rounded-[14px] border border-[var(--pos-border)] bg-[var(--pos-soft)] hover:bg-[var(--pos-soft)] w-full py-2 text-xs font-semibold text-[var(--pos-muted)] active:scale-95 transition disabled:opacity-50"
             >
               <span>دفع وتحصيل فوري بالكاونتر</span>
             </button>
@@ -511,7 +536,7 @@ function PosSalePanel({
                 state.setIsPaymentModalOpen(true);
               }
             }}
-            className={posPrimary + ' min-h-[76px] w-full py-2.5 rounded-[14px] text-sm font-bold shadow-[0_8px_18px_rgba(45,97,201,0.18)]'}
+            className={posPrimary + ' pos-checkout min-h-[76px] w-full py-2.5 rounded-[14px] text-sm font-bold shadow-[0_8px_18px_rgba(19,20,23,0.18)]'}
           >
             {sale.pending
               ? 'جارٍ تسجيل البيع...'
@@ -523,7 +548,7 @@ function PosSalePanel({
           </button>
         )}
 
-        <p className="text-center text-[10px] text-[#8D9AB2]">
+        <p className="text-center text-[10px] text-[var(--pos-muted)]">
           المبلغ شامل الضريبة؛ تُراجع الأسعار والتوفر عند الحفظ.
         </p>
       </div>
@@ -656,8 +681,8 @@ function PosContent({
   if (!state.shift) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-4 py-24">
-        <Store size={40} strokeWidth={1.5} className="text-[#72819A]" />
-        <h2 className="font-semibold text-[#142644]">افتح وردية الكاشير لبدء البيع</h2>
+        <Store size={40} strokeWidth={1.5} className="text-[var(--pos-muted)]" />
+        <h2 className="font-semibold text-[var(--pos-foreground)]">افتح وردية الكاشير لبدء البيع</h2>
         <button className={posPrimary} onClick={() => state.setShowShift(true)}>
           فتح وردية
         </button>
@@ -666,9 +691,9 @@ function PosContent({
   }
 
   return (
-    <div className="relative flex min-h-0 flex-1 flex-col gap-3 overflow-hidden bg-[#F7F8FC] p-2.5 sm:p-3 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(280px,25%)] lg:gap-3.5 lg:p-2">
+    <div className="relative flex min-h-0 flex-1 flex-col gap-3 overflow-hidden bg-[var(--pos-canvas)] p-2.5 sm:p-3 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(280px,25%)] lg:gap-3.5 lg:p-2">
       {/* 1. Catalog / Floor Plan Area */}
-      <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden rounded-[16px] border border-[#DCE3EF] bg-white pb-24 shadow-[0_5px_16px_rgba(20,38,68,0.04)] lg:pb-0">
+      <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden rounded-[16px] border border-[var(--pos-border)] bg-white pb-24 shadow-[0_5px_16px_rgba(19,20,23,0.04)] lg:pb-0">
         {state.viewMode === 'FLOOR_PLAN' ? (
           <PosFloorPlan
             tables={state.tables}
@@ -713,17 +738,17 @@ function PosContent({
           <button
             type="button"
             onClick={() => setShowMobileCart(true)}
-            className="flex w-full items-center justify-between rounded-[16px] border border-[#2756B8] bg-[#2D61C9] p-3 text-white shadow-[0_12px_26px_rgba(45,97,201,0.24)] transition active:scale-[0.99]"
+            className="pos-primary-action flex w-full items-center justify-between rounded-[16px] border border-[var(--pos-primary-hover)] bg-[var(--pos-primary)] p-3 text-white shadow-[0_12px_26px_rgba(19,20,23,0.24)] transition active:scale-[0.99]"
           >
             <div className="flex items-center gap-3">
                <span className="relative grid size-9 place-items-center rounded-xl bg-white/15 text-white">
                 <ShoppingCart size={18} strokeWidth={1.8} />
-                  <span className="absolute -right-1.5 -top-1.5 grid size-5 place-items-center rounded-full bg-white text-[10px] font-black text-[#2D61C9] shadow-xs">
+                  <span className="absolute -right-1.5 -top-1.5 grid size-5 place-items-center rounded-full bg-white text-[10px] font-black text-[var(--pos-primary)] shadow-xs">
                   {cartItemCount}
                 </span>
               </span>
               <div className="text-right">
-                 <p className="text-[10px] text-white/70">إجمالي الطلب</p>
+                 <p className="text-[10px] text-white">إجمالي الطلب</p>
                 <p className="text-xs sm:text-sm font-extrabold text-white">
                   {Money.fromMinor(
                     state.totals?.totalMinor ?? 0,
@@ -733,7 +758,7 @@ function PosContent({
               </div>
             </div>
 
-                <div className="flex items-center gap-1.5 rounded-xl bg-white/15 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-white/25">
+                <div className="flex items-center gap-1.5 rounded-xl bg-[var(--pos-primary-hover)] px-3 py-1.5 text-xs font-bold text-white transition hover:bg-[var(--pos-primary-hover)]">
               <span>عرض السلة والدفع</span>
               <ChevronLeft size={15} />
             </div>
@@ -751,13 +776,13 @@ function PosContent({
           {/* Backdrop blur overlay */}
           <div
             onClick={() => setShowMobileCart(false)}
-            className="fixed inset-0 bg-[#142644]/45 backdrop-blur-xs transition-opacity duration-200"
+            className="fixed inset-0 bg-[var(--pos-foreground)]/45 backdrop-blur-xs transition-opacity duration-200"
           />
 
           {/* Slide-up Container */}
           <div className="relative z-10 w-full max-h-[92vh] bg-white rounded-t-3xl flex flex-col overflow-hidden shadow-2xl animate-in slide-in-from-bottom duration-200">
             {/* Grab handle */}
-            <div className="w-12 h-1 rounded-full bg-[#DCE3EF] mx-auto my-2 shrink-0" />
+            <div className="w-12 h-1 rounded-full bg-[var(--pos-border)] mx-auto my-2 shrink-0" />
             <div className="flex-1 min-h-0 overflow-hidden flex flex-col">
               <PosSalePanel
                 state={state}
@@ -921,7 +946,7 @@ export function PosClient(props: PosClientProps) {
   return (
     <div
       dir="rtl"
-      className="h-screen max-h-screen overflow-hidden flex flex-col bg-[#F7F8FC] text-[#142644] font-sans"
+      className="pos-app h-screen max-h-screen overflow-hidden flex flex-col bg-[var(--pos-canvas)] text-[var(--pos-foreground)] font-sans"
     >
       <div className="flex flex-col flex-1 min-h-0 print:hidden overflow-hidden">
         <PosHeader

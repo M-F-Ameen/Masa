@@ -24,16 +24,16 @@ export function ProductPicker({ product, currency, locale, onAdd, onClose }: {
     return count >= group.minSelect && count <= group.maxSelect;
   });
   return <PosModal title={product.nameAr} onClose={onClose}>
-    <fieldset><legend className="mb-2 text-sm font-semibold text-[#142644]">المقاس</legend><div className="flex flex-wrap gap-2">
+    <fieldset><legend className="mb-2 text-sm font-semibold text-[var(--pos-foreground)]">المقاس</legend><div className="flex flex-wrap gap-2">
       {product.sizes.map((size) => <button key={size.id} aria-pressed={sizeId === size.id} onClick={() => setSizeId(size.id)}
-        className={posButton + (sizeId === size.id ? ' border-[#2D61C9] bg-[#E9EEFC] text-[#2756B8]' : '')}>
+        className={posButton + (sizeId === size.id ? ' pos-selected' : '')}>
         {size.nameAr} — {Money.fromMinor(size.price, currency).format(locale)}</button>)}
     </div></fieldset>
     {product.modifierGroups.map((group) => <fieldset className="mt-5" key={group.id}>
-      <legend className="mb-2 text-sm font-semibold text-[#142644]">{group.nameAr} <span className="font-normal text-[#72819A]">({group.minSelect}–{group.maxSelect})</span></legend>
+      <legend className="mb-2 text-sm font-semibold text-[var(--pos-foreground)]">{group.nameAr} <span className="font-normal text-[var(--pos-muted)]">({group.minSelect}–{group.maxSelect})</span></legend>
       <div className="flex flex-wrap gap-2">{group.modifiers.map((modifier) => <button key={modifier.id}
         aria-pressed={modifierIds.includes(modifier.id)} onClick={() => setModifierIds(toggleModifiers(product, modifierIds, group.id, modifier.id))}
-        className={posButton + (modifierIds.includes(modifier.id) ? ' border-[#2D61C9] bg-[#E9EEFC] text-[#2756B8]' : '')}>
+        className={posButton + (modifierIds.includes(modifier.id) ? ' pos-selected' : '')}>
         {modifier.nameAr} {modifier.priceDelta > 0 && '+ ' + Money.fromMinor(modifier.priceDelta, currency).format(locale)}</button>)}</div>
     </fieldset>)}
     <button disabled={!valid} className={posPrimary + ' mt-6 w-full'} onClick={() => { onAdd({ productId: product.id, sizeId, modifierIds, quantity: 1 }); onClose(); }}>إضافة للسلة</button>

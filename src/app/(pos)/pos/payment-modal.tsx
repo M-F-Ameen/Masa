@@ -97,23 +97,23 @@ export function PaymentModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#10204a]/35 p-3 backdrop-blur-[2px] sm:p-4 animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--pos-foreground)]/35 p-3 backdrop-blur-[2px] sm:p-4 animate-in fade-in duration-150"
       dir="rtl"
       role="dialog"
       aria-modal="true"
     >
-      <div className="w-full max-w-lg overflow-hidden rounded-[16px] border border-[#DCE3EF] bg-white text-[#142644] shadow-[0_20px_60px_rgba(20,38,68,0.16)] animate-in zoom-in-95 duration-150">
+      <div className="w-full max-w-lg overflow-hidden rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_20px_60px_rgba(19,20,23,0.16)] animate-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#DCE3EF] bg-[#F7F9FD] px-5 py-4">
+        <div className="flex items-center justify-between border-b border-[var(--pos-border)] bg-[var(--pos-soft)] px-5 py-4">
           <div className="flex items-center gap-2.5">
-            <div className="grid size-9 place-items-center rounded-[12px] bg-[#2D61C9] text-white shadow-[0_6px_14px_rgba(45,97,201,0.2)]">
+            <div className="grid size-9 place-items-center rounded-[12px] bg-[var(--pos-primary)] text-white shadow-[0_6px_14px_rgba(19,20,23,0.2)]">
               <Calculator size={18} strokeWidth={2} />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#142644]">
+              <h3 className="text-base font-bold text-[var(--pos-foreground)]">
                 تحصيل الحساب وإتمام البيع
               </h3>
-              <p className="text-xs text-[#72819A]">
+              <p className="text-xs text-[var(--pos-muted)]">
                 {orderType === OrderType.DINE_IN && tableNumber
                   ? `صالة — طاولة ${tableNumber}`
                   : 'طلب سفري / كاونتر'}
@@ -124,15 +124,15 @@ export function PaymentModal({
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="rounded-[10px] p-1 text-[#72819A] transition hover:bg-[#E9EEFC] hover:text-[#142644]"
+            className="rounded-[10px] p-1 text-[var(--pos-muted)] transition hover:bg-[var(--pos-soft)] hover:text-[var(--pos-foreground)]"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Total Summary Banner */}
-        <div className="space-y-1 bg-[#2D61C9] p-5 text-center text-white">
-          <span className="text-xs font-medium text-white/70">المبلغ الإجمالي المستحق</span>
+        <div className="space-y-1 bg-[var(--pos-primary)] p-5 text-center text-white">
+          <span className="text-xs font-medium text-white">المبلغ الإجمالي المستحق</span>
           <div className="text-3xl font-extrabold tracking-tight font-mono text-white">
             {total.format(settings.locale)}
           </div>
@@ -149,7 +149,7 @@ export function PaymentModal({
 
           {/* Payment Method Selector */}
           <div className="space-y-1.5">
-            <label className="block font-bold text-[#344a78]">طريقة السداد:</label>
+            <label className="block font-bold text-[var(--pos-foreground)]">طريقة السداد:</label>
             <div className="grid grid-cols-3 gap-2">
               {paymentOptions.map(({ mode: value, name, icon: Icon }) => {
                 const isSelected = value === mode;
@@ -161,8 +161,8 @@ export function PaymentModal({
                     onClick={() => setMode(value)}
                     className={`flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl border text-xs font-bold transition active:scale-95 ${
                       isSelected
-                         ? 'border-[#2D61C9] bg-[#2D61C9] text-white shadow-[0_6px_14px_rgba(45,97,201,0.2)]'
-                         : 'border-[#DCE3EF] bg-white text-[#526B90] hover:bg-[#F7F9FD]'
+                         ? 'pos-selected'
+                         : 'border-[var(--pos-border)] bg-white text-[var(--pos-muted)] hover:bg-[var(--pos-soft)]'
                     }`}
                   >
                     <Icon size={20} strokeWidth={1.8} />
@@ -177,9 +177,9 @@ export function PaymentModal({
           {isCashMode && (
             <div className="space-y-3 pt-1">
               <div className="space-y-1">
-                <label className="flex items-center justify-between font-bold text-[#142644]">
+                <label className="flex items-center justify-between font-bold text-[var(--pos-foreground)]">
                   <span>المبلغ المستلم نقداً من العميل:</span>
-                  <span className="font-mono text-[11px] font-normal text-[#8D9AB2]">
+                  <span className="font-mono text-[11px] font-normal text-[var(--pos-muted)]">
                     ({settings.currency})
                   </span>
                 </label>
@@ -190,19 +190,19 @@ export function PaymentModal({
                   value={cash}
                   onChange={(e) => setCash(e.target.value)}
                   placeholder={total.toMajor().toFixed(2)}
-                  className="h-11 w-full rounded-[14px] border border-[#DCE3EF] bg-[#F7F9FD] text-center font-mono text-lg font-bold transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2D61C9]/25"
+                  className="h-11 w-full rounded-[14px] border border-[var(--pos-border)] bg-[var(--pos-soft)] text-center font-mono text-lg font-bold transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--pos-signal)]/25"
                 />
               </div>
 
               {/* Quick Cash Buttons */}
               <div className="space-y-1">
-                <span className="text-[11px] font-medium text-[#72819A]">مبالغ سريعة:</span>
+                <span className="text-[11px] font-medium text-[var(--pos-muted)]">مبالغ سريعة:</span>
                 <div className="flex flex-wrap gap-1.5">
                   <button
                     type="button"
                     disabled={isPending}
                     onClick={() => setCash(total.toMajor().toString())}
-                    className="flex-1 rounded-lg border border-[#DCE3EF] bg-white px-2.5 py-1.5 text-xs font-mono font-bold text-[#142644] shadow-2xs transition hover:bg-[#F7F9FD]"
+                    className="flex-1 rounded-lg border border-[var(--pos-border)] bg-white px-2.5 py-1.5 text-xs font-mono font-bold text-[var(--pos-foreground)] shadow-2xs transition hover:bg-[var(--pos-soft)]"
                   >
                     التمام ({total.toMajor()})
                   </button>
@@ -212,7 +212,7 @@ export function PaymentModal({
                       type="button"
                       disabled={isPending}
                       onClick={() => setCash(amt.toString())}
-                      className="rounded-lg border border-[#DCE3EF] bg-white px-3 py-1.5 text-xs font-mono font-semibold text-[#526B90] shadow-2xs transition hover:bg-[#F7F9FD]"
+                      className="rounded-lg border border-[var(--pos-border)] bg-white px-3 py-1.5 text-xs font-mono font-semibold text-[var(--pos-muted)] shadow-2xs transition hover:bg-[var(--pos-soft)]"
                     >
                       {amt}
                     </button>
@@ -244,10 +244,10 @@ export function PaymentModal({
 
           {/* CARD MODE NOTICE */}
           {isCardMode && (
-            <div className="space-y-1.5 rounded-[14px] border border-[#DCE3EF] bg-[#F7F9FD] p-4 text-center">
-              <CreditCard size={28} className="mx-auto text-[#142644]" strokeWidth={1.5} />
-              <p className="font-bold text-[#142644]">جاهز للدفع عبر نقطة البيع الإلكترونية</p>
-              <p className="text-[11px] text-[#72819A]">
+            <div className="space-y-1.5 rounded-[14px] border border-[var(--pos-border)] bg-[var(--pos-soft)] p-4 text-center">
+              <CreditCard size={28} className="mx-auto text-[var(--pos-foreground)]" strokeWidth={1.5} />
+              <p className="font-bold text-[var(--pos-foreground)]">جاهز للدفع عبر نقطة البيع الإلكترونية</p>
+              <p className="text-[11px] text-[var(--pos-muted)]">
                 مرر بطاقة العميل على جهاز الـ POS لتحصيل كامل المبلغ: {total.format(settings.locale)}
               </p>
             </div>
@@ -257,21 +257,21 @@ export function PaymentModal({
           {isMixedMode && (
             <div className="space-y-3 pt-1">
               <div className="space-y-1">
-                <label className="block font-bold text-[#142644]">الجزء النقدي المستلم:</label>
+                <label className="block font-bold text-[var(--pos-foreground)]">الجزء النقدي المستلم:</label>
                 <input
                   disabled={isPending}
                   inputMode="decimal"
                   value={cash}
                   onChange={(e) => setCash(e.target.value)}
                   placeholder="0.00"
-                  className="h-10 w-full rounded-[12px] border border-[#DCE3EF] bg-[#F7F9FD] text-center font-mono text-base font-bold transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#2D61C9]/25"
+                  className="h-10 w-full rounded-[12px] border border-[var(--pos-border)] bg-[var(--pos-soft)] text-center font-mono text-base font-bold transition focus:bg-white focus:outline-none focus:ring-2 focus:ring-[var(--pos-signal)]/25"
                 />
               </div>
 
-            <div className="p-3 rounded-[14px] border border-[#C6D5F1] bg-[#EDF3FF] text-[#142644] flex items-center justify-between">
+            <div className="p-3 rounded-[14px] border border-[var(--pos-border)] bg-[var(--pos-soft)] text-[var(--pos-foreground)] flex items-center justify-between">
                 <div>
                   <span className="font-bold block">المتبقي على البطاقة:</span>
-                  <span className="text-[10px] text-[#2D61C9]">يُسحب من بطاقة الدفع</span>
+                  <span className="text-[10px] text-[var(--pos-primary)]">يُسحب من بطاقة الدفع</span>
                 </div>
                 <span className="text-base font-extrabold font-mono">
                   {remainingCardDue.format(settings.locale)}
@@ -282,12 +282,12 @@ export function PaymentModal({
         </div>
 
         {/* Modal Footer */}
-        <div className="flex items-center gap-3 border-t border-[#DCE3EF] bg-[#F7F9FD] px-5 py-4">
+        <div className="flex items-center gap-3 border-t border-[var(--pos-border)] bg-[var(--pos-soft)] px-5 py-4">
           <button
             type="button"
             onClick={onClose}
             disabled={isPending}
-            className="flex-1 rounded-[12px] border border-[#DCE3EF] bg-white py-2.5 text-xs font-semibold text-[#526B90] transition hover:bg-[#E9EEFC]"
+            className="flex-1 rounded-[12px] border border-[var(--pos-border)] bg-white py-2.5 text-xs font-semibold text-[var(--pos-muted)] transition hover:bg-[var(--pos-soft)]"
           >
             تراجع
           </button>
@@ -295,7 +295,7 @@ export function PaymentModal({
             type="button"
             disabled={isPending || (isCashMode && !isCashSufficient && entered.amount > 0)}
             onClick={onCheckout}
-            className="flex-2 flex min-h-14 items-center justify-center gap-2 rounded-[14px] bg-[#2D61C9] py-2.5 text-sm font-bold text-white shadow-[0_8px_18px_rgba(45,97,201,0.2)] transition hover:bg-[#2756B8] active:scale-98 disabled:opacity-50"
+            className="pos-primary-action flex-2 flex min-h-14 items-center justify-center gap-2 rounded-[14px] bg-[var(--pos-primary)] py-2.5 text-sm font-bold text-white shadow-[0_8px_18px_rgba(19,20,23,0.2)] transition hover:bg-[var(--pos-primary-hover)] active:scale-98 disabled:opacity-50"
           >
             {isPending ? (
               <>

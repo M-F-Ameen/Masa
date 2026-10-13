@@ -181,6 +181,109 @@ body {
 .scrollbar-none::-webkit-scrollbar { display: none; }
 .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
 
+/* POS identity palette: keep status colors and thermal documents independent. */
+.pos-app {
+  --pos-primary: #D83B0D;
+  --pos-primary-hover: #B93009;
+  --pos-foreground: #131417;
+  --pos-canvas: #EEF0F3;
+  --pos-surface: #FFFFFF;
+  --pos-soft: #EEF0F3;
+  --pos-soft-hover: #E2E5EB;
+  --pos-border: #DDE1E7;
+  --pos-muted: #626A78;
+  --pos-metal: #8B93A1;
+  --pos-signal: #FF5824;
+  --pos-signal-soft: #FFF0EB;
+  --pos-info: #2D61C9;
+  color-scheme: light;
+}
+
+.pos-app .pos-primary-action {
+  background: var(--pos-primary);
+  color: #FFFFFF;
+  box-shadow: 0 7px 16px rgba(216, 59, 13, 0.18);
+}
+
+.pos-app .pos-primary-action:hover {
+  background: var(--pos-primary-hover);
+}
+
+.pos-app .pos-selected {
+  border-color: var(--pos-primary);
+  background: var(--pos-primary);
+  color: #FFFFFF;
+  box-shadow: 0 5px 12px rgba(216, 59, 13, 0.16);
+}
+
+.pos-app .pos-selected:hover {
+  border-color: var(--pos-primary-hover);
+  background: var(--pos-primary-hover);
+  color: #FFFFFF;
+}
+
+.pos-app .pos-brand-mark {
+  background: var(--pos-foreground);
+  color: var(--pos-signal);
+}
+
+.pos-app .pos-category {
+  border-color: var(--pos-border);
+  background: var(--pos-surface);
+  color: var(--pos-muted);
+}
+
+.pos-app .pos-category:hover {
+  border-color: var(--pos-metal);
+  background: var(--pos-soft);
+}
+
+.pos-app .pos-category-selected,
+.pos-app .pos-category-selected:hover {
+  border-color: var(--pos-primary);
+  background: var(--pos-primary);
+  color: #FFFFFF;
+  box-shadow: 0 5px 12px rgba(216, 59, 13, 0.16);
+}
+
+.pos-app .pos-order-type-selected {
+  background: var(--pos-muted);
+  color: #FFFFFF;
+  box-shadow: 0 5px 12px rgba(19, 20, 23, 0.1);
+}
+
+.pos-app .pos-add-product {
+  background: var(--pos-signal);
+  color: #FFFFFF;
+  box-shadow: 0 5px 10px rgba(255, 88, 36, 0.18);
+}
+
+.pos-app .group:hover .pos-add-product {
+  background: #EB4B1A;
+}
+
+.pos-app .pos-checkout {
+  border-color: var(--pos-signal);
+  background: var(--pos-signal);
+  color: #FFFFFF;
+  font-size: 20px;
+  box-shadow: 0 8px 18px rgba(255, 88, 36, 0.18);
+}
+
+.pos-app .pos-checkout:hover {
+  border-color: #EB4B1A;
+  background: #EB4B1A;
+}
+
+.pos-app .pos-primary-action:focus-visible,
+.pos-app .pos-selected:focus-visible,
+.pos-app .pos-category-selected:focus-visible,
+.pos-app .pos-order-type-selected:focus-visible,
+.pos-app .pos-product:focus-visible {
+  outline: 2px solid var(--pos-signal);
+  outline-offset: 2px;
+}
+
 /* =====================================================
    MASA Admin Design System — Graphite and Signal Orange
    Scoped to .admin-app so storefront routes keep their own visual language.

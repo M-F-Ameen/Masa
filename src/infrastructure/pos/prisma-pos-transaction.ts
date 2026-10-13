@@ -31,7 +31,7 @@ export class PrismaPosTransaction implements PosTransaction {
   public async getSettings(): Promise<PosSettings> {
     const setting = await this.client.restaurantSetting.findFirst();
     if (!setting) throw new NotFoundError('إعدادات المطعم');
-    return { nameAr: setting.nameAr, nameEn: setting.nameEn, currency: setting.currency, locale: setting.locale, taxRatePercent: setting.taxRatePercent.toString() };
+    return { nameAr: setting.nameAr, nameEn: setting.nameEn, logoUrl: setting.logoUrl, currency: setting.currency, locale: setting.locale, taxRatePercent: setting.taxRatePercent.toString() };
   }
 
   public async getProducts(branchId: string, ids: string[]): Promise<PosProduct[]> {

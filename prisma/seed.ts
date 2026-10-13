@@ -1,8 +1,36 @@
 import 'dotenv/config';
-import { prisma } from '../src/infrastructure/db/prisma';
+import { PrismaClient } from '@prisma/client';
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import bcrypt from 'bcryptjs';
 import { SYSTEM_PERMISSIONS } from '../src/domain/staff/enums/permission.enum';
 import { SYSTEM_ROLES, SystemRole } from '../src/domain/staff/enums/role.enum';
+
+function createPrismaClient(): PrismaClient {
+  const dbUrl = process.env.DATABASE_URL || 'mysql://root:password@127.0.0.1:3306/resto_db';
+  try {
+    const url = new URL(dbUrl);
+    const host = url.hostname === 'localhost' ? '127.0.0.1' : url.hostname;
+    const port = url.port ? parseInt(url.port, 10) : 3306;
+    const user = decodeURIComponent(url.username || 'root');
+    const password = decodeURIComponent(url.password || '');
+    const database = url.pathname.replace(/^\//, '');
+
+    const adapter = new PrismaMariaDb({
+      host,
+      port,
+      user,
+      password,
+      database,
+      allowPublicKeyRetrieval: true,
+    });
+    return new PrismaClient({ adapter });
+  } catch {
+    return new PrismaClient();
+  }
+}
+
+const prisma = createPrismaClient();
+
 
 async function main() {
   console.log('[Seed] Starting production database initialization for Qahwet Cairo...');

@@ -1,6 +1,6 @@
 import { OrderType, PaymentMethod } from '../../ordering/enums';
 
-export interface PosSettings { nameAr: string; nameEn: string; currency: string; locale: string; taxRatePercent: string }
+export interface PosSettings { nameAr: string; nameEn: string; logoUrl?: string | null; currency: string; locale: string; taxRatePercent: string }
 export interface PosSize { id: string; nameAr: string; nameEn: string; price: number }
 export interface PosModifier { id: string; nameAr: string; nameEn: string; priceDelta: number }
 export interface PosModifierGroup { id: string; nameAr: string; minSelect: number; maxSelect: number; modifiers: PosModifier[] }

@@ -39,11 +39,11 @@ export function PosCatalog({
             posButton +
             ' h-[60px] min-h-[60px] min-w-[88px] shrink-0 flex-row items-center justify-center gap-2 rounded-[14px] px-4 py-2 text-xs' +
             (!categoryId
-              ? ' border-[#2D61C9] !bg-[#2D61C9] text-white hover:border-[#2756B8] hover:!bg-[#2756B8]'
-              : ' !bg-[#E9EEFC] text-[#142644]')
+              ? ' pos-category-selected'
+              : ' pos-category')
           }
         >
-          <ShoppingBag size={20} strokeWidth={1.7} />
+          <ShoppingBag size={20} strokeWidth={1.7} className={!categoryId ? 'text-white' : 'text-[var(--pos-metal)]'} />
           الكل
         </button>
         {categories.map((category, index) => {
@@ -58,12 +58,12 @@ export function PosCatalog({
                 posButton +
                 ' h-[60px] min-h-[60px] min-w-[132px] shrink-0 justify-between rounded-[14px] px-4 py-2 text-xs' +
                 (categoryId === category.id
-                  ? ' border-[#2D61C9] !bg-[#2D61C9] text-white hover:border-[#2756B8] hover:!bg-[#2756B8]'
-                  : ' !bg-[#E9EEFC] text-[#142644]')
+                  ? ' pos-category-selected'
+                  : ' pos-category')
               }
             >
               {category.nameAr}
-              <CategoryIcon size={20} strokeWidth={1.7} />
+              <CategoryIcon size={20} strokeWidth={1.7} className={categoryId === category.id ? 'text-white' : 'text-[var(--pos-metal)]'} />
             </button>
           );
         })}
@@ -76,23 +76,23 @@ export function PosCatalog({
             type="button"
             disabled={disabled}
             onClick={() => onSelect(product)}
-            className="group flex h-[256px] min-h-0 flex-col justify-between rounded-[14px] border border-[#DCE3EF] bg-white p-3 text-start shadow-[0_4px_12px_rgba(20,38,68,0.05)] transition hover:-translate-y-0.5 hover:border-[#B9C9E2] hover:shadow-[0_10px_20px_rgba(20,38,68,0.1)] active:scale-[0.98] disabled:opacity-50"
+            className="pos-product group flex h-[256px] min-h-0 flex-col justify-between rounded-[14px] border border-[var(--pos-border)] bg-white p-3 text-start shadow-[0_4px_12px_rgba(19,20,23,0.05)] transition hover:-translate-y-0.5 hover:border-[var(--pos-metal)] hover:shadow-[0_10px_20px_rgba(19,20,23,0.1)] active:scale-[0.98] disabled:opacity-50"
           >
             <div
               aria-hidden="true"
-              className="relative mb-1.5 flex h-[138px] w-full items-center justify-center overflow-hidden rounded-[12px] bg-[radial-gradient(circle_at_50%_48%,#fff_0%,#f7f8fc_70%,#eef2f9_100%)] bg-contain bg-center bg-no-repeat"
+              className="relative mb-1.5 flex h-[138px] w-full items-center justify-center overflow-hidden rounded-[12px] bg-[radial-gradient(circle_at_50%_48%,var(--pos-surface)_0%,var(--pos-canvas)_70%,var(--pos-soft-hover)_100%)] bg-contain bg-center bg-no-repeat"
               style={product.imageUrl ? { backgroundImage: `url(\"${product.imageUrl}\")` } : undefined}
             >
-              {!product.imageUrl && <Coffee size={38} strokeWidth={1.35} className="text-[#AAB8D0]" />}
+              {!product.imageUrl && <Coffee size={38} strokeWidth={1.35} className="text-[var(--pos-metal)]" />}
             </div>
-            <strong className="line-clamp-2 min-h-8 text-xs font-bold leading-snug text-[#142644] sm:text-sm">
+            <strong className="line-clamp-2 min-h-8 text-xs font-bold leading-snug text-[var(--pos-foreground)] sm:text-sm">
               {product.nameAr}
             </strong>
             <div dir="ltr" className="mt-auto flex w-full flex-row items-center justify-between gap-1 pt-1.5">
-              <span dir="rtl" className="whitespace-nowrap text-end font-sans text-[16px] font-bold leading-none tracking-tight text-[#142644]">
+              <span dir="rtl" className="whitespace-nowrap text-end font-sans text-[16px] font-bold leading-none tracking-tight text-[var(--pos-foreground)]">
                 من {Money.fromMinor(Math.min(...product.sizes.map((size) => size.price)), currency).format(locale)}
               </span>
-              <span className="grid size-[42px] place-items-center rounded-full bg-[#2D61C9] text-white shadow-[0_5px_10px_rgba(45,97,201,0.22)] transition group-hover:bg-[#2756B8]">
+              <span className="pos-add-product grid size-[42px] place-items-center rounded-full transition">
                 <Plus size={17} strokeWidth={2.2} />
               </span>
             </div>
@@ -101,7 +101,7 @@ export function PosCatalog({
       </div>
 
       {!products.length && (
-        <p className="py-20 text-center text-sm text-[#7180a4]">لا توجد أصناف متاحة مطابقة للبحث.</p>
+        <p className="py-20 text-center text-sm text-[var(--pos-muted)]">لا توجد أصناف متاحة مطابقة للبحث.</p>
       )}
     </section>
   );

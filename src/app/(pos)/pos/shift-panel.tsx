@@ -38,8 +38,8 @@ export function ShiftPanel({ branchId, currency, locale, shift, onDone, onClose 
     });
   }
   return <PosModal title={shift ? 'إغلاق وردية الكاشير' : 'فتح وردية الكاشير'} onClose={() => { if (!pending) onClose(); }}>
-    <div className="mb-4 grid size-12 place-items-center rounded-[14px] bg-[#E9EEFC] text-[#2D61C9]"><Wallet size={26} strokeWidth={1.5}/></div>
-    <p className="mb-5 text-sm leading-6 text-[#7180a4]">{shift ? 'عدّ النقدية الفعلية في الدرج. يشمل الرصيد المتوقع مبلغ البداية ومبيعات النقد فقط.' : 'أدخل رصيد درج النقدية قبل بدء البيع.'}</p>
+    <div className="mb-4 grid size-12 place-items-center rounded-[14px] bg-[var(--pos-soft)] text-[var(--pos-primary)]"><Wallet size={26} strokeWidth={1.5}/></div>
+    <p className="mb-5 text-sm leading-6 text-[var(--pos-muted)]">{shift ? 'عدّ النقدية الفعلية في الدرج. يشمل الرصيد المتوقع مبلغ البداية ومبيعات النقد فقط.' : 'أدخل رصيد درج النقدية قبل بدء البيع.'}</p>
     <label className="text-sm font-semibold">{shift ? 'النقدية الفعلية عند الإغلاق (' + shift.currency + ')' : 'رصيد البداية (' + currency + ')'}
       <input autoFocus value={amount} onChange={(event) => setAmount(event.target.value)} inputMode="decimal" dir="ltr" className={posInput + ' mt-2'} placeholder="0.00"/></label>
     {error && <p role="alert" className="mt-3 rounded-xl bg-rose-50 p-2.5 text-sm text-rose-700">{error}</p>}

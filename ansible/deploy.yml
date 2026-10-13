@@ -149,11 +149,11 @@
       ansible.builtin.wait_for:
         host: 127.0.0.1
         port: "{{ app_port }}"
-        delay: 5
-        timeout: 90
+        delay: 2
+        timeout: 60
 
     - name: Run Prisma db push to create tables
-      ansible.builtin.command: docker compose exec -T app npx prisma db push --skip-generate --accept-data-loss
+      ansible.builtin.command: docker compose exec -T app prisma db push --skip-generate --accept-data-loss
       args:
         chdir: "{{ app_dir }}"
       register: db_push_res
@@ -162,10 +162,13 @@
 
     - name: Print db push output
       ansible.builtin.debug:
-        var: db_push_res.stdout_lines
+        msg:
+          - "Return code: {{ db_push_res.rc }}"
+          - "stdout: {{ db_push_res.stdout_lines }}"
+          - "stderr: {{ db_push_res.stderr_lines }}"
 
     - name: Seed database with initial restaurant data
-      ansible.builtin.command: docker compose exec -T app npx tsx prisma/seed.ts
+      ansible.builtin.command: docker compose exec -T app tsx prisma/seed.ts
       args:
         chdir: "{{ app_dir }}"
       register: seed_status
@@ -174,7 +177,28 @@
 
     - name: Print seed status
       ansible.builtin.debug:
-        var: seed_status.stdout_lines
+        msg:
+          - "Return code: {{ seed_status.rc }}"
+          - "stdout: {{ seed_status.stdout_lines }}"
+          - "stderr: {{ seed_status.stderr_lines }}"
+
+    - name: Verify application health endpoint
+      ansible.builtin.uri:
+        url: "http://127.0.0.1:{{ app_port }}/api/health"
+        status_code: 200
+      register: health_check
+      retries: 15
+      delay: 2
+      until: health_check.status == 200
+
+    - name: Verify storefront home page
+      ansible.builtin.uri:
+        url: "http://127.0.0.1:{{ app_port }}/"
+        status_code: 200
+      register: home_check
+      retries: 10
+      delay: 2
+      until: home_check.status == 200
 
     - name: Show application container logs
       ansible.builtin.command: docker logs --tail 30 {{ app_name }}-dev
@@ -184,3 +208,4 @@
     - name: Print application logs
       ansible.builtin.debug:
         var: app_run_logs.stdout_lines
+

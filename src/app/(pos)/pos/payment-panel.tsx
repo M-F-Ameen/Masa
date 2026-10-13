@@ -47,8 +47,8 @@ export function PaymentPanel({
             onClick={() => setMode(value)}
             className={`flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg border text-xs font-semibold transition ${
               value === mode
-                ? 'border-[#2D61C9] bg-[#2D61C9] text-white shadow-[0_5px_12px_rgba(45,97,201,0.2)]'
-                : 'border-[#DCE3EF] bg-white text-[#526B90] hover:bg-[#F7F9FD]'
+                ? 'pos-selected'
+                : 'border-[var(--pos-border)] bg-white text-[var(--pos-muted)] hover:bg-[var(--pos-soft)]'
             }`}
           >
             <Icon size={14} strokeWidth={1.75} />
@@ -59,8 +59,8 @@ export function PaymentPanel({
 
       {mode !== PosPaymentMode.CARD && (
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between gap-2 rounded-[12px] border border-[#DCE3EF] bg-white px-2.5 py-1 text-xs">
-            <span className="shrink-0 text-[11px] text-[#72819A]">
+          <div className="flex items-center justify-between gap-2 rounded-[12px] border border-[var(--pos-border)] bg-white px-2.5 py-1 text-xs">
+            <span className="shrink-0 text-[11px] text-[var(--pos-muted)]">
               {mode === PosPaymentMode.MIXED ? 'الجزء النقدي' : 'المبلغ المستلم'}
             </span>
             <input
@@ -68,7 +68,7 @@ export function PaymentPanel({
               value={cash}
               onChange={(event) => setCash(event.target.value)}
               placeholder={total.toMajor().toFixed(2)}
-              className="h-7 w-24 rounded-lg border border-[#DCE3EF] bg-[#F7F9FD] px-2 text-left font-mono text-xs focus:outline-none focus:ring-1 focus:ring-[#2D61C9]"
+              className="h-7 w-24 rounded-lg border border-[var(--pos-border)] bg-[var(--pos-soft)] px-2 text-left font-mono text-xs focus:outline-none focus:ring-1 focus:ring-[var(--pos-signal)]"
             />
           </div>
 
@@ -77,7 +77,7 @@ export function PaymentPanel({
               <button
                 type="button"
                 onClick={() => setCash(total.toMajor().toString())}
-                className="shrink-0 rounded-md bg-[#E9EEFC] px-2 py-0.5 text-[10px] font-mono font-semibold text-[#2D61C9] transition hover:bg-[#DDE7FA]"
+                className="shrink-0 rounded-md bg-[var(--pos-soft)] px-2 py-0.5 text-[10px] font-mono font-semibold text-[var(--pos-primary)] transition hover:bg-[var(--pos-soft-hover)]"
               >
                 التمام ({total.toMajor()})
               </button>
@@ -89,7 +89,7 @@ export function PaymentPanel({
                     key={amt}
                     type="button"
                     onClick={() => setCash(amt.toString())}
-                    className="shrink-0 rounded-md bg-[#F7F9FD] px-2 py-0.5 text-[10px] font-mono font-medium text-[#72819A] transition hover:bg-[#E9EEFC]"
+                    className="shrink-0 rounded-md bg-[var(--pos-soft)] px-2 py-0.5 text-[10px] font-mono font-medium text-[var(--pos-muted)] transition hover:bg-[var(--pos-soft)]"
                   >
                     {amt}
                   </button>
@@ -107,7 +107,7 @@ export function PaymentPanel({
       )}
 
       {mode === PosPaymentMode.MIXED && entered.amount < total.amount && (
-        <div className="flex justify-between px-1 text-xs font-semibold text-[#2D61C9]">
+        <div className="flex justify-between px-1 text-xs font-semibold text-[var(--pos-primary)]">
           <span>على البطاقة:</span>
           <span>{total.subtract(entered).format(settings.locale)}</span>
         </div>
