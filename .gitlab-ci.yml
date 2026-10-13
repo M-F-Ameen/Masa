@@ -1,6 +1,7 @@
 stages:
   - test
   - build
+  - setup_db
   - deploy_dev
 
 variables:
@@ -36,6 +37,31 @@ build_image:
     - develop
     - main
     - /^release\/.*$/
+
+# Run this job ONCE manually to configure MySQL on the server to accept
+# connections from Docker containers. After it succeeds, you do not need
+# to run it again unless the server is rebuilt.
+mysql_setup:
+  stage: setup_db
+  tags:
+    - deploy
+  when: manual
+  allow_failure: true
+  before_script:
+    - mkdir --parents ~/.ssh
+    - |
+      if [ -n "$DEPLOY_SSH_PRIVATE_KEY" ]; then
+        printf '%s\n' "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+      fi
+    - |
+      if [ -n "$DEPLOY_SSH_KNOWN_HOSTS" ]; then
+        printf '%s\n' "$DEPLOY_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+      fi
+  script:
+    - ansible-playbook -i ansible/inventory.ini ansible/mysql-setup.yml --limit "$DEPLOY_ENV"
+  only:
+    - develop
 
 deploy_dev:
   stage: deploy_dev
