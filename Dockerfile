@@ -34,10 +34,13 @@ ENV PORT=3000
 ENV HOME=/home/nextjs
 ENV PATH="/app/node_modules/.bin:$PATH"
 
-RUN groupadd --system --gid 1001 nodejs \
+RUN apt-get update -y && apt-get install -y --no-install-recommends openssl ca-certificates \
+  && rm -rf /var/lib/apt/lists/* \
+  && groupadd --system --gid 1001 nodejs \
   && useradd --system --uid 1001 --gid nodejs -m -d /home/nextjs nextjs \
   && mkdir -p /home/nextjs/.npm /home/nextjs/.cache \
   && chown -R nextjs:nodejs /home/nextjs
+
 
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./

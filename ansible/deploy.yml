@@ -1,6 +1,6 @@
 ---
-- name: Deploy MASA development application
-  hosts: dev
+- name: Deploy custom application
+  hosts: "{{ target_env | default('dev') }}"
   become: false
   gather_facts: false
 
@@ -9,6 +9,7 @@
     app_port: "{{ deploy_port | default('1234') }}"
     container_port: "3000"
     image_name: "{{ docker_image }}"
+    env_name: "{{ target_env | default('dev') }}"
 
   pre_tasks:
     - name: Validate required deployment variables
@@ -23,8 +24,7 @@
         fail_msg: >-
           The deployment requires an image, registry credentials, and a runtime
           environment file. Ensure APP_RUNTIME_ENV_FILE is configured as a
-          File-type CI/CD variable that is available to this branch (either
-          unprotected, or the branch is protected).
+          File-type CI/CD variable that is available to this branch.
 
   tasks:
     - name: Create application directory
@@ -43,7 +43,7 @@
         group: deploy
         mode: "0600"
 
-    - name: Install production Compose file
+    - name: Create docker-compose file
       ansible.builtin.copy:
         dest: "{{ app_dir }}/docker-compose.yml"
         owner: deploy
@@ -53,7 +53,7 @@
           services:
             db:
               image: mysql:8.0
-              container_name: {{ app_name }}-db-dev
+              container_name: {{ app_name }}-db-{{ env_name }}
               restart: unless-stopped
               environment:
                 MYSQL_ROOT_PASSWORD: "root_password_masa_2026"
@@ -61,17 +61,17 @@
                 MYSQL_USER: masa_app
                 MYSQL_PASSWORD: "0250ed316d1bec238f06cad334592e554507f28a0c51487a"
               volumes:
-                - {{ app_name }}-mysql-data:/var/lib/mysql
+                - {{ app_name }}-mysql-{{ env_name }}:/var/lib/mysql
               healthcheck:
                 test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
                 interval: 5s
                 timeout: 5s
                 retries: 30
-                start_period: 45s
+                start_period: 30s
 
             app:
               image: {{ image_name }}
-              container_name: {{ app_name }}-dev
+              container_name: {{ app_name }}-{{ env_name }}
               depends_on:
                 db:
                   condition: service_healthy
@@ -87,15 +87,15 @@
               restart: unless-stopped
               healthcheck:
                 test: ["CMD-SHELL", "node -e \"require('http').get('http://127.0.0.1:{{ container_port }}/api/health', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\""]
-                interval: 15s
+                interval: 10s
                 timeout: 5s
                 retries: 3
-                start_period: 30s
+                start_period: 15s
 
           volumes:
-            {{ app_name }}-mysql-data:
+            {{ app_name }}-mysql-{{ env_name }}:
 
-    - name: Log in to GitLab Container Registry
+    - name: Login to GitLab Container Registry
       ansible.builtin.shell: >-
         echo "{{ registry_password }}" |
         docker login "{{ registry_url }}"
@@ -108,7 +108,7 @@
       args:
         chdir: "{{ app_dir }}"
 
-    - name: Pull application image
+    - name: Pull latest Docker image
       ansible.builtin.command: docker compose pull
       args:
         chdir: "{{ app_dir }}"
@@ -119,7 +119,7 @@
         chdir: "{{ app_dir }}"
 
     - name: Wait for MySQL to become healthy
-      ansible.builtin.command: docker inspect --format="{{ '{{' }} .State.Health.Status {{ '}}' }}" {{ app_name }}-db-dev
+      ansible.builtin.command: docker inspect --format="{{ '{{' }} .State.Health.Status {{ '}}' }}" {{ app_name }}-db-{{ env_name }}
       register: db_health
       until: db_health.stdout == "healthy"
       retries: 30
@@ -128,7 +128,7 @@
 
     - name: Ensure resto_db and masa_app exist in MySQL
       ansible.builtin.command: >-
-        docker exec {{ app_name }}-db-dev mysql -u root -proot_password_masa_2026 -e
+        docker exec {{ app_name }}-db-{{ env_name }} mysql -u root -proot_password_masa_2026 -e
         "CREATE DATABASE IF NOT EXISTS resto_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
          CREATE USER IF NOT EXISTS 'masa_app'@'%' IDENTIFIED BY '0250ed316d1bec238f06cad334592e554507f28a0c51487a';
          ALTER USER 'masa_app'@'%' IDENTIFIED BY '0250ed316d1bec238f06cad334592e554507f28a0c51487a';
@@ -145,7 +145,7 @@
       args:
         chdir: "{{ app_dir }}"
 
-    - name: Wait for the published application port
+    - name: Wait for application port to be reachable
       ansible.builtin.wait_for:
         host: 127.0.0.1
         port: "{{ app_port }}"
@@ -153,12 +153,11 @@
         timeout: 60
 
     - name: Run Prisma db push to create tables
-      ansible.builtin.command: docker compose exec -T app prisma db push --skip-generate --accept-data-loss
+      ansible.builtin.command: docker compose exec -T app prisma db push --accept-data-loss
       args:
         chdir: "{{ app_dir }}"
       register: db_push_res
       changed_when: true
-      failed_when: false
 
     - name: Print db push output
       ansible.builtin.debug:
@@ -173,7 +172,6 @@
         chdir: "{{ app_dir }}"
       register: seed_status
       changed_when: true
-      failed_when: false
 
     - name: Print seed status
       ansible.builtin.debug:
@@ -200,12 +198,11 @@
       delay: 2
       until: home_check.status == 200
 
-    - name: Show application container logs
-      ansible.builtin.command: docker logs --tail 30 {{ app_name }}-dev
-      register: app_run_logs
+    - name: Show running containers
+      ansible.builtin.command: docker ps
+      register: docker_ps_output
       changed_when: false
 
-    - name: Print application logs
+    - name: Print running containers
       ansible.builtin.debug:
-        var: app_run_logs.stdout_lines
-
+        var: docker_ps_output.stdout_lines

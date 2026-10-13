@@ -6,14 +6,11 @@ import { useState, useEffect } from 'react';
 import {
   ArrowRight,
   Bell,
-  ChevronDown,
   Printer,
   Store,
   ShoppingCart,
   ChevronLeft,
-  Sun,
   Utensils,
-  UserRound,
   X,
   Armchair,
   Plus,
@@ -22,6 +19,7 @@ import {
   WifiOff,
   RefreshCw,
   Search,
+  Menu,
 } from 'lucide-react';
 import { PosReceipt, PosShift } from '../../../domain/pos/contracts/pos.repository';
 import { Money } from '../../../domain/shared/value-objects/money';
@@ -252,6 +250,90 @@ function PosHeader({
 return (
 <header className="relative z-20 flex min-h-[96px] shrink-0 flex-wrap items-center justify-between gap-3 bg-[var(--pos-canvas)] px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-4 lg:px-8">
       <div dir="rtl" className="flex min-w-0 basis-full items-center gap-3 lg:flex-1 lg:basis-auto">
+        {/* Cashier menu */}
+        <div className="relative shrink-0">
+          <button
+            type="button"
+            aria-label="القائمة"
+            title="القائمة"
+            aria-expanded={userMenuOpen}
+            aria-haspopup="menu"
+            onClick={() => setUserMenuOpen((open) => !open)}
+            className="grid size-14 shrink-0 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]"
+          >
+            <Menu size={22} strokeWidth={1.8} />
+          </button>
+          {userMenuOpen && (
+            <div dir="rtl" role="menu" className="absolute right-0 top-[calc(100%+10px)] z-50 w-64 rounded-[16px] border border-[var(--pos-border)] bg-white p-2 text-sm text-[var(--pos-foreground)] shadow-[0_18px_45px_rgba(19,20,23,0.14)]">
+              {!state.offlineSync.isOnline ? (
+                <div className="mb-1 flex items-center gap-2 rounded-[12px] bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700">
+                  <WifiOff size={15} />
+                  <span>أوفلاين{state.offlineSync.pendingCount ? ` (${state.offlineSync.pendingCount})` : ''}</span>
+                </div>
+              ) : state.offlineSync.pendingCount > 0 ? (
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => state.offlineSync.syncNow()}
+                  disabled={state.offlineSync.isSyncing}
+                  className="mb-1 flex w-full items-center gap-2 rounded-[12px] px-3 py-2 text-xs font-semibold text-amber-800 transition hover:bg-amber-50 disabled:opacity-50"
+                >
+                  <RefreshCw size={15} className={state.offlineSync.isSyncing ? 'animate-spin' : ''} />
+                  {state.offlineSync.isSyncing ? 'جاري المزامنة...' : `مزامنة (${state.offlineSync.pendingCount})`}
+                </button>
+              ) : (
+                <div className="mb-1 flex items-center gap-2 rounded-[12px] bg-[var(--pos-soft)] px-3 py-2 text-xs text-[var(--pos-muted)]">
+                  <span className="size-2 rounded-full bg-emerald-500" />
+                  متصل
+                </div>
+              )}
+
+
+        {state.shift && (
+                <button
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    state.setViewMode(state.viewMode === 'FLOOR_PLAN' ? 'SALE' : 'FLOOR_PLAN');
+                    setUserMenuOpen(false);
+                  }}
+                  className="flex w-full items-center justify-between rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]"
+                >
+                  <span className="flex items-center gap-2"><Armchair size={15} />{state.viewMode === 'FLOOR_PLAN' ? 'الطلب السريع' : 'خريطة الصالة'}</span>
+                  {occupiedTablesCount > 0 && <span className="rounded-full bg-[var(--pos-soft)] px-1.5 text-[10px] text-[var(--pos-primary)]">{occupiedTablesCount}</span>}
+                </button>
+              )}
+
+              <Link
+                href="/pos/phone-orders"
+                role="menuitem"
+                onClick={() => setUserMenuOpen(false)}
+                className="flex w-full items-center gap-2 rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]"
+              >
+                <ShoppingCart size={15} />
+                طلبات الهاتف
+              </Link>
+
+              <button
+                type="button"
+                role="menuitem"
+                disabled={state.sale.locked || state.items.length > 0}
+                onClick={() => {
+                  state.setShowShift(true);
+                  setUserMenuOpen(false);
+                }}
+                className="flex w-full items-center rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {state.shift ? 'إغلاق الوردية' : 'فتح وردية'}
+              </button>
+
+              <Link href="/admin" role="menuitem" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]">
+                <ArrowRight size={15} />
+                الإدارة
+              </Link>
+            </div>
+          )}
+        </div>
         {state.settings.logoUrl ? (
           <Image
             src={state.settings.logoUrl}
@@ -279,12 +361,12 @@ return (
       </div>
 
       <div dir="ltr" className="flex shrink-0 items-center gap-2.5 lg:gap-3">
-<div className="hidden h-14 items-center gap-2.5 rounded-[16px] border border-[var(--pos-border)] bg-white px-3 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] lg:flex">
-          <Sun size={20} strokeWidth={1.7} className="text-[var(--pos-signal)]" />
-          <span aria-hidden="true" className="h-8 w-px bg-[var(--pos-border)]" />
-          <div dir="rtl" className="flex min-w-[150px] flex-col justify-center gap-0.5 leading-tight text-[var(--pos-foreground)]">
-            <span className="text-sm font-bold">{headerDateTime.date || '—'}</span>
-            <span className="text-sm font-semibold">{headerDateTime.time || '—'}</span>
+<div className="hidden h-14 w-[190px] shrink-0 flex-col items-center justify-center gap-1 rounded-[16px] border border-[var(--pos-border)] bg-white px-2 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] lg:flex">
+          <span dir="ltr" className="text-2xl font-extrabold leading-none tabular-nums">
+            {headerDateTime.time || '—'}
+          </span>
+          <div dir="rtl" className="w-full whitespace-nowrap text-center text-xs font-semibold leading-none text-[var(--pos-muted)]">
+            {headerDateTime.date || '—'}
           </div>
         </div>
 
@@ -308,97 +390,6 @@ className="hidden size-14 place-items-center rounded-[16px] border border-[var(-
         >
           <Printer size={20} strokeWidth={1.7} />
         </button>
-
-        {/* The reference keeps cashier tools behind a compact user selector. */}
-        <div className="relative">
-          <button
-            type="button"
-            aria-expanded={userMenuOpen}
-            aria-haspopup="menu"
-            onClick={() => setUserMenuOpen((open) => !open)}
-            dir="rtl"
-            className="flex h-14 w-[220px] items-center justify-between gap-3 rounded-[16px] border border-[var(--pos-border)] bg-white px-3 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]"
-          >
-            {state.settings.logoUrl ? (
-              <span className="grid h-10 w-24 shrink-0 place-items-center rounded-[10px] border border-[var(--pos-border)] bg-[var(--pos-soft)] px-1.5">
-                <img
-                  src={state.settings.logoUrl}
-                  alt="شعار المطعم"
-                  className="max-h-full w-full object-contain"
-                />
-              </span>
-            ) : (
-              <span className="grid size-10 shrink-0 place-items-center rounded-[10px] border border-[var(--pos-border)] bg-[var(--pos-soft)]">
-                <UserRound size={20} strokeWidth={1.7} className="text-[var(--pos-muted)]" />
-              </span>
-            )}
-            <span className="flex min-w-0 flex-1 flex-col items-start leading-tight">
-              <span className="text-xs text-[var(--pos-muted)]">المستخدم</span>
-              <strong className="text-sm">المدير</strong>
-            </span>
-            <ChevronDown size={18} strokeWidth={1.8} className="shrink-0 text-[var(--pos-muted)]" />
-          </button>
-
-          {userMenuOpen && (
-            <div dir="rtl" role="menu" className="absolute left-0 top-[calc(100%+10px)] z-50 w-64 rounded-[16px] border border-[var(--pos-border)] bg-white p-2 text-sm text-[var(--pos-foreground)] shadow-[0_18px_45px_rgba(19,20,23,0.14)]">
-              {!state.offlineSync.isOnline ? (
-                <div className="mb-1 flex items-center gap-2 rounded-[12px] bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700">
-                  <WifiOff size={15} />
-                  <span>أوفلاين{state.offlineSync.pendingCount ? ` (${state.offlineSync.pendingCount})` : ''}</span>
-                </div>
-              ) : state.offlineSync.pendingCount > 0 ? (
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => state.offlineSync.syncNow()}
-                  disabled={state.offlineSync.isSyncing}
-                  className="mb-1 flex w-full items-center gap-2 rounded-[12px] px-3 py-2 text-xs font-semibold text-amber-800 transition hover:bg-amber-50 disabled:opacity-50"
-                >
-                  <RefreshCw size={15} className={state.offlineSync.isSyncing ? 'animate-spin' : ''} />
-                  {state.offlineSync.isSyncing ? 'جاري المزامنة...' : `مزامنة (${state.offlineSync.pendingCount})`}
-                </button>
-              ) : (
-                <div className="mb-1 flex items-center gap-2 rounded-[12px] bg-[var(--pos-soft)] px-3 py-2 text-xs text-[var(--pos-muted)]">
-                  <span className="size-2 rounded-full bg-emerald-500" />
-                  متصل
-                </div>
-              )}
-
-              {state.shift && (
-                <button
-                  type="button"
-                  role="menuitem"
-                  onClick={() => {
-                    state.setViewMode(state.viewMode === 'FLOOR_PLAN' ? 'SALE' : 'FLOOR_PLAN');
-                    setUserMenuOpen(false);
-                  }}
-                  className="flex w-full items-center justify-between rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]"
-                >
-                  <span className="flex items-center gap-2"><Armchair size={15} />{state.viewMode === 'FLOOR_PLAN' ? 'الطلب السريع' : 'خريطة الصالة'}</span>
-                  {occupiedTablesCount > 0 && <span className="rounded-full bg-[var(--pos-soft)] px-1.5 text-[10px] text-[var(--pos-primary)]">{occupiedTablesCount}</span>}
-                </button>
-              )}
-
-              <button
-                type="button"
-                role="menuitem"
-                disabled={state.sale.locked || state.items.length > 0}
-                onClick={() => {
-                  state.setShowShift(true);
-                  setUserMenuOpen(false);
-                }}
-                className="flex w-full items-center rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)] disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                {state.shift ? 'إغلاق الوردية' : 'فتح وردية'}
-              </button>
-
-              <Link href="/admin" role="menuitem" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]">
-                <ArrowRight size={15} />
-                الإدارة
-              </Link>
-            </div>
-          )}
-        </div>
 
         {state.shift && (
           <button

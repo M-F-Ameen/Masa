@@ -54,3 +54,5 @@ vitest.config.ts
 AGENTS.md
 GEMINI.md
 CLAUDE.md
+custom-app-template/
+

@@ -63,7 +63,7 @@ export class PrismaPosTransaction implements PosTransaction {
     return mapPosReceipt(order, settings.currency, settings.locale);
   }
 
-  private async deductInventoryForSale(scope: PosScope, orderId: string, orderNumber: string, lines: PosResolvedLine[]): Promise<void> {
+  public async deductInventoryForSale(scope: PosScope, orderId: string, orderNumber: string, lines: PosResolvedLine[]): Promise<void> {
     const productIds = lines.map((l) => l.productId);
     const sizeIds = lines.map((l) => l.sizeId).filter(Boolean);
     const modifierIds = lines.flatMap((l) => l.modifiers.map((m) => m.modifierId));

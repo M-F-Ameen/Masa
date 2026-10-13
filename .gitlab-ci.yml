@@ -2,31 +2,33 @@ stages:
   - test
   - build
   - deploy_dev
+  - deploy_test
+  - deploy_staging
 
 variables:
-  APP_NAME: masa
-  DEPLOY_ENV: dev
-  DEPLOY_HOST: 192.168.1.183
-  DEPLOY_PORT: "1234"
+  APP_NAME: "masa"
+  DEV_PORT: "1234"
+  TEST_PORT: "1234"
+  STAGING_PORT: "1234"
   FULL_IMAGE_NAME: "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
 
-validate:
+test_app:
   stage: test
-  image: alpine:latest
   tags:
     - build
+  image: alpine:latest
   script:
-    - echo "Validating project configuration and files..."
+    - echo "Running basic custom app validation"
     - test -f Dockerfile
-    - test -f package.json
-    - test -f prisma/schema.prisma
-    - test -f ansible/deploy.yml
+    - test -f docker-compose.yml
+    - test -f README.md
+    - test -d src
 
 build_image:
   stage: build
-  image: docker:latest
   tags:
     - docker
+  image: docker:latest
   script:
     - echo "Logging in to GitLab Container Registry"
     - echo "$CI_REGISTRY_PASSWORD" | docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" --password-stdin
@@ -57,14 +59,13 @@ deploy_dev:
     - |
       if [ -z "${APP_RUNTIME_ENV_FILE:-}" ] || [ ! -f "$APP_RUNTIME_ENV_FILE" ]; then
         echo "APP_RUNTIME_ENV_FILE is missing or is not a readable file path." >&2
-        echo "Add it in Settings > CI/CD > Variables as type 'File', and make it available to this branch (unprotect it, or protect '$CI_COMMIT_REF_NAME')." >&2
         exit 1
       fi
-    - >-
+    - >
       ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
-      --limit "$DEPLOY_ENV"
+      -e "target_env=dev"
       -e "app_name=$APP_NAME"
-      -e "deploy_port=$DEPLOY_PORT"
+      -e "deploy_port=$DEV_PORT"
       -e "docker_image=$FULL_IMAGE_NAME"
       -e "registry_url=$CI_REGISTRY"
       -e "registry_user=$CI_REGISTRY_USER"
@@ -72,15 +73,89 @@ deploy_dev:
       -e "runtime_env_file=$APP_RUNTIME_ENV_FILE"
     - |
       if command -v curl >/dev/null 2>&1; then
-        curl --fail --retry 10 --retry-delay 3 --retry-connrefused --silent --show-error --max-time 30 -L "http://$DEPLOY_HOST:$DEPLOY_PORT/api/health"
-        echo "Health check passed at http://$DEPLOY_HOST:$DEPLOY_PORT/api/health"
-        curl --fail --retry 10 --retry-delay 3 --retry-connrefused --silent --show-error --max-time 30 -L "http://$DEPLOY_HOST:$DEPLOY_PORT/" > /dev/null
-        echo "Homepage check passed at http://$DEPLOY_HOST:$DEPLOY_PORT/"
-      else
-        echo "curl not found; skipping HTTP health check"
+        echo "Validating application response on port $DEV_PORT..."
+        curl -fsSL --retry 10 --retry-delay 3 --retry-connrefused "http://192.168.1.183:${DEV_PORT}/api/health"
+        curl -fsSL --retry 10 --retry-delay 3 --retry-connrefused "http://192.168.1.183:${DEV_PORT}/" > /dev/null
+        echo "Validation passed successfully!"
       fi
   environment:
-    name: development
-    url: http://192.168.1.183:1234/
+    name: dev
+    url: http://192.168.1.183:$DEV_PORT
   only:
     - develop
+
+deploy_test:
+  stage: deploy_test
+  tags:
+    - deploy
+  before_script:
+    - mkdir --parents ~/.ssh
+    - |
+      if [ -n "$DEPLOY_SSH_PRIVATE_KEY" ]; then
+        printf '%s\n' "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+      fi
+    - |
+      if [ -n "$DEPLOY_SSH_KNOWN_HOSTS" ]; then
+        printf '%s\n' "$DEPLOY_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+      fi
+  script:
+    - |
+      if [ -z "${APP_RUNTIME_ENV_FILE:-}" ] || [ ! -f "$APP_RUNTIME_ENV_FILE" ]; then
+        echo "APP_RUNTIME_ENV_FILE is missing." >&2
+        exit 1
+      fi
+    - >
+      ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
+      -e "target_env=test"
+      -e "app_name=$APP_NAME"
+      -e "deploy_port=$TEST_PORT"
+      -e "docker_image=$FULL_IMAGE_NAME"
+      -e "registry_url=$CI_REGISTRY"
+      -e "registry_user=$CI_REGISTRY_USER"
+      -e "registry_password=$CI_REGISTRY_PASSWORD"
+      -e "runtime_env_file=$APP_RUNTIME_ENV_FILE"
+  environment:
+    name: test
+    url: http://192.168.1.184:$TEST_PORT
+  when: manual
+  only:
+    - /^release\/.*$/
+
+deploy_staging:
+  stage: deploy_staging
+  tags:
+    - deploy
+  before_script:
+    - mkdir --parents ~/.ssh
+    - |
+      if [ -n "$DEPLOY_SSH_PRIVATE_KEY" ]; then
+        printf '%s\n' "$DEPLOY_SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
+      fi
+    - |
+      if [ -n "$DEPLOY_SSH_KNOWN_HOSTS" ]; then
+        printf '%s\n' "$DEPLOY_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+      fi
+  script:
+    - |
+      if [ -z "${APP_RUNTIME_ENV_FILE:-}" ] || [ ! -f "$APP_RUNTIME_ENV_FILE" ]; then
+        echo "APP_RUNTIME_ENV_FILE is missing." >&2
+        exit 1
+      fi
+    - >
+      ansible-playbook -i ansible/inventory.ini ansible/deploy.yml
+      -e "target_env=staging"
+      -e "app_name=$APP_NAME"
+      -e "deploy_port=$STAGING_PORT"
+      -e "docker_image=$FULL_IMAGE_NAME"
+      -e "registry_url=$CI_REGISTRY"
+      -e "registry_user=$CI_REGISTRY_USER"
+      -e "registry_password=$CI_REGISTRY_PASSWORD"
+      -e "runtime_env_file=$APP_RUNTIME_ENV_FILE"
+  environment:
+    name: staging
+    url: http://192.168.1.185:$STAGING_PORT
+  when: manual
+  only:
+    - main
