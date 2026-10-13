@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ShoppingBag } from 'lucide-react';
 import { OrderStatus } from '../../../../domain/ordering/enums';
+import { OrderSource } from '../../../../domain/ordering/enums';
 import {
   listOrdersAction,
   getOrdersMetricsAction,
@@ -54,6 +55,7 @@ export function OrdersCockpitClient({
   const [orders, setOrders] = useState<DetailedOrder[]>(initialOrders);
   const [metrics, setMetrics] = useState(initialMetrics);
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
+  const [selectedSource, setSelectedSource] = useState<OrderSource>(OrderSource.ONLINE);
   const [selectedBranchId, setSelectedBranchId] = useState<string>(
     isBranchRestricted && userBranchId ? userBranchId : 'ALL'
   );
@@ -173,13 +175,14 @@ export function OrdersCockpitClient({
         const [ordersRes, metricsRes] = await Promise.all([
           listOrdersAction({
             status: selectedStatus,
+            source: selectedSource,
             branchId: effectiveBranchId,
             search: searchQuery,
             dateFrom: startDateStr ? `${startDateStr}T00:00:00.000Z` : undefined,
             dateTo: endDateStr ? `${endDateStr}T23:59:59.999Z` : undefined,
             limit: 50,
           }),
-          getOrdersMetricsAction(effectiveBranchId),
+          getOrdersMetricsAction(effectiveBranchId, selectedSource),
         ]);
 
         if (ordersRes.success && ordersRes.data) {
@@ -208,7 +211,7 @@ export function OrdersCockpitClient({
         if (!isBackground) setIsRefreshing(false);
       }
     },
-    [selectedStatus, selectedBranchId, searchQuery, startDateStr, endDateStr, activeModalOrder, playAlertSound, isBranchRestricted, userBranchId]
+    [selectedStatus, selectedSource, selectedBranchId, searchQuery, startDateStr, endDateStr, activeModalOrder, playAlertSound, isBranchRestricted, userBranchId]
   );
 
   // Auto-refresh interval (every 20 seconds)
@@ -238,7 +241,7 @@ export function OrdersCockpitClient({
       fetchData(false);
     }, 300);
     return () => clearTimeout(timer);
-  }, [selectedStatus, selectedBranchId, searchQuery, startDateStr, endDateStr, fetchData]);
+  }, [selectedStatus, selectedSource, selectedBranchId, searchQuery, startDateStr, endDateStr, fetchData]);
 
   // Branch assignment action
   const handleAssignBranch = async (orderId: string, branchId: string): Promise<boolean> => {
@@ -379,6 +382,8 @@ export function OrdersCockpitClient({
         formatMoney={formatMoney}
         currencySymbol={currencySymbol}
         selectedStatus={selectedStatus}
+        selectedSource={selectedSource}
+        onSourceSelect={setSelectedSource}
         onStatusSelect={(status) => setSelectedStatus(status)}
         metrics={metrics}
         searchQuery={searchQuery}

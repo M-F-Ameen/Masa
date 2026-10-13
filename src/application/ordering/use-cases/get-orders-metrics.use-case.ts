@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 import { getCairoTodayRange } from '../../../domain/shared/utils/date-range';
 
 export class GetOrdersMetricsUseCase {
-  public async execute(branchId?: string) {
+  public async execute(branchId?: string, source: OrderSource = OrderSource.ONLINE) {
     const branchFilter: Prisma.OrderWhereInput =
       branchId && branchId !== 'ALL'
         ? branchId === 'UNASSIGNED'
@@ -12,7 +12,7 @@ export class GetOrdersMetricsUseCase {
           : { branchId }
         : {};
 
-    branchFilter.source = OrderSource.ONLINE;
+    branchFilter.source = source;
     const { startOfToday, endOfToday } = getCairoTodayRange();
 
     const [pendingCount, preparingCount, inDeliveryCount, deliveredTodayCount, todaySalesAggregate] =

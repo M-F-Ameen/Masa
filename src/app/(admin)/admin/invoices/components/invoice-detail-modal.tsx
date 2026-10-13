@@ -123,7 +123,7 @@ export function InvoiceDetailModal({
                   ? 'سفري'
                   : 'توصيل'}
                 {' • '}
-                {selectedInvoice.source === 'POS' ? 'كاشير' : 'الموقع'}
+              {selectedInvoice.source === 'POS' ? 'كاشير' : selectedInvoice.source === 'PHONE' ? 'الهاتف' : 'الموقع'}
               </span>
             </div>
             <div>

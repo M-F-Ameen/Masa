@@ -22,7 +22,9 @@ export class CreatePhoneOrderUseCase {
       if (replay.source !== OrderSource.PHONE || replay.createdById !== cashierId) {
         throw new ValidationError('مفتاح العملية مستخدم لطلب آخر؛ أعد المحاولة');
       }
-      return { id: replay.id, orderNumber: replay.orderNumber, totalMinor: replay.totalMinor, currency: replay.currency ?? 'EGP', locale: 'ar-EG' };
+      const settings = await prisma.restaurantSetting.findFirst({ select: { currency: true, locale: true } });
+      if (!settings) throw new NotFoundError('إعدادات المطعم غير مهيأة');
+      return { id: replay.id, orderNumber: replay.orderNumber, totalMinor: replay.totalMinor, currency: replay.currency ?? settings.currency, locale: settings.locale };
     }
 
     return prisma.$transaction(async (tx) => {
@@ -145,6 +147,22 @@ export class CreatePhoneOrderUseCase {
       );
 
       return { id: order.id, orderNumber: order.orderNumber, totalMinor: order.totalMinor, currency: setting.currency, locale: setting.locale };
-    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted });
+    }, { isolationLevel: Prisma.TransactionIsolationLevel.ReadCommitted }).catch(async (error: unknown) => {
+      const code = typeof error === 'object' && error !== null && 'code' in error
+        ? (error as { code?: string }).code
+        : undefined;
+      if (code !== 'P2002') throw error;
+      const concurrentReplay = await prisma.order.findUnique({ where: { posIdempotencyKey: validated.idempotencyKey } });
+      if (!concurrentReplay || concurrentReplay.source !== OrderSource.PHONE || concurrentReplay.createdById !== cashierId) throw error;
+      const settings = await prisma.restaurantSetting.findFirst({ select: { currency: true, locale: true } });
+      if (!settings) throw new NotFoundError('إعدادات المطعم غير مهيأة');
+      return {
+        id: concurrentReplay.id,
+        orderNumber: concurrentReplay.orderNumber,
+        totalMinor: concurrentReplay.totalMinor,
+        currency: concurrentReplay.currency ?? settings.currency,
+        locale: settings.locale,
+      };
+    });
   }
 }

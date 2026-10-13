@@ -478,7 +478,7 @@ export function InvoicesClient({
           : o.type === 'TAKEAWAY'
           ? 'سفري'
           : 'توصيل';
-      const sourceLabel = o.source === 'POS' ? 'كاشير POS' : 'المتجر أونلاين';
+      const sourceLabel = o.source === 'POS' ? 'كاشير POS' : o.source === 'PHONE' ? 'طلب هاتف' : 'المتجر أونلاين';
       const statusLabel = o.paymentStatus === 'PAID' ? 'مدفوعة' : 'شيك مفتوح';
       const methodLabel =
         o.paymentMethod === 'CASH'
@@ -759,7 +759,7 @@ export function InvoicesClient({
                       )}
 
                       <span className="admin-badge admin-badge-neutral">
-                        {order.source === 'POS' ? 'POS' : 'أونلاين'}
+                        {order.source === 'POS' ? 'POS' : order.source === 'PHONE' ? 'هاتف' : 'أونلاين'}
                       </span>
 
                       {order.paymentStatus === 'PAID' ? (
@@ -931,7 +931,7 @@ export function InvoicesClient({
                             )}
 
                             <span className="admin-badge admin-badge-neutral">
-                              {order.source === 'POS' ? 'POS' : 'أونلاين'}
+                              {order.source === 'POS' ? 'POS' : order.source === 'PHONE' ? 'هاتف' : 'أونلاين'}
                             </span>
                           </div>
                         </td>

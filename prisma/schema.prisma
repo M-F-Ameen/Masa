@@ -464,7 +464,7 @@ model Order {
   currency         String?     @db.Char(3)
   posIdempotencyKey String?    @unique @map("pos_idempotency_key")
   onlineIdempotencyKey String?  @unique @map("online_idempotency_key")
-  source           String      @default("ONLINE") // ONLINE | POS
+  source           String      @default("ONLINE") // ONLINE | POS | PHONE
   type             String      @default("DELIVERY") // DELIVERY | DINE_IN | TAKEAWAY
   status           String      @default("PENDING") // PENDING | CONFIRMED | ...
   paymentStatus    String      @default("PENDING") @map("payment_status")

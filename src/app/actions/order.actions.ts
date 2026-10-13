@@ -21,6 +21,7 @@ import { ForbiddenError, ValidationError } from '../../domain/shared/errors/doma
 import { RateLimiter } from '../../infrastructure/security/rate-limiter';
 import { RateLimiterKeys, RateLimitPolicies } from '../../infrastructure/security/rate-limiter-keys';
 import { getClientIp } from '../../infrastructure/security/client-ip';
+import { OrderSource } from '../../domain/ordering/enums';
 
 export async function placeOnlineOrderAction(input: PlaceOnlineOrderDto): Promise<ActionResult<{ orderNumber: string }>> {
   try {
@@ -135,13 +136,13 @@ export async function updateOrderStatusAction(input: UpdateOrderStatusDto): Prom
   }
 }
 
-export async function getOrdersMetricsAction(branchId?: string): Promise<ActionResult<Awaited<ReturnType<GetOrdersMetricsUseCase['execute']>>>> {
+export async function getOrdersMetricsAction(branchId?: string, source: OrderSource = OrderSource.ONLINE): Promise<ActionResult<Awaited<ReturnType<GetOrdersMetricsUseCase['execute']>>>> {
   try {
     const session = await SessionService.requirePermission(PermissionCode.MANAGE_ORDERS);
     const canManageAll = session.isSuperAdmin || session.permissions.includes(PermissionCode.MANAGE_BRANCHES);
 
     const effectiveBranchId = !canManageAll ? (session.assignedBranchIds[0] ?? 'NONE') : branchId;
-    const metrics = await new GetOrdersMetricsUseCase().execute(effectiveBranchId);
+    const metrics = await new GetOrdersMetricsUseCase().execute(effectiveBranchId, source);
     return { success: true, data: metrics };
   } catch (error) {
     return toActionFailure(error);

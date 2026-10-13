@@ -52,6 +52,7 @@ export default async function AdminOrdersPage() {
       select: { nameAr: true, nameEn: true, currencySymbol: true },
     }),
     new ListOrdersUseCase().execute({
+      source: 'ONLINE',
       branchId: isBranchRestricted && userBranchId ? userBranchId : undefined,
       dateFrom: startOfToday,
       dateTo: endOfToday,

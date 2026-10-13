@@ -196,6 +196,7 @@ export function InvoiceFilterToolbar({
               { id: 'ALL', label: 'الكل' },
               { id: 'POS', label: 'كاشير' },
               { id: 'ONLINE', label: 'أونلاين' },
+              { id: 'PHONE', label: 'هاتف' },
             ].map((tab) => (
               <button
                 key={tab.id}

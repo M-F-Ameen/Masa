@@ -3,6 +3,7 @@
 import React from 'react';
 import { Calendar, Search, Building2 } from 'lucide-react';
 import { OrderStatus } from '../../../../../domain/ordering/enums';
+import { OrderSource } from '../../../../../domain/ordering/enums';
 import { OrderMetrics } from './orders-kpi-summary';
 import { BranchOption } from '../order-detail-modal';
 
@@ -17,6 +18,8 @@ interface OrdersFilterToolbarProps {
   formatMoney: (minor: number) => string;
   currencySymbol: string;
   selectedStatus: string;
+  selectedSource: OrderSource;
+  onSourceSelect: (source: OrderSource) => void;
   onStatusSelect: (status: string) => void;
   metrics: OrderMetrics;
   searchQuery: string;
@@ -39,6 +42,8 @@ export function OrdersFilterToolbar({
   formatMoney,
   currencySymbol,
   selectedStatus,
+  selectedSource,
+  onSourceSelect,
   onStatusSelect,
   metrics,
   searchQuery,
@@ -134,6 +139,24 @@ export function OrdersFilterToolbar({
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs" aria-label="قناة الطلبات">
+        <span className="shrink-0 px-1 font-semibold admin-muted">القناة:</span>
+        {[
+          { id: OrderSource.ONLINE, label: 'طلبات الموقع' },
+          { id: OrderSource.PHONE, label: 'طلبات الهاتف' },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            aria-pressed={selectedSource === tab.id}
+            onClick={() => onSourceSelect(tab.id)}
+            className={`whitespace-nowrap rounded-lg px-3.5 py-2 font-semibold transition ${selectedSource === tab.id ? 'admin-primary-action' : 'admin-muted hover:bg-[var(--admin-background)] hover:text-[var(--admin-foreground)]'}`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
 
       {/* Status Navigation Tabs */}

@@ -584,7 +584,7 @@ export default async function AdminDashboardPage() {
                           minute: '2-digit',
                         }).format(new Date(order.createdAt))}
                         {' • '}
-                        {order.source === 'POS' ? 'كاشير الفرع' : 'أونلاين (الموقع)'}
+                        {order.source === 'POS' ? 'كاشير الفرع' : order.source === 'PHONE' ? 'طلب هاتفي' : 'أونلاين (الموقع)'}
                       </span>
                     </div>
                   </div>
