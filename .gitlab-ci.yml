@@ -1,7 +1,7 @@
 stages:
+  - setup_db
   - test
   - build
-  - setup_db
   - deploy_dev
 
 variables:
@@ -45,7 +45,6 @@ mysql_setup:
   stage: setup_db
   tags:
     - deploy
-  when: manual
   allow_failure: true
   before_script:
     - mkdir --parents ~/.ssh

@@ -8,68 +8,52 @@
   gather_facts: false
 
   tasks:
-    - name: Detect MySQL config file location
-      ansible.builtin.find:
-        paths:
-          - /etc/mysql/mysql.conf.d
-          - /etc/mysql/conf.d
-          - /etc/mysql
-        patterns:
-          - 'mysqld.cnf'
-          - 'my.cnf'
-        recurse: false
-      register: mysql_conf_files
+    - name: Get masa-dev container logs
+      ansible.builtin.command: docker logs --tail 50 masa-dev
+      register: masa_logs
+      changed_when: false
+      failed_when: false
 
-    - name: Set mysql config path fact
-      ansible.builtin.set_fact:
-        mysql_conf_path: "{{ (mysql_conf_files.files | sort(attribute='path') | first).path }}"
-      when: mysql_conf_files.files | length > 0
+    - name: Print masa-dev container logs
+      ansible.builtin.debug:
+        var: masa_logs.stdout_lines
 
-    - name: Fallback config path if not found
-      ansible.builtin.set_fact:
-        mysql_conf_path: "/etc/mysql/mysql.conf.d/mysqld.cnf"
-      when: mysql_conf_files.files | length == 0
+    - name: Get running docker containers
+      ansible.builtin.command: docker ps -a
+      register: docker_ps
+      changed_when: false
+      failed_when: false
 
-    - name: "Set bind-address to 0.0.0.0 in {{ mysql_conf_path }}"
-      ansible.builtin.replace:
-        path: "{{ mysql_conf_path }}"
-        regexp: '^(\s*bind-address\s*=\s*).*'
-        replace: 'bind-address = 0.0.0.0'
-      notify: Restart MySQL
+    - name: Print running docker containers
+      ansible.builtin.debug:
+        var: docker_ps.stdout_lines
 
-    - name: "Ensure bind-address line exists if not already present"
-      ansible.builtin.lineinfile:
-        path: "{{ mysql_conf_path }}"
-        regexp: '^bind-address'
-        line: 'bind-address = 0.0.0.0'
-        insertafter: '^\[mysqld\]'
-        create: false
-      notify: Restart MySQL
-
-    - name: Flush handlers to restart MySQL now
-      ansible.builtin.meta: flush_handlers
-
-    - name: Grant masa_app user access from any host
-      ansible.builtin.command: >-
-        mysql -u root -e
-        "CREATE USER IF NOT EXISTS 'masa_app'@'%' IDENTIFIED BY '0250ed316d1bec238f06cad334592e554507f28a0c51487a';
-         ALTER USER 'masa_app'@'%' IDENTIFIED BY '0250ed316d1bec238f06cad334592e554507f28a0c51487a';
-         GRANT ALL PRIVILEGES ON resto_db.* TO 'masa_app'@'%';
-         FLUSH PRIVILEGES;"
-      changed_when: true
-      no_log: true
-
-    - name: Verify MySQL is listening on 0.0.0.0
+    - name: Check listening TCP ports
       ansible.builtin.command: ss -tlnp
-      register: ss_output
+      register: listening_ports
       changed_when: false
 
-    - name: Print listening ports
+    - name: Print listening TCP ports
       ansible.builtin.debug:
-        msg: "{{ ss_output.stdout_lines | select('search', '3306') | list }}"
+        var: listening_ports.stdout_lines
 
-  handlers:
-    - name: Restart MySQL
-      ansible.builtin.service:
-        name: mysql
-        state: restarted
+    - name: Search for any cnf files
+      ansible.builtin.command: find /etc -name "*cnf" -o -name "*cnf.d"
+      register: cnf_files
+      changed_when: false
+      failed_when: false
+
+    - name: Print cnf files found
+      ansible.builtin.debug:
+        var: cnf_files.stdout_lines
+
+    - name: Check systemd services for sql
+      ansible.builtin.command: systemctl list-units --type=service | grep -iE 'sql|maria|db'
+      register: sql_services
+      changed_when: false
+      failed_when: false
+
+    - name: Print sql services
+      ansible.builtin.debug:
+        var: sql_services.stdout_lines
+
