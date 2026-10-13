@@ -55,10 +55,6 @@
               image: mysql:8.0
               container_name: {{ app_name }}-db-dev
               restart: unless-stopped
-              command: >
-                --default-authentication-plugin=mysql_native_password
-                --character-set-server=utf8mb4
-                --collation-server=utf8mb4_unicode_ci
               environment:
                 MYSQL_ROOT_PASSWORD: "root_password_masa_2026"
                 MYSQL_DATABASE: resto_db
@@ -67,11 +63,11 @@
               volumes:
                 - {{ app_name }}-mysql-data:/var/lib/mysql
               healthcheck:
-                test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u masa_app -p0250ed316d1bec238f06cad334592e554507f28a0c51487a --silent || exit 1"]
+                test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
                 interval: 5s
                 timeout: 5s
-                retries: 20
-                start_period: 15s
+                retries: 30
+                start_period: 45s
 
             app:
               image: {{ image_name }}
@@ -118,9 +114,29 @@
         chdir: "{{ app_dir }}"
 
     - name: Start application and database
-      ansible.builtin.command: docker compose up -d --remove-orphans
-      args:
-        chdir: "{{ app_dir }}"
+      block:
+        - name: Run docker compose up
+          ansible.builtin.command: docker compose up -d --remove-orphans
+          args:
+            chdir: "{{ app_dir }}"
+      rescue:
+        - name: Get db container logs on failure
+          ansible.builtin.command: docker logs --tail 100 {{ app_name }}-db-dev
+          register: db_failure_logs
+          failed_when: false
+        - name: Print db logs
+          ansible.builtin.debug:
+            var: db_failure_logs.stdout_lines
+        - name: Get app container logs on failure
+          ansible.builtin.command: docker logs --tail 100 {{ app_name }}-dev
+          register: app_failure_logs
+          failed_when: false
+        - name: Print app logs
+          ansible.builtin.debug:
+            var: app_failure_logs.stdout_lines
+        - name: Fail deployment task
+          ansible.builtin.fail:
+            msg: "docker compose up failed. Check the container logs above."
 
     - name: Wait for the published application port
       ansible.builtin.wait_for:
