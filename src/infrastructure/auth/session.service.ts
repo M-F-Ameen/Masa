@@ -4,9 +4,9 @@ import { RbacGuard } from './rbac-guard';
 import { UserSessionContext } from './branch-context.service';
 import { JwtService } from './jwt.service';
 import { prisma } from '../db/prisma';
-import { env } from '../config/env';
 import { SystemRole } from '../../domain/staff/enums/role.enum';
 import { SESSION_TTL_SECONDS } from './auth.constants';
+import { shouldUseSecureCookies } from './cookie-security';
 
 export class SessionService {
   private static readonly COOKIE_NAME = 'resto_session';
@@ -60,7 +60,7 @@ export class SessionService {
       path: '/',
       httpOnly: true,
       sameSite: 'lax',
-      secure: env.NODE_ENV === 'production',
+      secure: await shouldUseSecureCookies(),
       maxAge: SESSION_TTL_SECONDS,
     });
   }

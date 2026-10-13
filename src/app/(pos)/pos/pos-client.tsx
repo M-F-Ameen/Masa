@@ -20,6 +20,7 @@ import {
   RefreshCw,
   Search,
   Menu,
+  PhoneCall,
 } from 'lucide-react';
 import { PosReceipt, PosShift } from '../../../domain/pos/contracts/pos.repository';
 import { Money } from '../../../domain/shared/value-objects/money';
@@ -334,6 +335,14 @@ return (
             </div>
           )}
         </div>
+        <Link
+          href="/pos/phone-orders"
+          aria-label="طلبات الهاتف"
+          title="طلبات الهاتف"
+          className="grid size-14 shrink-0 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]"
+        >
+          <PhoneCall size={20} strokeWidth={1.8} />
+        </Link>
         {state.settings.logoUrl ? (
           <Image
             src={state.settings.logoUrl}

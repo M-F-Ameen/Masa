@@ -50,20 +50,25 @@ export class CreatePhoneOrderUseCase {
       const customerResult = await new MatchOrCreateCustomerUseCase().execute({
         phone: phone.value,
         fullName: validated.customerName,
-        address: isDelivery && !selectedAddress ? {
-          title: 'عنوان التوصيل',
-          city: 'Cairo',
-          area: validated.area ?? '',
-          street: validated.street ?? '',
-          building: validated.building,
-          floor: validated.floor,
-          apartment: validated.apartment,
-          landmark: validated.landmark,
-          deliveryNotes: validated.deliveryNotes,
-        } : undefined,
       }, tx);
 
-      const chosenAddress = selectedAddress ?? customerResult.address;
+      let chosenAddress = selectedAddress ?? customerResult.address;
+      if (isDelivery && !chosenAddress && validated.addressText) {
+        const existingFreeformAddress = await tx.customerAddress.findFirst({
+          where: { customerId: customerResult.customer.id, area: '', street: validated.addressText },
+        });
+        chosenAddress = existingFreeformAddress ?? await tx.customerAddress.create({
+          data: {
+            customerId: customerResult.customer.id,
+            title: 'عنوان التوصيل',
+            city: '',
+            area: '',
+            street: validated.addressText,
+            deliveryNotes: validated.deliveryNotes ?? null,
+            isDefault: (await tx.customerAddress.count({ where: { customerId: customerResult.customer.id } })) === 0,
+          },
+        });
+      }
       if (isDelivery && !chosenAddress) throw new ValidationError('أدخل عنوان التوصيل');
 
       const products = await new PrismaPosTransaction(tx).getProducts(validated.branchId, [...new Set(validated.items.map((item) => item.productId))]);
@@ -82,7 +87,9 @@ export class CreatePhoneOrderUseCase {
 
       const orderNumber = await OrderNumberService.getNextOrderNumber(tx);
       const addressSummary = isDelivery && chosenAddress
-        ? [chosenAddress.city, chosenAddress.area, chosenAddress.street,
+        ? !selectedAddress && validated.addressText
+          ? validated.addressText
+          : [chosenAddress.city, chosenAddress.area, chosenAddress.street,
             chosenAddress.building ? `عمارة ${chosenAddress.building}` : null,
             chosenAddress.floor ? `طابق ${chosenAddress.floor}` : null,
             chosenAddress.apartment ? `شقة ${chosenAddress.apartment}` : null,
@@ -114,7 +121,9 @@ export class CreatePhoneOrderUseCase {
           customerName: validated.customerName,
           customerPhone: phone.value,
           deliveryAddress: addressSummary,
-          deliveryNotes: isDelivery ? chosenAddress?.deliveryNotes ?? validated.deliveryNotes ?? null : null,
+          deliveryNotes: isDelivery
+            ? (selectedAddress ? chosenAddress?.deliveryNotes : validated.deliveryNotes ?? chosenAddress?.deliveryNotes) ?? null
+            : null,
           customerNotes: validated.customerNotes ?? null,
           items: { create: lines.map(({ modifiers, ...line }) => ({
             productId: line.productId,

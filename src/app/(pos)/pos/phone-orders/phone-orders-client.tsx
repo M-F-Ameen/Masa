@@ -9,7 +9,6 @@ import {
   Check,
   ChefHat,
   ChevronDown,
-  Clock3,
   MapPin,
   Menu,
   PackageCheck,
@@ -35,6 +34,7 @@ type SavedAddress = {
   city: string;
   area: string;
   street: string;
+  addressText: string | null;
   building: string | null;
   floor: string | null;
   apartment: string | null;
@@ -53,17 +53,12 @@ type PhoneOrderResult =
   | { success: false; error: string; code: string };
 
 type AddressForm = {
-  area: string;
-  street: string;
-  building: string;
-  floor: string;
-  apartment: string;
-  landmark: string;
+  addressText: string;
   deliveryNotes: string;
 };
 
 const emptyAddress: AddressForm = {
-  area: '', street: '', building: '', floor: '', apartment: '', landmark: '', deliveryNotes: '',
+  addressText: '', deliveryNotes: '',
 };
 
 function makeIdempotencyKey() {
@@ -92,6 +87,7 @@ export function PhoneOrdersClient({
   const [matchedCustomer, setMatchedCustomer] = useState<Caller | null>(null);
   const [addresses, setAddresses] = useState<SavedAddress[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState('');
+  const [useNewAddress, setUseNewAddress] = useState(false);
   const [address, setAddress] = useState<AddressForm>(emptyAddress);
   const [customerNotes, setCustomerNotes] = useState('');
   const [search, setSearch] = useState('');
@@ -101,6 +97,7 @@ export function PhoneOrdersClient({
   const [completedOrder, setCompletedOrder] = useState<{ orderNumber: string; totalMinor: number } | null>(null);
   const [headerDateTime, setHeaderDateTime] = useState({ date: '', time: '' });
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [activePanelTab, setActivePanelTab] = useState<'SUMMARY' | 'CUSTOMER'>('SUMMARY');
   const [isLookingUp, startLookup] = useTransition();
   const [isSubmitting, startSubmit] = useTransition();
   const draftKeyRef = useRef(makeIdempotencyKey());
@@ -108,8 +105,7 @@ export function PhoneOrdersClient({
   const phoneInputRef = useRef<HTMLInputElement>(null);
   const customerNameRef = useRef<HTMLInputElement>(null);
   const addressSelectRef = useRef<HTMLSelectElement>(null);
-  const areaInputRef = useRef<HTMLInputElement>(null);
-  const streetInputRef = useRef<HTMLInputElement>(null);
+  const addressTextRef = useRef<HTMLTextAreaElement>(null);
   const catalogRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -149,9 +145,9 @@ export function PhoneOrdersClient({
   }, [items, products, orderType, deliveryFeeMinor, settings.taxRatePercent, settings.currency]);
 
   const hasDeliveryAddress = orderType !== OrderType.DELIVERY || Boolean(
-    matchedCustomer
+    matchedCustomer && !useNewAddress
       ? selectedAddressId
-      : address.area.trim() && address.street.trim(),
+      : address.addressText.trim(),
   );
   const canSubmit = Boolean(lookupDone && phone.trim() && (matchedCustomer || customerName.trim().length >= 2) && items.length > 0 && hasDeliveryAddress);
 
@@ -164,23 +160,24 @@ export function PhoneOrdersClient({
     if (!phone.trim()) return 'أدخل رقم هاتف العميل وابحث عنه.';
     if (!lookupDone) return 'ابحث عن رقم الهاتف للتحقق من العميل.';
     if (!matchedCustomer && customerName.trim().length < 2) return 'أدخل اسم العميل الجديد (حرفان على الأقل).';
-    if (orderType === OrderType.DELIVERY && matchedCustomer && !selectedAddressId) return 'اختر عنواناً محفوظاً للعميل.';
-    if (orderType === OrderType.DELIVERY && !matchedCustomer && !address.area.trim()) return 'أدخل المنطقة أو الحي.';
-    if (orderType === OrderType.DELIVERY && !matchedCustomer && !address.street.trim()) return 'أدخل اسم الشارع.';
+    if (orderType === OrderType.DELIVERY && matchedCustomer && !useNewAddress && !selectedAddressId) return 'اختر عنواناً محفوظاً أو أضف عنواناً جديداً.';
+    if (orderType === OrderType.DELIVERY && (!matchedCustomer || useNewAddress) && !address.addressText.trim()) return 'أدخل العنوان بالتفصيل.';
     return '';
   }
 
   function focusMissingRequirement() {
     const missing = missingRequirement();
+    if (!missing.startsWith('أضف')) setActivePanelTab('CUSTOMER');
     const target = missing.startsWith('أضف') ? catalogRef.current
       : missing.includes('هاتف') || missing.includes('ابحث') ? phoneInputRef.current
         : missing.includes('اسم العميل') ? customerNameRef.current
           : missing.includes('عنواناً محفوظاً') ? addressSelectRef.current
-            : missing.includes('منطقة') ? areaInputRef.current
-              : missing.includes('الشارع') ? streetInputRef.current
+            : missing.includes('العنوان بالتفصيل') ? addressTextRef.current
                 : phoneInputRef.current;
-    target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    if (target instanceof HTMLElement) window.setTimeout(() => target.focus(), 250);
+    window.setTimeout(() => {
+      target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (target instanceof HTMLElement) target.focus();
+    }, missing.startsWith('أضف') ? 0 : 100);
   }
 
   function lookupCaller() {
@@ -202,14 +199,10 @@ export function PhoneOrdersClient({
       setAddresses(result.data.addresses);
       const defaultAddress = result.data.addresses.find((entry) => entry.isDefault) ?? result.data.addresses[0];
       setSelectedAddressId(defaultAddress?.id ?? '');
+      setUseNewAddress(false);
       if (defaultAddress) {
         setAddress({
-          area: defaultAddress.area,
-          street: defaultAddress.street,
-          building: defaultAddress.building ?? '',
-          floor: defaultAddress.floor ?? '',
-          apartment: defaultAddress.apartment ?? '',
-          landmark: defaultAddress.landmark ?? '',
+          addressText: defaultAddress.addressText ?? [defaultAddress.area, defaultAddress.street].filter(Boolean).join('، '),
           deliveryNotes: defaultAddress.deliveryNotes ?? '',
         });
       } else {
@@ -260,12 +253,7 @@ export function PhoneOrdersClient({
           ? selectedAddressId
             ? { addressId: selectedAddressId }
             : {
-                area: address.area.trim(),
-                street: address.street.trim(),
-                building: address.building.trim() || undefined,
-                floor: address.floor.trim() || undefined,
-                apartment: address.apartment.trim() || undefined,
-                landmark: address.landmark.trim() || undefined,
+                addressText: address.addressText.trim(),
                 deliveryNotes: address.deliveryNotes.trim() || undefined,
               }
           : {}),
@@ -292,6 +280,7 @@ export function PhoneOrdersClient({
     setMatchedCustomer(null);
     setAddresses([]);
     setSelectedAddressId('');
+    setUseNewAddress(false);
     setAddress(emptyAddress);
     setCustomerNotes('');
     setItems([]);
@@ -308,8 +297,8 @@ export function PhoneOrdersClient({
 
   return (
     <main className="pos-app min-h-dvh bg-[var(--pos-canvas)] text-[var(--pos-foreground)]" dir="rtl">
-      <header className="relative z-20 flex min-h-[96px] shrink-0 flex-wrap items-center justify-between gap-3 bg-[var(--pos-canvas)] px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-4 lg:px-8">
-        <div dir="rtl" className="flex min-w-0 basis-full items-center gap-3 lg:flex-1 lg:basis-auto">
+      <header dir="rtl" className="sticky top-0 z-20 flex min-h-[96px] shrink-0 flex-wrap items-center justify-between gap-3 bg-[var(--pos-canvas)] px-4 py-3 sm:px-6 lg:flex-nowrap lg:gap-4 lg:px-8">
+        <div className="order-1 flex min-w-0 items-center gap-3 lg:flex-1">
           <div className="relative shrink-0">
             <button type="button" aria-label="القائمة" title="القائمة" aria-expanded={userMenuOpen} aria-haspopup="menu" onClick={() => setUserMenuOpen((open) => !open)} className="grid size-14 shrink-0 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]">
               <Menu size={22} strokeWidth={1.8} />
@@ -319,17 +308,20 @@ export function PhoneOrdersClient({
               <Link href="/admin/orders" role="menuitem" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2 rounded-[12px] px-3 py-2.5 text-xs font-semibold transition hover:bg-[var(--pos-soft)]"><ShoppingBag size={15} />إدارة الطلبات</Link>
             </div>}
           </div>
+          <Link href="/pos" aria-label="العودة إلى نقطة البيع" title="نقطة البيع" className="grid size-14 shrink-0 place-items-center rounded-[16px] border border-[var(--pos-border)] bg-white text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft)]">
+            <ShoppingBag size={20} strokeWidth={1.8} />
+          </Link>
           {settings.logoUrl ? (
             <Image src={settings.logoUrl} alt={settings.nameAr} width={180} height={64} unoptimized className="h-14 w-32 shrink-0 object-contain sm:w-40" />
           ) : (
             <span className="pos-brand-mark grid size-14 shrink-0 place-items-center rounded-[16px] shadow-[0_7px_15px_rgba(19,20,23,0.14)]"><Utensils size={24} strokeWidth={1.7} /></span>
           )}
-          <label className="flex h-14 min-w-0 flex-1 items-center gap-2.5 rounded-[16px] border border-[var(--pos-border)] bg-white px-3.5 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition focus-within:border-[var(--pos-signal)] focus-within:ring-2 focus-within:ring-[var(--pos-signal)]/10">
-            <Search size={20} strokeWidth={1.8} className="shrink-0 text-[var(--pos-muted)]" />
-            <input aria-label="البحث عن صنف" placeholder="ابحث عن صنف بالاسم..." value={search} onChange={(event) => setSearch(event.target.value)} className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[var(--pos-foreground)] outline-none placeholder:text-[var(--pos-muted)] focus:ring-0" />
-          </label>
         </div>
-        <div dir="ltr" className="flex shrink-0 items-center gap-2.5 lg:gap-3">
+        <label className="order-2 flex h-12 w-full min-w-0 items-center gap-2.5 rounded-[16px] border border-[var(--pos-border)] bg-white px-3.5 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] transition focus-within:border-[var(--pos-signal)] focus-within:ring-2 focus-within:ring-[var(--pos-signal)]/10 lg:order-2 lg:h-14 lg:w-auto lg:flex-1">
+          <Search size={20} strokeWidth={1.8} className="shrink-0 text-[var(--pos-muted)]" />
+          <input aria-label="البحث عن صنف" placeholder="ابحث عن صنف بالاسم..." value={search} onChange={(event) => setSearch(event.target.value)} className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[var(--pos-foreground)] outline-none placeholder:text-[var(--pos-muted)] focus:ring-0" />
+        </label>
+        <div dir="ltr" className="order-1 flex shrink-0 items-center gap-2.5 lg:order-3 lg:gap-3">
           <div className="hidden h-14 w-[190px] shrink-0 flex-col items-center justify-center gap-1 rounded-[16px] border border-[var(--pos-border)] bg-white px-2 text-[var(--pos-foreground)] shadow-[0_4px_14px_rgba(19,20,23,0.06)] lg:flex">
             <span dir="ltr" className="text-2xl font-extrabold leading-none tabular-nums">{headerDateTime.time || '—'}</span>
             <div dir="rtl" className="w-full whitespace-nowrap text-center text-xs font-semibold leading-none text-[var(--pos-muted)]">{headerDateTime.date || '—'}</div>
@@ -339,66 +331,95 @@ export function PhoneOrdersClient({
         </div>
       </header>
 
-      <div className="mx-auto grid w-full max-w-[1800px] grid-cols-1 gap-4 p-3 pb-28 sm:p-5 sm:pb-28 xl:grid-cols-[minmax(0,1fr)_390px] xl:pb-5">
-        <section className="min-w-0 space-y-4">
-          <section ref={catalogRef} className="overflow-hidden rounded-[18px] border border-[var(--pos-border)] bg-white shadow-[0_5px_16px_rgba(19,20,23,0.04)]">
-            <div className="flex items-center justify-between gap-3 border-b border-[var(--pos-border)] px-4 py-4 sm:px-5">
-              <div><h1 className="text-base font-black">أصناف الطلب</h1><p className="mt-1 text-xs text-[var(--pos-muted)]">{branch.nameAr} · اختر الأصناف والمقاسات والإضافات أولاً، ثم سجّل بيانات المتصل.</p></div>
-              <span className="shrink-0 rounded-full bg-[var(--pos-signal-soft)] px-3 py-1.5 text-[11px] font-bold text-[var(--pos-primary)]">{items.reduce((sum, item) => sum + item.quantity, 0)} صنف</span>
+      <div className="mx-auto grid w-full max-w-[1800px] grid-cols-1 gap-4 p-3 pb-28 sm:p-5 sm:pb-28 xl:h-[calc(100dvh-116px)] xl:min-h-0 xl:grid-cols-[minmax(0,1fr)_390px] xl:items-stretch xl:pb-5">
+        <section className="min-w-0 xl:h-full xl:min-h-0">
+          <section ref={catalogRef} className="overflow-hidden rounded-[18px] border border-[var(--pos-border)] bg-white shadow-[0_5px_16px_rgba(19,20,23,0.04)] xl:flex xl:h-full xl:min-h-0 xl:flex-col">
+            <h1 className="sr-only">أصناف الطلب</h1>
+            <div className="flex-1 h-full overflow-y-auto">
+              <PosCatalog categories={categories} currency={settings.currency} locale={settings.locale} disabled={isSubmitting} search={search} onSelect={setSelectedProduct} />
             </div>
-            <PosCatalog categories={categories} currency={settings.currency} locale={settings.locale} disabled={isSubmitting} search={search} onSelect={setSelectedProduct} />
           </section>
+        </section>
 
-          <section className="rounded-[18px] border border-[var(--pos-border)] bg-white p-4 shadow-[0_5px_16px_rgba(19,20,23,0.04)] sm:p-5">
-            <div className="mb-4 flex items-start justify-between gap-3">
-              <div><h2 className="flex items-center gap-2 text-lg font-black"><Phone size={19} className="text-[var(--pos-primary)]" /> بيانات المتصل</h2><p className="mt-1 text-xs text-[var(--pos-muted)]">بعد تجهيز الأصناف، ابحث برقم الهاتف لتحديد العميل.</p></div>
-              {matchedCustomer && <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-[11px] font-bold text-emerald-800"><Check size={13} /> عميل مسجل</span>}
+        <aside ref={summaryRef} className="min-h-[520px] xl:h-full xl:min-h-0">
+          <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-[18px] border border-[var(--pos-border)] bg-white shadow-[0_7px_20px_rgba(19,20,23,0.06)]">
+            <div role="tablist" aria-label="تفاصيل الطلب" className="grid shrink-0 grid-cols-2 gap-1 border-b border-[var(--pos-border)] bg-[var(--pos-canvas)] p-2">
+              <button type="button" role="tab" aria-selected={activePanelTab === 'SUMMARY'} onClick={() => setActivePanelTab('SUMMARY')} className={`flex min-h-11 items-center justify-center gap-2 rounded-[12px] px-2 text-xs font-bold transition ${activePanelTab === 'SUMMARY' ? 'bg-white text-[var(--pos-foreground)] shadow-sm' : 'text-[var(--pos-muted)] hover:bg-white/70'}`}><ShoppingBag size={16} />ملخص الطلب</button>
+              <button type="button" role="tab" aria-selected={activePanelTab === 'CUSTOMER'} onClick={() => setActivePanelTab('CUSTOMER')} className={`flex min-h-11 items-center justify-center gap-2 rounded-[12px] px-2 text-xs font-bold transition ${activePanelTab === 'CUSTOMER' ? 'bg-white text-[var(--pos-foreground)] shadow-sm' : 'text-[var(--pos-muted)] hover:bg-white/70'}`}><UserRound size={16} />بيانات العميل</button>
             </div>
-            <div className="grid gap-3 md:grid-cols-[minmax(220px,1fr)_auto] md:items-end">
+            <div role="tabpanel" className={`${activePanelTab === 'SUMMARY' ? 'flex' : 'hidden'} min-h-0 flex-1 flex-col`}>
+              <div className="min-h-0 flex-1 overflow-y-auto p-3">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <div><h2 className="text-sm font-black">الطلب الحالي</h2><p className="mt-1 text-[11px] text-[var(--pos-muted)]">{items.reduce((sum, item) => sum + item.quantity, 0)} صنف · {orderType === OrderType.DELIVERY ? 'توصيل' : 'استلام'}</p></div>
+                  <span className="rounded-full bg-[var(--pos-signal-soft)] px-3 py-1.5 text-[11px] font-bold text-[var(--pos-primary)]">{items.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                </div>
+                <CartLines items={items} products={productsInCart} settings={settings} locked={isSubmitting} changeQuantity={changeQuantity} />
+              </div>
+              <div className="shrink-0 space-y-2 border-t border-[var(--pos-border)] p-3 sm:p-4">
+                <label className="block text-xs font-bold">ملاحظة للمطبخ أو الطلب
+                  <textarea value={customerNotes} onChange={(event) => { refreshDraftKey(); setCustomerNotes(event.target.value); }} rows={2} maxLength={500} placeholder="مثال: بدون سكر، الاتصال عند الوصول" className="mt-1.5 min-h-16 w-full resize-y rounded-[13px] border border-[var(--pos-border)] bg-[var(--pos-canvas)] px-3 py-2 text-sm font-normal outline-none placeholder:text-[var(--pos-muted)] focus:border-[var(--pos-signal)] focus:bg-white focus:ring-2 focus:ring-[var(--pos-signal)]/15" />
+                </label>
+                {orderType === OrderType.DELIVERY && <div className="flex justify-between text-xs text-[var(--pos-muted)]"><span>التوصيل</span><span className="font-mono">{Money.fromMinor(deliveryFeeMinor, settings.currency).format(settings.locale)}</span></div>}
+                <CartTotals totals={totals} settings={settings} />
+                <div className="rounded-[12px] bg-amber-50 px-3 py-2 text-[11px] leading-5 text-amber-900">الدفع عند الاستلام — لا تُسجل بيانات البطاقة عبر الهاتف.</div>
+                <div className={`rounded-[12px] px-3 py-2 text-[11px] leading-5 ${canSubmit ? 'bg-emerald-50 text-emerald-800' : 'bg-[var(--pos-signal-soft)] text-[var(--pos-foreground)]'}`}>
+                  {canSubmit ? 'الطلب جاهز للإرسال.' : missingRequirement()}
+                  {!canSubmit && <button type="button" onClick={focusMissingRequirement} className="ms-2 font-bold text-[var(--pos-primary)] underline underline-offset-2">الانتقال للحقل</button>}
+                </div>
+                <button type="button" onClick={submitOrder} disabled={!canSubmit || isSubmitting} className={`${posPrimary} min-h-12 w-full text-sm`}><ChefHat size={17} />{isSubmitting ? 'جارٍ إرسال الطلب...' : 'تأكيد وإرسال للمطبخ'}</button>
+              </div>
+            </div>
+            <div role="tabpanel" className={`${activePanelTab === 'CUSTOMER' ? 'flex' : 'hidden'} min-h-0 flex-1 flex-col`}>
+              <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-2.5 sm:p-3">
+                <section className="space-y-3">
+            <div className="flex items-center justify-between gap-2">
+              <div><h2 className="flex items-center gap-2 text-sm font-black"><Phone size={16} className="text-[var(--pos-primary)]" /> بيانات المتصل</h2><p className="mt-0.5 text-[11px] text-[var(--pos-muted)]">ابحث برقم الهاتف لتحديد العميل.</p></div>
+              {matchedCustomer && <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold text-emerald-800"><Check size={12} /> مسجل</span>}
+            </div>
+            <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
               <label className="block text-xs font-bold text-[var(--pos-foreground)]">رقم الهاتف <span className="text-[var(--pos-primary)]">*</span>
-                <div className="relative mt-1.5"><Phone size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--pos-muted)]" />
+                <div className="relative mt-1"><Phone size={15} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--pos-muted)]" />
                   <input ref={phoneInputRef} dir="ltr" inputMode="tel" autoComplete="tel" value={phone} onChange={(event) => {
-                    refreshDraftKey(); setPhone(event.target.value); setLookupDone(false); setMatchedCustomer(null); setCustomerName(''); setAddresses([]); setSelectedAddressId(''); setAddress(emptyAddress); setFeedback('');
+                    refreshDraftKey(); setPhone(event.target.value); setLookupDone(false); setMatchedCustomer(null); setCustomerName(''); setAddresses([]); setSelectedAddressId(''); setUseNewAddress(false); setAddress(emptyAddress); setFeedback('');
                   }} placeholder="01xxxxxxxxx" className={`${posInput} pe-10 text-left`} />
                 </div>
               </label>
-              <button type="button" onClick={lookupCaller} disabled={isLookingUp || !phone.trim()} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[14px] border border-[var(--pos-border)] bg-[var(--pos-canvas)] px-4 text-sm font-bold transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft-hover)] disabled:opacity-60">
-                <Search size={16} /> {isLookingUp ? 'جارٍ البحث...' : 'بحث عن العميل'}
+              <button type="button" onClick={lookupCaller} disabled={isLookingUp || !phone.trim()} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[12px] border border-[var(--pos-border)] bg-[var(--pos-canvas)] px-3 text-xs font-bold transition hover:border-[var(--pos-metal)] hover:bg-[var(--pos-soft-hover)] disabled:opacity-60">
+                <Search size={15} /> {isLookingUp ? 'جارٍ البحث...' : 'بحث عن العميل'}
               </button>
             </div>
-            {lookupDone && matchedCustomer && <div className="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-[13px] border border-emerald-200 bg-emerald-50/70 px-3.5 py-3"><div><p className="text-sm font-bold">{matchedCustomer.fullName}</p><p dir="ltr" className="mt-0.5 text-left text-xs text-[var(--pos-muted)]">{matchedCustomer.phone}</p></div><span className="text-[11px] font-semibold text-emerald-800">تم التعرف على العميل</span></div>}
-            {lookupDone && !matchedCustomer && <div className="mt-3 rounded-[13px] border border-[var(--pos-border)] bg-[var(--pos-canvas)] p-3.5">
-              <p className="mb-3 text-xs font-semibold text-[var(--pos-muted)]">لا يوجد عميل مسجل بهذا الرقم. أدخل بيانات العميل الجديد.</p>
-              <label className="block max-w-xl text-xs font-bold">اسم العميل <span className="text-[var(--pos-primary)]">*</span>
-                <div className="relative mt-1.5"><UserRound size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--pos-muted)]" /><input ref={customerNameRef} value={customerName} onChange={(event) => { refreshDraftKey(); setCustomerName(event.target.value); }} autoComplete="name" placeholder="اسم العميل" className={`${posInput} pe-10 bg-white`} /></div>
+            {lookupDone && matchedCustomer && <div className="flex items-center justify-between gap-2 rounded-[12px] bg-emerald-50/70 px-3 py-2"><div><p className="text-sm font-bold">{matchedCustomer.fullName}</p><p dir="ltr" className="mt-0.5 text-left text-xs text-[var(--pos-muted)]">{matchedCustomer.phone}</p></div><span className="text-[10px] font-semibold text-emerald-800">تم التعرف على العميل</span></div>}
+            {lookupDone && !matchedCustomer && <div className="border-t border-[var(--pos-border)] pt-3">
+              <p className="mb-2 text-[11px] font-medium text-[var(--pos-muted)]">عميل جديد — أدخل اسمه للمتابعة.</p>
+              <label className="block text-xs font-bold">اسم العميل <span className="text-[var(--pos-primary)]">*</span>
+                <div className="relative mt-1"><UserRound size={15} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--pos-muted)]" /><input ref={customerNameRef} value={customerName} onChange={(event) => { refreshDraftKey(); setCustomerName(event.target.value); }} autoComplete="name" placeholder="اسم العميل" className={`${posInput} pe-10`} /></div>
               </label>
             </div>}
-            {feedback && !completedOrder && <p role="status" className="mt-3 rounded-[12px] bg-[var(--pos-signal-soft)] px-3 py-2 text-xs font-semibold text-[var(--pos-foreground)]">{feedback}</p>}
+            {feedback && !completedOrder && <p role="status" className="rounded-[10px] bg-[var(--pos-signal-soft)] px-3 py-2 text-[11px] font-semibold leading-5 text-[var(--pos-foreground)]">{feedback}</p>}
           </section>
 
-          {lookupDone && <section className="rounded-[18px] border border-[var(--pos-border)] bg-white p-4 shadow-[0_5px_16px_rgba(19,20,23,0.04)] sm:p-5">
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+          {lookupDone && <section className="space-y-3 border-t border-[var(--pos-border)] pt-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
-                <h2 className="text-base font-black">طريقة الاستلام والعنوان</h2>
-                <p className="mt-1 text-xs text-[var(--pos-muted)]">يُسجل الطلب غير مدفوع حتى التحصيل عند الاستلام.</p>
+                <h2 className="text-sm font-black">الاستلام والعنوان</h2>
               </div>
-              <div className="flex h-11 rounded-[13px] border border-[var(--pos-border)] bg-[var(--pos-canvas)] p-1">
+              <div className="flex h-10 w-full rounded-[12px] border border-[var(--pos-border)] bg-[var(--pos-canvas)] p-1 sm:w-auto">
                 {([
                   [OrderType.DELIVERY, 'توصيل'],
                   [OrderType.TAKEAWAY, 'استلام من المطعم'],
                 ] as const).map(([type, label]) => (
-                  <button type="button" key={type} onClick={() => { refreshDraftKey(); setOrderType(type); }} aria-pressed={orderType === type} className={`rounded-[10px] px-3 text-xs font-bold transition ${orderType === type ? 'pos-category-selected' : 'text-[var(--pos-muted)] hover:text-[var(--pos-foreground)]'}`}>
+                  <button type="button" key={type} onClick={() => { refreshDraftKey(); setOrderType(type); }} aria-pressed={orderType === type} className={`flex-1 rounded-[9px] px-3 text-xs font-bold transition sm:flex-none ${orderType === type ? 'pos-category-selected' : 'text-[var(--pos-muted)] hover:text-[var(--pos-foreground)]'}`}>
                     {label}
                   </button>
                 ))}
               </div>
             </div>
             {orderType === OrderType.DELIVERY ? (
-              <div className="space-y-3">
-                {matchedCustomer && addresses.length > 0 && (
+              <div className="space-y-2.5">
+                {matchedCustomer && !useNewAddress && addresses.length > 0 && (
                   <label className="block text-xs font-bold">
                     عنوان محفوظ
-                    <div className="relative mt-1.5">
+                    <div className="relative mt-1">
                       <MapPin size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--pos-muted)]" />
                       <select ref={addressSelectRef} value={selectedAddressId} onChange={(event) => {
                         const id = event.target.value;
@@ -406,27 +427,26 @@ export function PhoneOrdersClient({
                         setSelectedAddressId(id);
                       }} className={`${posInput} appearance-none pe-10`}>
                         <option value="">اختر عنوان العميل</option>
-                        {addresses.map((entry) => <option key={entry.id} value={entry.id}>{entry.title} · {entry.area} · {entry.street}{entry.isDefault ? ' (الافتراضي)' : ''}</option>)}
+                        {addresses.map((entry) => <option key={entry.id} value={entry.id}>{entry.title} · {entry.addressText || [entry.area, entry.street].filter(Boolean).join('، ')}{entry.isDefault ? ' (الافتراضي)' : ''}</option>)}
                       </select>
                       <ChevronDown size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[var(--pos-muted)]" />
                     </div>
                   </label>
                 )}
-                {matchedCustomer && !addresses.length && <div className="rounded-[13px] bg-amber-50 px-3.5 py-3 text-xs leading-5 text-amber-900">لا يوجد لهذا العميل عنوان محفوظ. يمكنك تسجيل الطلب للاستلام من المطعم، أو إضافة عنوان للعميل من صفحة العملاء قبل اختيار التوصيل.</div>}
-                {!matchedCustomer && (
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                    <AddressInput label="المنطقة" required value={address.area} inputRef={(node) => { areaInputRef.current = node; }} onChange={(value) => addressValue('area', value)} placeholder="مثال: مدينة نصر" />
-                    <AddressInput label="الشارع" required value={address.street} inputRef={(node) => { streetInputRef.current = node; }} onChange={(value) => addressValue('street', value)} placeholder="اسم الشارع" />
-                    <AddressInput label="رقم المبنى" value={address.building} onChange={(value) => addressValue('building', value)} />
-                    <AddressInput label="الدور" value={address.floor} onChange={(value) => addressValue('floor', value)} />
-                    <AddressInput label="الشقة" value={address.apartment} onChange={(value) => addressValue('apartment', value)} />
-                    <AddressInput label="علامة مميزة" value={address.landmark} onChange={(value) => addressValue('landmark', value)} placeholder="بجوار..." />
-                    <label className="block text-xs font-bold sm:col-span-2 lg:col-span-3">تعليمات الوصول
-                      <input value={address.deliveryNotes} onChange={(event) => addressValue('deliveryNotes', event.target.value)} maxLength={300} placeholder="تفاصيل تساعد المندوب في الوصول" className={`${posInput} mt-1.5`} />
+                {matchedCustomer && !useNewAddress && <button type="button" onClick={() => { refreshDraftKey(); setSelectedAddressId(''); setAddress(emptyAddress); setUseNewAddress(true); }} className="text-xs font-bold text-[var(--pos-primary)] underline underline-offset-2">إضافة عنوان جديد</button>}
+                {matchedCustomer && useNewAddress && addresses.length > 0 && <button type="button" onClick={() => { refreshDraftKey(); setUseNewAddress(false); setAddress(emptyAddress); setSelectedAddressId(addresses.find((entry) => entry.isDefault)?.id ?? addresses[0].id); }} className="text-xs font-bold text-[var(--pos-primary)] underline underline-offset-2">اختيار عنوان محفوظ</button>}
+                {matchedCustomer && useNewAddress && <p className="text-[11px] text-[var(--pos-muted)]">سيُحفظ العنوان الجديد مع ملف العميل.</p>}
+                {!matchedCustomer || useNewAddress ? (
+                  <div className="grid gap-2.5">
+                    <label className="block text-xs font-bold">العنوان بالتفصيل <span className="text-[var(--pos-primary)]">*</span>
+                      <textarea ref={addressTextRef} value={address.addressText} onChange={(event) => addressValue('addressText', event.target.value)} required maxLength={1000} rows={3} placeholder="المنطقة، الشارع، رقم المبنى، الدور، الشقة، وأي تفاصيل تساعد في الوصول" className={`${posInput} mt-1 min-h-24 resize-y py-3`} />
+                    </label>
+                    <label className="block text-xs font-bold">تعليمات التوصيل
+                      <input value={address.deliveryNotes} onChange={(event) => addressValue('deliveryNotes', event.target.value)} maxLength={500} placeholder="مثال: الاتصال عند الوصول" className={`${posInput} mt-1`} />
                     </label>
                   </div>
-                )}
-                <div className="flex flex-wrap items-center justify-between gap-2 rounded-[12px] bg-[var(--pos-canvas)] px-3 py-2.5 text-xs">
+                ) : null}
+                <div className="flex flex-wrap items-center justify-between gap-2 rounded-[10px] bg-[var(--pos-canvas)] px-3 py-2 text-xs">
                   <span className="inline-flex items-center gap-1.5 text-[var(--pos-muted)]"><MapPin size={15} /> رسوم التوصيل</span>
                   <strong className="font-mono">{Money.fromMinor(deliveryFeeMinor, settings.currency).format(settings.locale)}</strong>
                 </div>
@@ -438,32 +458,7 @@ export function PhoneOrdersClient({
               </div>
             )}
           </section>}
-
-        </section>
-
-        <aside ref={summaryRef} className="xl:sticky xl:top-[94px] xl:h-[calc(100dvh-110px)]">
-          <section className="flex max-h-[calc(100dvh-110px)] min-h-[440px] flex-col overflow-hidden rounded-[18px] border border-[var(--pos-border)] bg-white shadow-[0_7px_20px_rgba(19,20,23,0.06)]">
-            <div className="shrink-0 border-b border-[var(--pos-border)] px-4 py-4">
-              <h2 className="flex items-center gap-2 text-base font-black"><ShoppingBag size={18} /> ملخص الطلب</h2>
-              <p className="mt-1 text-xs text-[var(--pos-muted)]">{items.reduce((sum, item) => sum + item.quantity, 0)} صنف · {orderType === OrderType.DELIVERY ? 'توصيل' : 'استلام'}</p>
-            </div>
-            <div className="min-h-0 flex-1 overflow-y-auto p-3">
-              <CartLines items={items} products={productsInCart} settings={settings} locked={isSubmitting} changeQuantity={changeQuantity} />
-            </div>
-            <div className="shrink-0 space-y-3 border-t border-[var(--pos-border)] p-4">
-              <label className="block text-xs font-bold">ملاحظة للمطبخ أو الطلب
-                <textarea value={customerNotes} onChange={(event) => { refreshDraftKey(); setCustomerNotes(event.target.value); }} rows={2} maxLength={500} placeholder="مثال: بدون سكر، الاتصال عند الوصول" className="mt-1.5 min-h-20 w-full resize-y rounded-[13px] border border-[var(--pos-border)] bg-[var(--pos-canvas)] px-3 py-2.5 text-sm font-normal outline-none placeholder:text-[var(--pos-muted)] focus:border-[var(--pos-signal)] focus:bg-white focus:ring-2 focus:ring-[var(--pos-signal)]/15" />
-              </label>
-              {orderType === OrderType.DELIVERY && <div className="flex justify-between text-xs text-[var(--pos-muted)]"><span>التوصيل</span><span className="font-mono">{Money.fromMinor(deliveryFeeMinor, settings.currency).format(settings.locale)}</span></div>}
-              <CartTotals totals={totals} settings={settings} />
-              <div className="rounded-[12px] bg-amber-50 px-3 py-2 text-[11px] leading-5 text-amber-900">الدفع عند الاستلام — لا تُسجل بيانات البطاقة عبر الهاتف.</div>
-              <div className={`rounded-[12px] px-3 py-2 text-[11px] leading-5 ${canSubmit ? 'bg-emerald-50 text-emerald-800' : 'bg-[var(--pos-signal-soft)] text-[var(--pos-foreground)]'}`}>
-                {canSubmit ? 'الطلب جاهز للإرسال.' : missingRequirement()}
-                {!canSubmit && <button type="button" onClick={focusMissingRequirement} className="ms-2 font-bold text-[var(--pos-primary)] underline underline-offset-2">الانتقال للحقل</button>}
               </div>
-              <button type="button" onClick={submitOrder} disabled={!canSubmit || isSubmitting} className={`${posPrimary} min-h-14 w-full text-sm`}>
-                <ChefHat size={18} /> {isSubmitting ? 'جارٍ إرسال الطلب...' : 'تأكيد وإرسال للمطبخ'}
-              </button>
             </div>
           </section>
         </aside>
@@ -475,7 +470,7 @@ export function PhoneOrdersClient({
             <p className="text-[11px] text-[var(--pos-muted)]">{items.reduce((sum, item) => sum + item.quantity, 0)} صنف في الطلب</p>
             <p className="truncate text-base font-black">{Money.fromMinor(totals.totalMinor, settings.currency).format(settings.locale)}</p>
           </div>
-          <button type="button" onClick={() => summaryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })} className={`${posPrimary} min-h-11 shrink-0 px-5`}>
+          <button type="button" onClick={() => { setActivePanelTab('SUMMARY'); window.setTimeout(() => summaryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); }} className={`${posPrimary} min-h-11 shrink-0 px-5`}>
             <ShoppingBag size={17} /> ملخص الطلب
           </button>
         </div>
@@ -499,24 +494,3 @@ export function PhoneOrdersClient({
   );
 }
 
-function AddressInput({
-  label,
-  value,
-  onChange,
-  placeholder,
-  required,
-  inputRef,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  required?: boolean;
-  inputRef?: (node: HTMLInputElement | null) => void;
-}) {
-  return (
-    <label className="block text-xs font-bold">{label}{required && <span className="text-[var(--pos-primary)]"> *</span>}
-      <input ref={inputRef} value={value} onChange={(event) => onChange(event.target.value)} required={required} maxLength={100} placeholder={placeholder} className={`${posInput} mt-1.5`} />
-    </label>
-  );
-}

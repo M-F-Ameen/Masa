@@ -7,6 +7,10 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(32, 'JWT_SECRET must be at least 32 characters long'),
   PORT: z.coerce.number().default(3000),
   TRUSTED_PROXY_HOPS: z.coerce.number().int().min(0).max(5).default(1),
+  COOKIE_SECURE: z
+    .enum(['true', 'false'])
+    .transform((value) => value === 'true')
+    .optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

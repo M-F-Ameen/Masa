@@ -17,6 +17,7 @@ export interface PhoneCustomerMatch {
     city: string;
     area: string;
     street: string;
+    addressText: string | null;
     building: string | null;
     floor: string | null;
     apartment: string | null;
@@ -44,7 +45,7 @@ export async function findPhoneCustomerAction(rawPhone: string): Promise<ActionR
       data: {
         customer: match ? { id: match.id, fullName: match.fullName, phone: match.phone } : null,
         addresses: match?.addresses.map(({ id, title, city, area, street, building, floor, apartment, landmark, deliveryNotes, isDefault }) => ({
-          id, title, city, area, street, building, floor, apartment, landmark, deliveryNotes, isDefault,
+          id, title, city, area, street, addressText: area ? null : street, building, floor, apartment, landmark, deliveryNotes, isDefault,
         })) ?? [],
       },
     };

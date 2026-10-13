@@ -7,8 +7,8 @@ import { UpdateBranchUseCase } from '../../application/branches/use-cases/update
 import { ToggleBranchStatusUseCase } from '../../application/branches/use-cases/toggle-branch-status.use-case';
 import { CreateBranchDto, UpdateBranchDto } from '../../application/branches/dto/branch.dto';
 import { ActionResult, toActionFailure } from './action-result';
-import { env } from '../../infrastructure/config/env';
 import { SessionService } from '../../infrastructure/auth/session.service';
+import { shouldUseSecureCookies } from '../../infrastructure/auth/cookie-security';
 import { BranchContextService } from '../../infrastructure/auth/branch-context.service';
 import { UnauthorizedError } from '../../domain/shared/errors/domain-error';
 import { PermissionCode } from '../../domain/staff/enums/permission.enum';
@@ -67,7 +67,7 @@ export async function switchActiveBranchAction(branchId: string): Promise<Action
       path: '/',
       httpOnly: true,
       sameSite: 'lax',
-      secure: env.NODE_ENV === 'production',
+      secure: await shouldUseSecureCookies(),
       maxAge: 60 * 60 * 24 * 30, // 30 days
     });
     revalidatePath('/admin');
