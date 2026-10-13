@@ -113,37 +113,18 @@
       args:
         chdir: "{{ app_dir }}"
 
-    - name: Start application and database
-      block:
-        - name: Run docker compose up
-          ansible.builtin.command: docker compose up -d --remove-orphans
-          args:
-            chdir: "{{ app_dir }}"
-      rescue:
-        - name: Get db container logs on failure
-          ansible.builtin.command: docker logs --tail 100 {{ app_name }}-db-dev
-          register: db_failure_logs
-          failed_when: false
-        - name: Print db logs
-          ansible.builtin.debug:
-            var: db_failure_logs.stdout_lines
-        - name: Get app container logs on failure
-          ansible.builtin.command: docker logs --tail 100 {{ app_name }}-dev
-          register: app_failure_logs
-          failed_when: false
-        - name: Print app logs
-          ansible.builtin.debug:
-            var: app_failure_logs.stdout_lines
-        - name: Fail deployment task
-          ansible.builtin.fail:
-            msg: "docker compose up failed. Check the container logs above."
+    - name: Start database service
+      ansible.builtin.command: docker compose up -d db
+      args:
+        chdir: "{{ app_dir }}"
 
-    - name: Wait for the published application port
-      ansible.builtin.wait_for:
-        host: 127.0.0.1
-        port: "{{ app_port }}"
-        delay: 3
-        timeout: 90
+    - name: Wait for MySQL to become healthy
+      ansible.builtin.command: docker inspect --format="{{ '{{' }} .State.Health.Status {{ '}}' }}" {{ app_name }}-db-dev
+      register: db_health
+      until: db_health.stdout == "healthy"
+      retries: 30
+      delay: 3
+      changed_when: false
 
     - name: Ensure resto_db and masa_app exist in MySQL
       ansible.builtin.command: >-
@@ -158,7 +139,18 @@
       delay: 3
       until: mysql_init_check.rc == 0
       changed_when: true
-      failed_when: false
+
+    - name: Start application
+      ansible.builtin.command: docker compose up -d --remove-orphans app
+      args:
+        chdir: "{{ app_dir }}"
+
+    - name: Wait for the published application port
+      ansible.builtin.wait_for:
+        host: 127.0.0.1
+        port: "{{ app_port }}"
+        delay: 5
+        timeout: 90
 
     - name: Run Prisma db push to create tables
       ansible.builtin.command: docker compose exec -T app npx prisma db push --skip-generate --accept-data-loss
