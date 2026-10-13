@@ -44,7 +44,37 @@ Each variable must be exposed to the deploying branch. If a variable is marked
 An unavailable or empty `APP_RUNTIME_ENV_FILE` fails the deploy job with a clear
 message.
 
-## Database migration decision
+## Database connectivity from Docker
+
+The application runs inside a Docker container. If MySQL is installed on the
+host OS of the deployment server (`192.168.1.183`), you **must not** use
+`localhost` or `127.0.0.1` in `DATABASE_URL` — those resolve to the container
+itself, not the host.
+
+Use the special `host-gateway` hostname instead (added automatically by
+`extra_hosts` in the Compose template):
+
+```
+DATABASE_URL="mysql://masa_app:YOUR_PASSWORD@host-gateway:3306/resto_db"
+```
+
+`host-gateway` is resolved by Docker to the host's bridge IP (usually
+`172.17.0.1`) so the container can reach a MySQL instance running on the host.
+
+Before deploying, confirm on the server that:
+1. MySQL is listening on `0.0.0.0` (not just `127.0.0.1`):
+   - Edit `/etc/mysql/mysql.conf.d/mysqld.cnf` → set `bind-address = 0.0.0.0`
+   - Restart: `sudo systemctl restart mysql`
+2. The MySQL user allows connections from `%` (any host):
+   ```sql
+   CREATE USER IF NOT EXISTS 'masa_app'@'%' IDENTIFIED BY 'YOUR_PASSWORD';
+   GRANT ALL PRIVILEGES ON resto_db.* TO 'masa_app'@'%';
+   FLUSH PRIVILEGES;
+   ```
+3. Update `APP_RUNTIME_ENV_FILE` in GitLab CI/CD Variables with the correct
+   `host-gateway` URL above.
+
+## Health check endpoint
 
 The repository contains Prisma migrations, but the deployment job does not
 run them automatically. Before the first deployment, confirm whether the

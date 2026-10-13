@@ -62,7 +62,15 @@
                 PORT: {{ container_port }}
               ports:
                 - "{{ app_port }}:{{ container_port }}"
+              extra_hosts:
+                - "host-gateway:host-gateway"
               restart: unless-stopped
+              healthcheck:
+                test: ["CMD-SHELL", "node -e \"require('http').get('http://127.0.0.1:{{ container_port }}/api/health', r => process.exit(r.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))\""]
+                interval: 15s
+                timeout: 5s
+                retries: 3
+                start_period: 30s
 
     - name: Log in to GitLab Container Registry
       ansible.builtin.shell: >-
