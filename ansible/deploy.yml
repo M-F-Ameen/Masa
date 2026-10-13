@@ -145,18 +145,34 @@
         delay: 3
         timeout: 90
 
-    - name: Show application status
-      ansible.builtin.command: docker compose ps
+    - name: Ensure resto_db and masa_app exist in MySQL
+      ansible.builtin.command: >-
+        docker exec {{ app_name }}-db-dev mysql -u root -proot_password_masa_2026 -e
+        "CREATE DATABASE IF NOT EXISTS resto_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+         CREATE USER IF NOT EXISTS 'masa_app'@'%' IDENTIFIED BY '0250ed316d1bec238f06cad334592e554507f28a0c51487a';
+         ALTER USER 'masa_app'@'%' IDENTIFIED BY '0250ed316d1bec238f06cad334592e554507f28a0c51487a';
+         GRANT ALL PRIVILEGES ON resto_db.* TO 'masa_app'@'%';
+         FLUSH PRIVILEGES;"
+      register: mysql_init_check
+      retries: 10
+      delay: 3
+      until: mysql_init_check.rc == 0
+      changed_when: true
+      failed_when: false
+
+    - name: Run Prisma db push to create tables
+      ansible.builtin.command: docker compose exec -T app npx prisma db push --skip-generate --accept-data-loss
       args:
         chdir: "{{ app_dir }}"
-      register: compose_status
-      changed_when: false
+      register: db_push_res
+      changed_when: true
+      failed_when: false
 
-    - name: Print application status
+    - name: Print db push output
       ansible.builtin.debug:
-        var: compose_status.stdout_lines
+        var: db_push_res.stdout_lines
 
-    - name: Verify database initialization and seed
+    - name: Seed database with initial restaurant data
       ansible.builtin.command: docker compose exec -T app npx tsx prisma/seed.ts
       args:
         chdir: "{{ app_dir }}"
@@ -167,3 +183,12 @@
     - name: Print seed status
       ansible.builtin.debug:
         var: seed_status.stdout_lines
+
+    - name: Show application container logs
+      ansible.builtin.command: docker logs --tail 30 {{ app_name }}-dev
+      register: app_run_logs
+      changed_when: false
+
+    - name: Print application logs
+      ansible.builtin.debug:
+        var: app_run_logs.stdout_lines

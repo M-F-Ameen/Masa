@@ -346,8 +346,8 @@ export function AdminShell({
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         {/* Desktop Top Header (Hidden on mobile) */}
         <header className="admin-topbar me-1.5 mt-1.5 hidden h-16 shrink-0 items-center justify-between gap-4 rounded-2xl border px-4 md:flex">
-          <label className="flex h-14 min-w-0 flex-1 items-center gap-2.5 rounded-[16px] border border-[#DCE3EF] bg-white px-3.5 text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition focus-within:border-[#2D61C9] focus-within:ring-2 focus-within:ring-[#2D61C9]/10">
-            <Search size={20} strokeWidth={1.8} className="shrink-0 text-[#627594]" />
+          <label className="admin-header-search flex h-14 min-w-0 flex-1 items-center gap-2.5 rounded-[16px] border px-3.5 transition">
+            <Search size={20} strokeWidth={1.8} className="admin-muted shrink-0" />
             <input
               type="search"
               aria-label="البحث في القائمة"
@@ -356,7 +356,7 @@ export function AdminShell({
               onChange={(event) => setSearch(event.target.value)}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
-              className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[#142644] outline-none placeholder:text-[#91A0B8] focus:ring-0"
+              className="min-w-0 flex-1 border-0 bg-transparent text-sm text-[var(--admin-foreground)] outline-none placeholder:text-[var(--admin-muted)] focus:ring-0"
             />
           </label>
 
@@ -365,10 +365,10 @@ export function AdminShell({
               type="button"
               aria-label="الإشعارات"
               title="الإشعارات"
-              className="relative grid size-14 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition hover:border-[#B9C9E2] hover:bg-[#F7F9FD]"
+              className="admin-header-tool relative grid size-14 place-items-center rounded-[16px] border transition"
             >
               <Bell size={20} strokeWidth={1.7} />
-              <span className="absolute right-2.5 top-2.5 size-2.5 rounded-full bg-[#2D61C9]" />
+              <span className="absolute right-2.5 top-2.5 size-2.5 rounded-full bg-[var(--admin-signal)]" />
             </button>
 
             <button
@@ -376,7 +376,7 @@ export function AdminShell({
               aria-label="طباعة"
               title="طباعة"
               onClick={() => window.print()}
-              className="grid size-14 place-items-center rounded-[16px] border border-[#DCE3EF] bg-white text-[#142644] shadow-[0_4px_14px_rgba(20,38,68,0.06)] transition hover:border-[#B9C9E2] hover:bg-[#F7F9FD]"
+              className="admin-header-tool grid size-14 place-items-center rounded-[16px] border transition"
             >
               <Printer size={20} strokeWidth={1.7} />
             </button>

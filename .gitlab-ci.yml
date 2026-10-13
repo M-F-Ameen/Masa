@@ -71,9 +71,9 @@ deploy_dev:
       -e "runtime_env_file=$APP_RUNTIME_ENV_FILE"
     - |
       if command -v curl >/dev/null 2>&1; then
-        curl --fail --silent --show-error --max-time 30 -L "http://$DEPLOY_HOST:$DEPLOY_PORT/api/health"
+        curl --fail --retry 10 --retry-delay 3 --retry-connrefused --silent --show-error --max-time 30 -L "http://$DEPLOY_HOST:$DEPLOY_PORT/api/health"
         echo "Health check passed at http://$DEPLOY_HOST:$DEPLOY_PORT/api/health"
-        curl --fail --silent --show-error --max-time 30 -L "http://$DEPLOY_HOST:$DEPLOY_PORT/" > /dev/null
+        curl --fail --retry 10 --retry-delay 3 --retry-connrefused --silent --show-error --max-time 30 -L "http://$DEPLOY_HOST:$DEPLOY_PORT/" > /dev/null
         echo "Homepage check passed at http://$DEPLOY_HOST:$DEPLOY_PORT/"
       else
         echo "curl not found; skipping HTTP health check"

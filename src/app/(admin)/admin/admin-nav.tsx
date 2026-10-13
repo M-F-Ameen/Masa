@@ -140,7 +140,7 @@ export function AdminNav({ sections, items, onItemClick, className, searchQuery 
                     )}
 
                     {isActive && (
-                       <span className="size-1.5 rounded-full bg-[var(--admin-accent)] md:hidden" />
+                       <span className="size-1.5 rounded-full bg-[var(--admin-signal)] md:hidden" />
                     )}
                   </div>
                 </Link>

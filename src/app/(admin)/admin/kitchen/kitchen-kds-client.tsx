@@ -405,20 +405,20 @@ export function KitchenKdsClient({
               className="kitchen-control kitchen-header-back inline-flex shrink-0 items-center gap-1.5 px-3 text-xs font-semibold"
               title="العودة للوحة التحكم"
             >
-              <ArrowRight className="w-4 h-4 text-[#2D61C9]" />
+              <ArrowRight className="w-4 h-4 text-[var(--kitchen-primary)]" />
               <span className="hidden sm:inline">لوحة التحكم</span>
             </Link>
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] border border-[#C8D7FA] bg-[#E9EEFC] text-[#2D61C9] shadow-xs">
+            <div className="kitchen-brand-icon flex h-11 w-11 shrink-0 items-center justify-center rounded-[14px] border shadow-xs">
               <ChefHat className="h-6 w-6" />
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
-                <h1 className="truncate text-lg font-black tracking-tight text-[#142644]">شاشة المطبخ (KDS)</h1>
+                <h1 className="truncate text-lg font-black tracking-tight text-[var(--kitchen-deep)]">شاشة المطبخ (KDS)</h1>
                 <span className="rounded-full border border-[#B9E3DC] bg-[#E7F5F2] px-2.5 py-0.5 text-xs font-bold text-[#08766D]">
                   {orders.length} نشط
                 </span>
               </div>
-              <p className="truncate text-xs text-[#72819A]">
+              <p className="truncate text-xs text-[var(--kitchen-muted)]">
                 {restaurantNameAr} • {restaurantNameEn}
               </p>
             </div>
@@ -544,10 +544,10 @@ export function KitchenKdsClient({
             <div className="kitchen-empty-icon mb-4 flex h-20 w-20 items-center justify-center rounded-full shadow-inner">
               <ChefHat className="w-10 h-10 stroke-[1.5]" />
             </div>
-            <h3 className="mb-1 text-xl font-bold text-[#142644]">
+            <h3 className="mb-1 text-xl font-bold text-[var(--kitchen-deep)]">
               لا توجد طلبات قيد التجهيز في المطبخ حالياً
             </h3>
-            <p className="max-w-sm text-sm text-[#72819A]">
+            <p className="max-w-sm text-sm text-[var(--kitchen-muted)]">
               المطبخ في وضع الجاهزية. ستظهر التذاكر الجديدة هنا فور تأكيدها وتتحرك بشكل تسلسلي حسب وقت النزول.
             </p>
           </div>
@@ -580,7 +580,7 @@ export function KitchenKdsClient({
                       <div className="flex items-center gap-2">
                         {getOrderTypeBadge(order)}
                         {order.branchNameAr && selectedBranchId === 'ALL' && (
-                          <span className="text-[11px] font-medium text-[#72819A]">({order.branchNameAr})</span>
+                          <span className="text-[11px] font-medium text-[var(--kitchen-muted)]">({order.branchNameAr})</span>
                         )}
                       </div>
 
@@ -604,7 +604,7 @@ export function KitchenKdsClient({
                           #{order.orderNumber}
                         </span>
                         {order.customerName && (
-                          <span className="max-w-[130px] truncate font-medium text-[#142644]">
+                          <span className="max-w-[130px] truncate font-medium text-[var(--kitchen-deep)]">
                             {order.customerName}
                           </span>
                         )}
@@ -673,7 +673,7 @@ export function KitchenKdsClient({
                               >
                                 {item.productNameAr}
                                 {item.sizeNameAr && (
-                                  <span className="mr-1.5 text-xs font-normal text-[#72819A]">
+                                  <span className="mr-1.5 text-xs font-normal text-[var(--kitchen-muted)]">
                                     ({item.sizeNameAr})
                                   </span>
                                 )}
@@ -707,7 +707,7 @@ export function KitchenKdsClient({
                             }`}
                           >
                             {isItemLoading ? (
-                              <Loader2 className="h-4 w-4 animate-spin text-[#72819A]" />
+                              <Loader2 className="h-4 w-4 animate-spin text-[var(--kitchen-muted)]" />
                             ) : item.isPrepared ? (
                               <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                             ) : null}

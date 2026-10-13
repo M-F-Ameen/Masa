@@ -182,24 +182,29 @@ body {
 .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* =====================================================
-   MASA Admin Design System — Atlantic Blue
+   MASA Admin Design System — Graphite and Signal Orange
    Scoped to .admin-app so storefront routes keep their own visual language.
    ===================================================== */
 .admin-app {
-  --admin-primary: #2859D9;
-  --admin-primary-hover: #2149B5;
-  --admin-primary-soft: #E9EFFF;
+  --admin-primary: #131417;
+  --admin-primary-hover: #292C32;
+  --admin-primary-soft: #EEF0F3;
+  --admin-signal: #FF5824;
+  --admin-signal-soft: #FFF0EB;
+  --admin-metal: #8B93A1;
+  /* Keep operational success colors independent of the identity accent. */
   --admin-accent: #0D9488;
   --admin-accent-hover: #08766D;
   --admin-accent-soft: #DDF5F1;
-  --admin-sidebar: #111C33;
-  --admin-sidebar-hover: #1B2D4B;
-  --admin-background: #F6F8FC;
+  --admin-sidebar: #131417;
+  --admin-sidebar-hover: #292C32;
+  --admin-background: #EEF0F3;
   --admin-surface: #FFFFFF;
-  --admin-foreground: #142033;
-  --admin-muted: #66758C;
-  --admin-border: #E1E7F0;
+  --admin-foreground: #131417;
+  --admin-muted: #626A78;
+  --admin-border: #DDE1E7;
   --admin-success: #0D9488;
+  --admin-success-foreground: #08766D;
   --admin-success-soft: #DDF5F1;
   --admin-warning: #B45309;
   --admin-warning-soft: #FFF4E5;
@@ -217,8 +222,8 @@ body {
   border-radius: 1rem;
   background: var(--admin-surface);
   box-shadow:
-    0 1px 2px rgba(20, 32, 51, 0.05),
-    0 14px 30px -20px rgba(20, 32, 51, 0.30);
+    0 1px 2px rgba(19, 20, 23, 0.05),
+    0 14px 30px -20px rgba(19, 20, 23, 0.30);
 }
 
 .admin-app .admin-card-hover {
@@ -227,7 +232,7 @@ body {
 
 .admin-app .admin-card-hover:hover {
   border-color: color-mix(in srgb, var(--admin-primary) 28%, var(--admin-border));
-  box-shadow: 0 8px 22px rgba(20, 32, 51, 0.08);
+  box-shadow: 0 8px 22px rgba(19, 20, 23, 0.08);
 }
 
 .admin-app .admin-topbar {
@@ -239,7 +244,7 @@ body {
   background-color: color-mix(in srgb, #FFFFFF 18%, transparent);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 16px -14px rgba(20, 32, 51, 0.14);
+  box-shadow: 0 4px 16px -14px rgba(19, 20, 23, 0.14);
 }
 
 .admin-app .admin-header-branch > div {
@@ -265,9 +270,9 @@ body {
   background: var(--admin-surface);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(20, 32, 51, 0.05),
-    0 1px 2px rgba(20, 32, 51, 0.08),
-    0 18px 36px -18px rgba(20, 32, 51, 0.34);
+    inset 0 -1px 0 rgba(19, 20, 23, 0.05),
+    0 1px 2px rgba(19, 20, 23, 0.08),
+    0 18px 36px -18px rgba(19, 20, 23, 0.34);
 }
 
 .admin-app .admin-sidebar-brand,
@@ -277,9 +282,9 @@ body {
 }
 
 .admin-app .admin-sidebar-logo {
-  background: var(--admin-primary-soft);
-  color: var(--admin-primary);
-  box-shadow: 0 4px 12px rgba(40, 89, 217, 0.1);
+  background: var(--admin-primary);
+  color: var(--admin-signal);
+  box-shadow: 0 4px 12px rgba(19, 20, 23, 0.1);
 }
 
 .admin-app .admin-sidebar-header {
@@ -327,25 +332,26 @@ body {
 
 .admin-app .admin-control:focus-visible,
 .admin-app .admin-primary-action:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--admin-primary) 38%, transparent);
+  outline: 2px solid var(--admin-signal);
   outline-offset: 2px;
 }
 
 .admin-app .admin-avatar {
   background: var(--admin-primary);
   color: #FFFFFF;
-  box-shadow: 0 5px 12px rgba(40, 89, 217, 0.2);
+  box-shadow: 0 5px 12px rgba(19, 20, 23, 0.2);
 }
 
 .admin-app .admin-primary-action {
   background: var(--admin-primary);
   color: #FFFFFF;
+  box-shadow: inset 0 -2px 0 var(--admin-signal);
   transition: background-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
 .admin-app .admin-primary-action:hover {
   background: var(--admin-primary-hover);
-  box-shadow: 0 7px 16px rgba(40, 89, 217, 0.2);
+  box-shadow: inset 0 -2px 0 var(--admin-signal), 0 7px 16px rgba(19, 20, 23, 0.2);
 }
 
 .admin-app .admin-soft-primary {
@@ -376,7 +382,7 @@ body {
 .admin-app .admin-status-success {
   border-color: color-mix(in srgb, var(--admin-success) 22%, var(--admin-border));
   background: var(--admin-success-soft);
-  color: var(--admin-accent-hover);
+  color: var(--admin-success-foreground);
 }
 
 .admin-app .admin-badge-warning,
@@ -430,8 +436,9 @@ body {
   color: var(--admin-primary-hover);
 }
 
-.admin-app .admin-nav-link:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--admin-primary) 46%, transparent);
+.admin-app .admin-nav-link:focus-visible,
+.admin-app .admin-nav-link-active:focus-visible {
+  outline: 2px solid var(--admin-signal);
   outline-offset: 2px;
 }
 
@@ -440,7 +447,7 @@ body {
   border-color: var(--admin-primary);
   background: var(--admin-primary);
   color: #FFFFFF;
-  box-shadow: 0 7px 18px rgba(40, 89, 217, 0.2);
+  box-shadow: inset -3px 0 0 var(--admin-signal), 0 7px 18px rgba(19, 20, 23, 0.2);
 }
 
 .admin-app .admin-nav-link-active::after {
@@ -454,7 +461,7 @@ body {
 }
 
 .admin-app .admin-nav-icon {
-  color: var(--admin-primary);
+  color: var(--admin-muted);
 }
 
 .admin-app .admin-nav-link:hover .admin-nav-icon,
@@ -463,7 +470,7 @@ body {
 }
 
 .admin-app .admin-nav-link-active .admin-nav-icon {
-  color: #FFFFFF;
+  color: var(--admin-signal);
 }
 
 .admin-app .admin-sidebar-danger-action {
@@ -477,7 +484,7 @@ body {
   background: color-mix(in srgb, var(--admin-danger-soft) 78%, var(--admin-surface));
 }
 
-.admin-app .admin-status-success-text { color: var(--admin-accent-hover); }
+.admin-app .admin-status-success-text { color: var(--admin-success-foreground); }
 .admin-app .admin-status-warning-text { color: #92400E; }
 .admin-app .admin-status-danger-text { color: #9F1239; }
 .admin-app .admin-status-info-text { color: #1D4ED8; }
@@ -534,7 +541,30 @@ body {
 }
 
 .admin-app .admin-branch-switcher button:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--admin-primary) 38%, transparent);
+  outline: 2px solid var(--admin-signal);
+  outline-offset: 2px;
+}
+
+.admin-app .admin-header-search,
+.admin-app .admin-header-tool {
+  border-color: var(--admin-border);
+  background: var(--admin-surface);
+  color: var(--admin-foreground);
+  box-shadow: 0 4px 14px rgba(19, 20, 23, 0.06);
+}
+
+.admin-app .admin-header-search:focus-within {
+  border-color: var(--admin-signal);
+  box-shadow: 0 0 0 2px var(--admin-signal-soft);
+}
+
+.admin-app .admin-header-tool:hover {
+  border-color: var(--admin-metal);
+  background: var(--admin-primary-soft);
+}
+
+.admin-app .admin-header-tool:focus-visible {
+  outline: 2px solid var(--admin-signal);
   outline-offset: 2px;
 }
 
@@ -542,7 +572,7 @@ body {
   .admin-app .admin-sidebar {
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.9),
-      -18px 0 42px rgba(20, 32, 51, 0.18);
+      -18px 0 42px rgba(19, 20, 23, 0.18);
   }
 
   .admin-app .admin-topbar {
@@ -550,17 +580,21 @@ body {
   }
 }
 
-/* Kitchen KDS: scoped light POS surface and touch-first primitives. */
+/* Kitchen KDS: scoped identity colors with independent operational status cues. */
 .kitchen-shell,
 .kitchen-app {
-  --kitchen-canvas: #F7F8FC;
+  --kitchen-canvas: #EEF0F3;
   --kitchen-surface: #FFFFFF;
-  --kitchen-primary: #2D61C9;
-  --kitchen-primary-hover: #2756B8;
-  --kitchen-deep: #142644;
-  --kitchen-muted: #72819A;
-  --kitchen-border: #DCE3EF;
-  --kitchen-soft-blue: #E9EEFC;
+  --kitchen-primary: #131417;
+  --kitchen-primary-hover: #292C32;
+  --kitchen-deep: #131417;
+  --kitchen-muted: #626A78;
+  --kitchen-metal: #8B93A1;
+  --kitchen-border: #DDE1E7;
+  --kitchen-soft: #EEF0F3;
+  --kitchen-signal: #FF5824;
+  --kitchen-info: #2D61C9;
+  --kitchen-info-soft: #E9EEFC;
   --kitchen-accent: #1D6C6B;
   --kitchen-accent-soft: #E7F5F2;
   --kitchen-warning: #B45309;
@@ -578,7 +612,7 @@ body {
 .kitchen-app .kitchen-header {
   border-color: var(--kitchen-border);
   background: color-mix(in srgb, var(--kitchen-surface) 94%, transparent);
-  box-shadow: 0 4px 18px rgba(20, 38, 68, 0.06);
+  box-shadow: 0 4px 18px rgba(19, 20, 23, 0.06);
   backdrop-filter: blur(14px);
 }
 
@@ -628,13 +662,13 @@ body {
   border-radius: 14px;
   background: var(--kitchen-surface);
   color: var(--kitchen-deep);
-  box-shadow: 0 3px 12px rgba(20, 38, 68, 0.04);
+  box-shadow: 0 3px 12px rgba(19, 20, 23, 0.04);
   transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
 }
 
 .kitchen-app .kitchen-control:hover {
-  border-color: #C6D2E5;
-  background: #F7F9FD;
+  border-color: var(--kitchen-metal);
+  background: var(--kitchen-soft);
 }
 
 .kitchen-app .kitchen-control:focus-visible,
@@ -642,7 +676,7 @@ body {
 .kitchen-app .kitchen-item:focus-visible,
 .kitchen-app .kitchen-check:focus-visible,
 .kitchen-app .kitchen-bump:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--kitchen-primary) 24%, transparent);
+  outline: 3px solid var(--kitchen-signal);
   outline-offset: 2px;
 }
 
@@ -671,7 +705,7 @@ body {
   padding: 4px;
   border: 1px solid var(--kitchen-border);
   border-radius: 16px;
-  background: #F7F9FD;
+  background: var(--kitchen-soft);
 }
 
 .kitchen-app .kitchen-filter {
@@ -688,23 +722,27 @@ body {
   background: var(--kitchen-surface);
 }
 
-.kitchen-app .kitchen-filter-active {
+.kitchen-app .kitchen-filter-active,
+.kitchen-app .kitchen-filter-active:hover {
   background: var(--kitchen-primary);
   color: #FFFFFF;
-  box-shadow: 0 5px 12px rgba(45, 97, 201, 0.18);
+  box-shadow: inset 0 -2px 0 var(--kitchen-signal), 0 5px 12px rgba(19, 20, 23, 0.18);
 }
 
-.kitchen-app .kitchen-filter-type-dine.kitchen-filter-active { background: var(--kitchen-primary); }
-.kitchen-app .kitchen-filter-type-takeaway.kitchen-filter-active { background: #D97706; }
-.kitchen-app .kitchen-filter-type-delivery.kitchen-filter-active { background: var(--kitchen-accent); }
+.kitchen-app .kitchen-filter-type-dine.kitchen-filter-active,
+.kitchen-app .kitchen-filter-type-dine.kitchen-filter-active:hover { background: var(--kitchen-info); }
+.kitchen-app .kitchen-filter-type-takeaway.kitchen-filter-active,
+.kitchen-app .kitchen-filter-type-takeaway.kitchen-filter-active:hover { background: #D97706; }
+.kitchen-app .kitchen-filter-type-delivery.kitchen-filter-active,
+.kitchen-app .kitchen-filter-type-delivery.kitchen-filter-active:hover { background: var(--kitchen-accent); }
 
 .kitchen-app .kitchen-empty {
   border-color: var(--kitchen-border);
-  background: color-mix(in srgb, var(--kitchen-surface) 78%, var(--kitchen-soft-blue));
+  background: color-mix(in srgb, var(--kitchen-surface) 78%, var(--kitchen-soft));
 }
 
 .kitchen-app .kitchen-empty-icon {
-  background: var(--kitchen-soft-blue);
+  background: var(--kitchen-soft);
   border: 1px solid color-mix(in srgb, var(--kitchen-primary) 18%, var(--kitchen-border));
   color: var(--kitchen-primary);
 }
@@ -713,7 +751,7 @@ body {
   border: 1px solid var(--kitchen-border);
   border-radius: 18px;
   background: var(--kitchen-surface);
-  box-shadow: 0 5px 18px rgba(20, 38, 68, 0.07);
+  box-shadow: 0 5px 18px rgba(19, 20, 23, 0.07);
 }
 
 .kitchen-app .kitchen-ticket-urgent {
@@ -728,7 +766,7 @@ body {
 
 .kitchen-app .kitchen-ticket-header {
   border-color: var(--kitchen-border);
-  background: #FBFCFE;
+  background: color-mix(in srgb, var(--kitchen-surface) 78%, var(--kitchen-soft));
 }
 
 .kitchen-app .kitchen-ticket-meta {
@@ -754,7 +792,7 @@ body {
   font-weight: 800;
 }
 
-.kitchen-app .kitchen-type-dine { border-color: #C8D7FA; background: var(--kitchen-soft-blue); color: #2149B5; }
+.kitchen-app .kitchen-type-dine { border-color: #C8D7FA; background: var(--kitchen-info-soft); color: #2149B5; }
 .kitchen-app .kitchen-type-takeaway { border-color: #F3D29C; background: #FFF7E8; color: #92400E; }
 .kitchen-app .kitchen-type-delivery { border-color: #B9E3DC; background: var(--kitchen-accent-soft); color: #08766D; }
 
@@ -771,7 +809,7 @@ body {
 .kitchen-app .kitchen-timer-warning { border-color: #F3D29C; background: var(--kitchen-warning-soft); color: #92400E; font-weight: 700; }
 .kitchen-app .kitchen-timer-urgent { border-color: #F6B5C4; background: var(--kitchen-danger-soft); color: #9F1239; font-weight: 800; }
 
-.kitchen-app .kitchen-order-chip { background: var(--kitchen-soft-blue); color: var(--kitchen-deep); }
+.kitchen-app .kitchen-order-chip { background: var(--kitchen-soft); color: var(--kitchen-deep); }
 .kitchen-app .kitchen-note { border: 1px solid #F3D29C; background: var(--kitchen-warning-soft); color: #78350F; }
 .kitchen-app .kitchen-note-icon { color: #B45309; }
 
@@ -782,7 +820,7 @@ body {
   color: var(--kitchen-muted);
 }
 
-.kitchen-app .kitchen-print:hover { background: var(--kitchen-soft-blue); color: var(--kitchen-primary); }
+.kitchen-app .kitchen-print:hover { background: var(--kitchen-soft); color: var(--kitchen-primary); }
 
 .kitchen-app .kitchen-items {
   background: var(--kitchen-surface);
@@ -795,35 +833,35 @@ body {
   transition: background-color 160ms ease, opacity 160ms ease;
 }
 
-.kitchen-app .kitchen-item:hover { background: #F7F9FD; }
-.kitchen-app .kitchen-item-prepared { background: #F4F7FA; opacity: 0.68; }
-.kitchen-app .kitchen-quantity { background: var(--kitchen-soft-blue); color: var(--kitchen-primary-hover); }
-.kitchen-app .kitchen-quantity-prepared { background: #EFF2F6; color: var(--kitchen-muted); }
+.kitchen-app .kitchen-item:hover { background: var(--kitchen-soft); }
+.kitchen-app .kitchen-item-prepared { background: var(--kitchen-soft); opacity: 0.68; }
+.kitchen-app .kitchen-quantity { background: var(--kitchen-soft); color: var(--kitchen-primary-hover); }
+.kitchen-app .kitchen-quantity-prepared { background: var(--kitchen-soft); color: var(--kitchen-muted); }
 .kitchen-app .kitchen-product { color: var(--kitchen-deep); }
 .kitchen-app .kitchen-product-prepared { color: var(--kitchen-muted); }
 .kitchen-app .kitchen-modifier { color: var(--kitchen-muted); }
-.kitchen-app .kitchen-modifier-dot { background: #AAB7C9; }
+.kitchen-app .kitchen-modifier-dot { background: var(--kitchen-metal); }
 
 .kitchen-app .kitchen-check {
   min-width: 44px;
   min-height: 44px;
-  border: 1px solid #C6D2E5;
+  border: 1px solid var(--kitchen-metal);
   border-radius: 12px;
   color: transparent;
   background: var(--kitchen-surface);
 }
 
-.kitchen-app .kitchen-check:hover { border-color: var(--kitchen-primary); background: var(--kitchen-soft-blue); }
+.kitchen-app .kitchen-check:hover { border-color: var(--kitchen-primary); background: var(--kitchen-soft); }
 .kitchen-app .kitchen-check-prepared { border-color: var(--kitchen-accent); background: var(--kitchen-accent); color: #FFFFFF; }
 
 .kitchen-app .kitchen-ticket-footer {
   border-color: var(--kitchen-border);
-  background: #FBFCFE;
+  background: color-mix(in srgb, var(--kitchen-surface) 78%, var(--kitchen-soft));
 }
 
 .kitchen-app .kitchen-progress-label { color: var(--kitchen-muted); }
 .kitchen-app .kitchen-progress-value { color: var(--kitchen-deep); }
-.kitchen-app .kitchen-progress-track { background: #E8EDF5; }
+.kitchen-app .kitchen-progress-track { background: var(--kitchen-soft); }
 .kitchen-app .kitchen-progress-fill { background: var(--kitchen-accent); }
 
 .kitchen-app .kitchen-bump {
@@ -832,12 +870,18 @@ body {
   border-radius: 14px;
   background: var(--kitchen-primary);
   color: #FFFFFF;
-  box-shadow: 0 7px 16px rgba(45, 97, 201, 0.18);
+  box-shadow: inset 0 -2px 0 var(--kitchen-signal), 0 7px 16px rgba(19, 20, 23, 0.18);
 }
 
 .kitchen-app .kitchen-bump:hover { background: var(--kitchen-primary-hover); }
 .kitchen-app .kitchen-bump-ready { border-color: var(--kitchen-accent); background: var(--kitchen-accent); box-shadow: 0 7px 16px rgba(29, 108, 107, 0.18); }
 .kitchen-app .kitchen-bump-ready:hover { background: #17605F; }
+
+.kitchen-app .kitchen-brand-icon {
+  border-color: var(--kitchen-primary);
+  background: var(--kitchen-primary);
+  color: var(--kitchen-signal);
+}
 
 @media (max-width: 767px) {
   .kitchen-app .kitchen-header { padding-inline: 12px; }
